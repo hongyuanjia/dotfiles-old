@@ -1,0 +1,7 @@
+[user]
+	name = Hongyuan Jia
+	email = hongyuanjia@cqu.edu.cn
+[credential]
+	helper = store
+[core]
+	autocrlf = true

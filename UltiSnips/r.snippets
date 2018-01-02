@@ -1,0 +1,89 @@
+snippet roxygen "a templete of inserting R function documentation." b
+#' ${1:Summary}
+#'
+#' \code{${2:fun}} returns $3
+#'
+#' @param ${4:param} ${5:desription}
+#' @return $6
+#' @export
+#' @examples
+#' $7
+endsnippet
+
+snippet ## "" b
+#' ${VISUAL}$0
+endsnippet
+
+snippet param "" b
+#' @param ${1:param} ${2:desription}
+endsnippet
+
+snippet impf "import from" b
+#' @importFrom ${1:pkg} ${2:fun}
+endsnippet
+
+snippet \c "\code{}"
+\code{$1}
+endsnippet
+
+snippet help "help for R package" b
+help(package = "$1${VISUAL}")
+endsnippet
+
+snippet exp "export package function" b
+#' @export
+endsnippet
+
+snippet inst "install package" b
+install.packages("$1${VISUAL}")
+endsnippet
+
+snippet tb "traceback"
+traceback()
+endsnippet
+
+snippet ffold "function with folds"
+# ${1:name} {{{$2
+$1 <- function ($3) {
+    ${VISUAL}$0
+
+	return()
+}
+# }}}$2
+endsnippet
+
+snippet shiny "text shiny ui component"
+shinyApp(
+    ui = shinyUI(
+        fluidPage(
+			${VISUAL}$0
+        )
+    ),
+
+    server = shinyServer(
+        function (input, output, session) {
+
+            # Stop shiny app when closing the web brower.
+            session$onSessionEnded(stopApp)
+        }
+    )
+)
+endsnippet
+
+snippet db "debug me" b
+"!DEBUG ${VISUAL}$0"
+endsnippet
+
+snippet fail "assertthat::on_failure" b
+assertthat::on_failure(${VISUAL}$1) <- function (call, env) {
+    paste0(deparse(call$${2:x}), "${3:info}")
+}
+endsnippet
+
+snippet code "\code{}"
+\code{${VISUAL}$1}
+endsnippet
+
+snippet link "\link{}"
+\link{${VISUAL}$1}
+endsnippet

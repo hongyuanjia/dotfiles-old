@@ -1,2 +1,2 @@
-
-Copyright (C) 2018 
+YEAR: 2017-2018
+COPYRIGHT HOLDER: Hongyuan Jia

@@ -1,0 +1,82 @@
+# Optional parameters for the console and the pager
+# The system-wide copy is in rwxxxx/etc.
+# A user copy can be installed in `R_USER'.
+
+## Style
+# This can be `yes' (for MDI) or `no' (for SDI).
+MDI = no
+# the next two are only relevant for MDI
+toolbar = yes
+statusbar = no
+
+## Font.
+# Please use only fixed width font.
+# If font=FixedFont the system fixed font is used; in this case
+# points and style are ignored. If font begins with "TT ", only
+# True Type fonts are searched for.
+font = WenQuanYi Micro Hei Mono
+points = 12
+style = normal # Style can be normal, bold, italic
+
+
+# Dimensions (in characters) of the console.
+rows = 52
+columns = 176
+# Dimensions (in characters) of the internal pager.
+pgrows = 25
+pgcolumns = 75
+# should options(width=) be set to the console width?
+setwidthonresize = yes
+
+# memory limits for the console scrolling buffer, in chars and lines
+bufbytes = 250000
+buflines = 8000
+
+# Initial position of the console (pixels, relative to the workspace for MDI)
+xconsole = 809
+yconsole = 0
+
+# Dimension of MDI frame in pixels
+# Format (w*h+xorg+yorg) or use -ve w and h for offsets from right bottom
+# This will come up maximized if w==0
+# MDIsize = 0*0+0+0
+# MDIsize = 1000*800+100+0
+# MDIsize = -50*-50+50+50  # 50 pixels space all round
+
+# The internal pager can displays help in a single window
+# or in multiple windows (one for each topic)
+# pagerstyle can be set to `singlewindow' or `multiplewindows'
+pagerstyle = multiplewindows
+
+
+## Colours for console and pager(s)
+# (see rwxxxx/etc/rgb.txt for the known colours).
+background = gray16
+normaltext = GhostWhite
+usertext = VioletRed1
+pagerbg = white
+pagertext = navy
+highlight = DarkRed
+dataeditbg = white
+dataedittext = navy
+dataedituser = red
+editorbg = white
+editortext = black
+
+
+## Initial position of the graphics window
+## (pixels, <0 values from opposite edge)
+xgraphics = 0
+ygraphics = 0
+
+
+## Language for messages
+language = en
+
+
+## Default setting for console buffering: 'yes' or 'no'
+buffered = yes
+
+
+## Console cursor blink
+cursor_blink = Partial
