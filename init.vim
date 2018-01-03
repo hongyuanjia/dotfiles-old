@@ -215,7 +215,14 @@ endfunction
 command! -bang -range ToggleSlash <line1>,<line2>call ToggleSlash(<bang>1)
 nnoremap <Leader>r<BSlash> :ToggleSlash<CR>
 " }}}
-
+" UltiSnips {{{
+let g:UltiSnipsEditSplit="vertical"
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsListSnippets="<s-tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-k>"
+let g:UltiSnipsJumpBackwardTrigger="<c-j>"
+"}}}
 if executable('pt')
     let g:unite_source_grep_command='pt'
     let g:unite_source_grep_default_opts='--nocolor --nogroup --smart-case'
@@ -223,3 +230,11 @@ if executable('pt')
     let g:unite_source_grep_encoding='utf-8'
     let g:unite_source_rec_async_command= ['pt', '--nocolor', '--nogroup', '-g', '.']
 endif
+let g:deoplete#ignore_sources = {}
+let g:deoplete#ignore_sources._ = [
+      \   'buffer',
+      \   'member',
+      \   'tag',
+      \   'file',
+      \   'around',
+       \ ]
