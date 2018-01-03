@@ -193,6 +193,7 @@ set formatoptions+=j "Remove a comment leader when joining
 set formatoptions+=q "New line will start with a commen leader
 set formatoptions+=n "When formatting text, recognize numbered lists
 "}}}
+set colorcolumn=81
 set complete+=k
 set list!
 set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
