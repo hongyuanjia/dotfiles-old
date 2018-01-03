@@ -4,51 +4,72 @@ let g:spacevim_realtime_leader_guide = 1
 call SpaceVim#layers#load('incsearch')
 call SpaceVim#layers#load('autocomplete')
 call SpaceVim#layers#load('lang#python')
-call SpaceVim#layers#load('lang#tmux')
 call SpaceVim#layers#load('lang#vim')
-call SpaceVim#layers#load('shell')   
+call SpaceVim#layers#load('shell')
 call SpaceVim#layers#load('tools#screensaver')
+call SpaceVim#layers#load('indentmove')
 let g:spacevim_enable_vimfiler_welcome = 1
-let g:spacevim_enable_debug = 1
-let g:deoplete#auto_complete_delay = 150
+let g:deoplete#auto_complete_delay = 10
 let g:spacevim_enable_tabline_filetype_icon = 1
 let g:spacevim_enable_statusline_display_mode = 0
 let g:spacevim_enable_os_fileformat_icon = 1
 let g:spacevim_buffer_index_type = 1
-let g:neomake_vim_enabled_makers = []
-if executable('vimlint')
-    call add(g:neomake_vim_enabled_makers, 'vimlint') 
-endif
-if executable('vint')
-    call add(g:neomake_vim_enabled_makers, 'vint') 
-endif
 if has('python3')
     let g:ctrlp_map = ''
     nnoremap <silent> <C-p> :Denite file_rec<CR>
 endif
-let g:clang2_placeholder_next = ''
-let g:clang2_placeholder_prev = ''
 
-" Custom {{{
+" Custom for SpaceVim {{{
+" load extra packages or load lazy loaded package when start
 let g:spacevim_custom_plugins = [
-      \['jalvesaq/Nvim-R'],
-      \['roxma/nvim-completion-manager'],
-      \['roxma/vim-hug-neovim-rpc'],
-      \['gaalcaras/ncm-R'],
-      \['vim-pandoc/vim-pandoc'],
-      \['vim-pandoc/vim-rmarkdown']
-      \]
-" }}} Custom
+      \ ['jalvesaq/Nvim-R'],
+      \ ['roxma/nvim-completion-manager'],
+      \ ['roxma/vim-hug-neovim-rpc'],
+      \ ['gaalcaras/ncm-R'],
+      \ ['vim-pandoc/vim-pandoc'],
+      \ ['vim-pandoc/vim-rmarkdown'],
+      \ ['ntpeters/vim-better-whitespace', {'on_cmd' : 'EnableStripWhitespaceOnSave'}],
+      \ ['ujihisa/neco-look', {'merged' : 0}]
+      \ ]
+
 " Set SpaceVim buffer index type
 let g:spacevim_buffer_index_type = 4
 " Set SpaceVim windows index type
 let g:spacevim_windows_index_type = 3
 let g:spacevim_github_username = 'hongyuanjia'
+" For speed concern
 let g:spacevim_enable_vimfiler_welcome = 0
+" My favourite
 let g:spacevim_colorscheme = 'molokai'
+" Use `ultisnips` instead of `neosnippet`
 let g:spacevim_snippet_engine = 'ultisnips'
 let g:python3_host_prog = 'C:\\Python36\\python.exe'
-
+" Remove minor mode
+let g:spacevim_statusline_left_sections =
+            \ [
+            \ 'winnr',
+            \ 'filename',
+            \ 'major mode',
+            \ 'version control info'
+            \ ]
+let g:spacevim_default_indent = 4
+let g:spacevim_max_column = 80
+let g:better_whitespace_filetypes_blacklist = [
+            \ 'startify',
+            \ 'diff',
+            \ 'gitcommit',
+            \ 'unite',
+            \ 'qf',
+            \ 'help',
+            \ 'markdown',
+            \ 'leaderGuide'
+            \ ]
+" }}} Custom
+" GUI {{{
+set guifont=DroidSansMonoForPowerline\ NF:h12
+set guifontwide=SimHei:h12
+autocmd ColorScheme * highlight Folded guifg = SlateGray
+"}}}
 " Set folding method for specfic file types {{{
 augroup ft_vim
     au!
@@ -109,9 +130,20 @@ let R_clear_line = 1
 let R_source_args = "print.eval = TRUE, max.deparse.length = 1000, echo = TRUE, encoding = 'UTF-8'"
 let R_in_buffer = 0
 " }}}
-
+" Auto delete trailing spaces when saving R, vim files {{{
+autocmd FileType r,vim autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
+" }}}
+" better default {{{
+" No annoying sound on errors
+set noerrorbells
+set novisualbell
+set visualbell t_vb=
+set noerrorbells
+set novisualbell
+set visualbell t_vb=
 set clipboard+=unnamed
 let maplocalleader = ","
+" keybindings {{{
 nnoremap j gj
 nnoremap k gk
 vnoremap j gj
@@ -125,35 +157,55 @@ vnoremap L $
 " Quick command mode
 nnoremap ; :
 nnoremap : ;
+" Easy move using <Ctrl>[aedhjkl] {{{
+" Insert mode shortcut
+inoremap <C-h> <Left>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-l> <Right>
+" Bash like
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
+inoremap <C-d> <Delete>
+" Command mode shortcut
+cnoremap <C-h> <left>
+cnoremap <C-j> <Down>
+cnoremap <C-k> <Up>
+cnoremap <C-l> <Right>
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+cnoremap <C-d> <Delete>
+" }}}
+" }}}
 " Case sensitive when uc present
-set smartcase      
-set guifont=DroidSansMonoForPowerline\ NF:h12
-set guifontwide=SimHei:h12
+set smartcase
 set dictionary+=$HOME/.SpaceVim.d/dict/english.dic
-
-autocmd ColorScheme * highlight Folded guifg=SlateGray
+" formatoptions {{{
+set formatoptions+=M "don't insert a space before or after a multi-byte when join
+set formatoptions+=m "Multibyte line breaking
+set formatoptions+=j "Remove a comment leader when joining
+set formatoptions+=q "New line will start with a commen leader
+set formatoptions+=n "When formatting text, recognize numbered lists
+"}}}
+set complete+=k
+set list!
+set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
+" }}}
 " ToggleSlash {{{
 function! ToggleSlash(independent) range
-  let from = ''
-  for lnum in range(a:firstline, a:lastline)
-    let line = getline(lnum)
-    let first = matchstr(line, '[/\\]')
-    if !empty(first)
-      if a:independent || empty(from)
-        let from = first
-      endif
-      let opposite = (from == '/' ? '\' : '/')
-      call setline(lnum, substitute(line, from, opposite, 'g'))
-    endif
-  endfor
+    let from = ''
+    for lnum in range(a:firstline, a:lastline)
+        let line = getline(lnum)
+        let first = matchstr(line, '[/\\]')
+        if !empty(first)
+            if a:independent || empty(from)
+                let from = first
+            endif
+            let opposite = (from == '/' ? '\' : '/')
+            call setline(lnum, substitute(line, from, opposite, 'g'))
+        endif
+    endfor
 endfunction
 command! -bang -range ToggleSlash <line1>,<line2>call ToggleSlash(<bang>1)
 nnoremap <Leader>r<BSlash> :ToggleSlash<CR>
 " }}}
-let g:spacevim_statusline_left_sections =
-  \ [
-  \ 'winnr',
-  \ 'filename',
-  \ 'major mode',
-  \ 'version control info'
-  \ ]
