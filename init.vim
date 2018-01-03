@@ -7,8 +7,9 @@ call SpaceVim#layers#load('lang#python')
 call SpaceVim#layers#load('lang#vim')
 call SpaceVim#layers#load('shell')
 call SpaceVim#layers#load('tools#screensaver')
-call SpaceVim#layers#load('indentmove')
+call SpaceVim#layers#load('edit')
 let g:spacevim_enable_vimfiler_welcome = 1
+let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_complete_delay = 10
 let g:spacevim_enable_tabline_filetype_icon = 1
 let g:spacevim_enable_statusline_display_mode = 0
@@ -29,7 +30,11 @@ let g:spacevim_custom_plugins = [
       \ ['vim-pandoc/vim-pandoc'],
       \ ['vim-pandoc/vim-rmarkdown'],
       \ ['ntpeters/vim-better-whitespace', {'on_cmd' : 'EnableStripWhitespaceOnSave'}],
-      \ ['ujihisa/neco-look', {'merged' : 0}]
+      \ ['kana/vim-textobj-fold'],
+      \ ['Julian/vim-textobj-variable-segment'],
+      \ ['beloglazov/vim-textobj-quotes'],
+      \ ['sgur/vim-textobj-parameter'],
+      \ ['terryma/vim-expand-region']
       \ ]
 
 " Set SpaceVim buffer index type
@@ -142,6 +147,7 @@ set noerrorbells
 set novisualbell
 set visualbell t_vb=
 set clipboard+=unnamed
+set signcolumn=yes
 let maplocalleader = ","
 " keybindings {{{
 nnoremap j gj
