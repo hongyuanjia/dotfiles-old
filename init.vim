@@ -195,10 +195,12 @@ set formatoptions+=j "Remove a comment leader when joining
 set formatoptions+=q "New line will start with a commen leader
 set formatoptions+=n "When formatting text, recognize numbered lists
 "}}}
+autocmd BufReadPost,BufNewFile *.R,*.r,*.rmd,*.rmarkdown set foldmethod=marker
 set colorcolumn=81
 set complete+=k
 set list!
 set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
+set completeopt-=preview
 " }}}
 " ToggleSlash {{{
 function! ToggleSlash(independent) range
