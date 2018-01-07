@@ -29,6 +29,7 @@ let g:spacevim_custom_plugins = [
       \ ['roxma/vim-hug-neovim-rpc'],
       \ ['gaalcaras/ncm-R'],
       \ ['vim-pandoc/vim-pandoc'],
+      \ ['vim-pandoc/vim-pandoc-syntax'],
       \ ['vim-pandoc/vim-rmarkdown'],
       \ ['ntpeters/vim-better-whitespace', {'on_cmd' : 'EnableStripWhitespaceOnSave'}],
       \ ['kana/vim-textobj-fold'],
