@@ -150,6 +150,7 @@ set novisualbell
 set visualbell t_vb=
 set clipboard+=unnamed
 set signcolumn=yes
+set autoread
 let maplocalleader = ","
 " keybindings {{{
 nnoremap j gj
