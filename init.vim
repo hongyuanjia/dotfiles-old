@@ -9,7 +9,7 @@ call SpaceVim#layers#load('shell')
 call SpaceVim#layers#load('tools#screensaver')
 call SpaceVim#layers#load('edit')
 let g:spacevim_enable_vimfiler_welcome = 1
-let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_at_startup = 0
 let g:deoplete#auto_complete_delay = 10
 let g:spacevim_enable_tabline_filetype_icon = 1
 let g:spacevim_enable_statusline_display_mode = 0
@@ -21,6 +21,7 @@ if has('python3')
 endif
 
 " Custom for SpaceVim {{{
+let g:spacevim_disabled_plugins = ['deoplete.vim']
 " load extra packages or load lazy loaded package when start
 let g:spacevim_custom_plugins = [
       \ ['jalvesaq/Nvim-R'],
@@ -233,9 +234,14 @@ if executable('pt')
 endif
 let g:deoplete#ignore_sources = {}
 let g:deoplete#ignore_sources._ = [
-      \   'buffer',
-      \   'member',
-      \   'tag',
-      \   'file',
-      \   'around',
-       \ ]
+      \ 'buffer',
+      \ 'member',
+      \ 'tag',
+      \ 'file',
+      \ 'around',
+      \ ]
+
+highlight BookmarkSign ctermbg=NONE ctermfg=160
+highlight BookmarkLine ctermbg=194 ctermfg=NONE
+let g:bookmark_sign = '♥'
+let g:bookmark_highlight_lines = 1
