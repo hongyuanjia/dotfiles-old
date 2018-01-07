@@ -35,7 +35,8 @@ let g:spacevim_custom_plugins = [
       \ ['Julian/vim-textobj-variable-segment'],
       \ ['beloglazov/vim-textobj-quotes'],
       \ ['sgur/vim-textobj-parameter'],
-      \ ['terryma/vim-expand-region']
+      \ ['terryma/vim-expand-region'],
+      \ ['thinca/vim-qfreplace']
       \ ]
 
 " Set SpaceVim buffer index type
