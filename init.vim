@@ -137,6 +137,9 @@ let R_assign_map = "<M-->"
 let R_clear_line = 1
 let R_source_args = "print.eval = TRUE, max.deparse.length = 1000, echo = TRUE, encoding = 'UTF-8'"
 let R_in_buffer = 0
+augroup r_customcmd
+    autocmd FileType R nnoremap <buffer> <LocalLeader>la :RSend devtools::load_all()<cr>
+augroup END
 " }}}
 " Auto delete trailing spaces when saving R, vim files {{{
 autocmd FileType r,vim autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
