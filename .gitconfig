@@ -5,3 +5,4 @@
 	helper = store
 [core]
 	autocrlf = true
+	quotepath = off
