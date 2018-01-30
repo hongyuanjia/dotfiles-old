@@ -87,3 +87,10 @@ endsnippet
 snippet link "\link{}"
 \link{${VISUAL}$1}
 endsnippet
+
+snippet bm "microbenchmark"
+microbenchmark::microbenchmark(
+    $1 = $2,
+	times = ${3:100L}
+)
+endsnippet
