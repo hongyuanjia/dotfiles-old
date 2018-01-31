@@ -1,0 +1,151 @@
+" Let Vim and NeoVim shares the same plugin directory.
+" Comment it out if you don't like
+let g:spacevim_plug_home = '~/.vim/plugged'
+
+" The default leader key is space key.
+" Uncomment the line below and modify "<\Space>" if you prefer another
+" let g:spacevim_leader = "<\Space>"
+
+" The default local leader key is comma.
+" Uncomment the line below and modify ',' if you prefer another
+" let g:spacevim_localleader = ','
+
+" Enable the existing layers in space-vim
+let g:spacevim_layers = [
+      \ 'fzf', 'unite', 'better-defaults',
+      \ 'which-key', 'ycmd', 'code-snippets',
+      \ 'markdown', 'editing', 'file-manager',
+      \ 'better-motion', 'programming'
+      \ ]
+
+" If you want to have more control over the layer, try using Layer command.
+" if g:spacevim_gui
+"   Layer 'airline'
+" endif
+
+" Manage your own plugins, refer to vim-plug's instruction for more detials.
+function! UserInit()
+
+  " Add plugin via Plug command.
+  Plug 'junegunn/seoul256.vim'
+  Plug 'jalvesaq/Nvim-R'
+  Plug 'vim-pandoc/vim-pandoc'
+  Plug 'vim-pandoc/vim-pandoc-syntax'
+  Plug 'vim-pandoc/vim-rmarkdown'
+  Plug 'kana/vim-textobj-user'
+  Plug 'kana/vim-textobj-fold'
+  Plug 'Julian/vim-textobj-variable-segment'
+  Plug 'beloglazov/vim-textobj-quotes'
+  Plug 'sgur/vim-textobj-parameter'
+  Plug 'terryma/vim-expand-region'
+  Plug 'thinca/vim-qfreplace'
+  Plug 'Valloric/YouCompleteMe'
+
+endfunction
+
+" Override the default settings as well as adding extras
+function! UserConfig()
+
+  " If you have installed the powerline fonts and want to enable airline layer
+  " let g:airline_powerline_fonts=1
+  set guifont=DroidSansMonoForPowerline\ NF:h12
+  set guifontwide=SimHei:h12
+  set guioptions-=m
+  set showtabline=2
+  set expandtab
+  set tabstop=4
+  set shiftwidth=4
+  set softtabstop=4
+  " Move to the start of line
+  nnoremap H ^
+  vnoremap H ^
+  " Move to the end of line
+  nnoremap L $
+  vnoremap L $
+
+  " Use gui colors in terminal if available
+  if has('termguicolors')
+    set termguicolors
+    if g:spacevim_tmux
+      " If use vim inside tmux, see https://github.com/vim/vim/issues/993
+      " set Vim-specific sequences for RGB colors
+      let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+      let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    endif
+  endif
+
+  let g:ycm_global_ycm_extra_conf = 'C:/Users/hongy/.vim/.ycm_extra_conf.py'
+
+  " Set folding method for specfic file types {{{
+  augroup ft_vim
+      au!
+  au FileType vim setlocal foldmethod=marker
+  au FileType r setlocal foldmethod=marker
+  augroup END
+  " }}}
+  " Commentary strings for different file types {{{
+  augroup plugin_commentary
+      au!
+      au FileType R setlocal commentstring=#%s
+      au FileType idf setlocal commentstring=!\ %s
+      au FileType osm setlocal commentstring=!\ %s
+  augroup END
+  " }}}
+  " EnergyPlus file type {{{
+  augroup ft_idf
+      au!
+      au BufRead,BufNewFile *.idf set filetype=idf
+      au BufRead,BufNewFile *.epmidf set filetype=idf
+      au BufRead,BufNewFile *.imf set filetype=idf
+      au BufRead,BufNewFile *.ddy set filetype=idf
+      au BufRead,BufNewFile *.osm set filetype=osm
+  augroup END
+  " }}}
+  " Auto quit R when close Vim {{{
+  autocmd VimLeave * if exists("g:SendCmdToR") && string(g:SendCmdToR) != "function('SendCmdToR_fake')" | call RQuit("nosave") | endif
+  " }}}
+  " Insert '%>%' pipe '.[]' operator in R {{{
+  augroup r_pipe
+      autocmd!
+      autocmd FileType R inoremap <buffer> ½ <c-v><Space>%>%<c-v><Space>
+      autocmd FileType R inoremap <buffer> <M-=> <c-v><Space>%>%<c-v><Space>
+      autocmd FileType R inoremap <buffer> ® .[]
+      autocmd FileType R inoremap <buffer> <M-.> .[]
+      autocmd FileType R inoremap <buffer> <M-;> <c-v><Space>:=<c-v><Space>
+      autocmd FileType R inoremap <buffer> <C-o> <C-x><C-o>
+  augroup END
+  " }}}
+  " Nvim-R {{{
+  let rmd_syn_hl_chunk = 1
+  " not losing focus every time that you generate the pdf
+  let R_openpdf = 1
+  " highlight R functions only if the `(` is typed
+  let R_hl_fun_paren = 1
+  let R_hl_term = 1
+  let R_listmethods = 1
+  " lists the arguments of a function, but and also the arguments of its methods
+  let R_objbr_opendf = 0
+  let Rout_more_colors = 1
+  let R_objbr_openlist = 0
+  " show a preview window of function arguments description and arguments
+  let R_show_arg_help = 1
+  let R_commented_lines = 1
+  let R_assign_map = "<M-->"
+  " clear R Console line before sending commands~
+  let R_clear_line = 1
+  let R_source_args = "print.eval = TRUE, max.deparse.length = 1000, echo = TRUE, encoding = 'UTF-8'"
+  let R_in_buffer = 0
+  augroup r_customcmd
+      autocmd FileType R nnoremap <buffer> <LocalLeader>la :RSend devtools::load_all()<cr>
+  augroup END
+  " }}}
+  " Auto delete trailing spaces when saving R, vim files {{{
+  " autocmd FileType r,vim autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
+  " }}}
+  set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
+  " Quick command mode
+  nnoremap ; :
+  nnoremap : ;
+  let g:ycm_key_invoke_completion='<M-;>'
+endfunction
+
