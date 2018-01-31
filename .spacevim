@@ -40,6 +40,7 @@ function! UserInit()
   Plug 'terryma/vim-expand-region'
   Plug 'thinca/vim-qfreplace'
   Plug 'Valloric/YouCompleteMe'
+  Plug 'ervandew/supertab'
 
 endfunction
 
@@ -143,6 +144,16 @@ function! UserConfig()
   " }}}
   set list!
   set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
+
+  " make YCM compatible with UltiSnips (using supertab)
+  let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+  let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+  let g:SuperTabDefaultCompletionType = '<C-n>'
+
+  " better key bindings for UltiSnipsExpandTrigger
+  let g:UltiSnipsExpandTrigger = "<tab>"
+  let g:UltiSnipsJumpForwardTrigger = "<tab>"
+  let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
   let g:ycm_key_invoke_completion = '<c-z>'
   noremap <c-z> <NOP>
   let g:ycm_global_ycm_extra_conf = 'C:/Users/hongy/.vim/.ycm_extra_conf.py'
