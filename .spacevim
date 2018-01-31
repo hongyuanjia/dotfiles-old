@@ -62,6 +62,9 @@ function! UserConfig()
   " Move to the end of line
   nnoremap L $
   vnoremap L $
+  " Quick command mode
+  nnoremap ; :
+  nnoremap : ;
 
   " Use gui colors in terminal if available
   if has('termguicolors')
@@ -73,8 +76,6 @@ function! UserConfig()
       let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
     endif
   endif
-
-  let g:ycm_global_ycm_extra_conf = 'C:/Users/hongy/.vim/.ycm_extra_conf.py'
 
   " Set folding method for specfic file types {{{
   augroup ft_vim
@@ -107,6 +108,7 @@ function! UserConfig()
   " Insert '%>%' pipe '.[]' operator in R {{{
   augroup r_pipe
       autocmd!
+      autocmd FileType R inoremap <buffer> <M--> <c-v><Space><-<c-v><Space>
       autocmd FileType R inoremap <buffer> ½ <c-v><Space>%>%<c-v><Space>
       autocmd FileType R inoremap <buffer> <M-=> <c-v><Space>%>%<c-v><Space>
       autocmd FileType R inoremap <buffer> ® .[]
@@ -115,6 +117,9 @@ function! UserConfig()
       autocmd FileType R inoremap <buffer> <C-o> <C-x><C-o>
   augroup END
   " }}}
+  augroup r_customcmd
+      autocmd FileType R nnoremap <buffer> <LocalLeader>la :RSend devtools::load_all()<cr>
+  augroup END
   " Nvim-R {{{
   let rmd_syn_hl_chunk = 1
   " not losing focus every time that you generate the pdf
@@ -135,17 +140,12 @@ function! UserConfig()
   let R_clear_line = 1
   let R_source_args = "print.eval = TRUE, max.deparse.length = 1000, echo = TRUE, encoding = 'UTF-8'"
   let R_in_buffer = 0
-  augroup r_customcmd
-      autocmd FileType R nnoremap <buffer> <LocalLeader>la :RSend devtools::load_all()<cr>
-  augroup END
   " }}}
-  " Auto delete trailing spaces when saving R, vim files {{{
-  " autocmd FileType r,vim autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
-  " }}}
+  set list!
   set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
-  " Quick command mode
-  nnoremap ; :
-  nnoremap : ;
-  let g:ycm_key_invoke_completion='<M-;>'
+  let g:ycm_key_invoke_completion = '<c-z>'
+  noremap <c-z> <NOP>
+  let g:ycm_global_ycm_extra_conf = 'C:/Users/hongy/.vim/.ycm_extra_conf.py'
+  "autocmd FileType r setlocal omnifunc=CompleteR
 endfunction
 
