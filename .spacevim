@@ -15,7 +15,7 @@ let g:spacevim_layers = [
       \ 'fzf', 'unite', 'better-defaults',
       \ 'which-key', 'ycmd', 'code-snippets',
       \ 'markdown', 'editing', 'file-manager',
-      \ 'better-motion', 'programming'
+      \ 'better-motion', 'programming', 'git'
       \ ]
 
 " If you want to have more control over the layer, try using Layer command.
@@ -169,6 +169,6 @@ endfunction
   " clear R Console line before sending commands~
   let R_clear_line = 1
   let R_source_args = "print.eval = TRUE, max.deparse.length = 1000, echo = TRUE, encoding = 'UTF-8'"
-  let R_in_buffer = 1
+  let R_in_buffer = 0
   " }}}
 autocmd GUIEnter * simalt ~x
