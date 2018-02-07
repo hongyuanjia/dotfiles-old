@@ -44,6 +44,7 @@ function! UserInit()
   Plug 'Shougo/unite-outline'
   Plug 'Shougo/vimproc.vim'
   Plug 'thinca/vim-qfreplace'
+  Plug 'tpope/vim-commentary'
 
 endfunction
 
