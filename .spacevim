@@ -27,7 +27,7 @@ let g:spacevim_layers = [
 function! UserInit()
 
   " Add plugin via Plug command.
-  Plug 'junegunn/seoul256.vim'
+  Plug 'binss/vim-sublime-monokai'
   Plug 'jalvesaq/Nvim-R'
   Plug 'vim-pandoc/vim-pandoc'
   Plug 'vim-pandoc/vim-pandoc-syntax'
@@ -63,6 +63,8 @@ function! UserConfig()
   set list!
   set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
   au FileType cpp,vim setlocal tabstop=4 softtabstop=4 shiftwidth=4
+  colorscheme monokai
+  hi Cursor guifg=#313131 guibg=white
 
   " Move to the start of line
   nnoremap H ^
@@ -148,6 +150,7 @@ function! UserConfig()
   let g:unite_source_grep_recursive_opt = ''
 
   nnoremap - <Nop>
+  autocmd GUIEnter * simalt ~x
 endfunction
 
   " Nvim-R {{{
@@ -171,4 +174,3 @@ endfunction
   let R_source_args = "print.eval = TRUE, max.deparse.length = 1000, echo = TRUE, encoding = 'UTF-8'"
   let R_in_buffer = 0
   " }}}
-autocmd GUIEnter * simalt ~x
