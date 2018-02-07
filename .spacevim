@@ -121,7 +121,6 @@ function! UserConfig()
   " Insert '%>%' pipe '.[]' operator in R {{{
   augroup r_pipe
       autocmd!
-      autocmd FileType R inoremap <buffer> <M--> <c-v><Space><-<c-v><Space>
       autocmd FileType R inoremap <buffer> ½ <c-v><Space>%>%<c-v><Space>
       autocmd FileType R inoremap <buffer> <M-=> <c-v><Space>%>%<c-v><Space>
       autocmd FileType R inoremap <buffer> ® .[]
@@ -152,6 +151,7 @@ function! UserConfig()
 
   nnoremap - <Nop>
   autocmd GUIEnter * simalt ~x
+  autocmd FileType cpp setlocal commentstring=//%s
 endfunction
 
   " Nvim-R {{{
