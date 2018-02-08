@@ -65,7 +65,8 @@ function! UserConfig()
   set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
   au FileType cpp,vim setlocal tabstop=4 softtabstop=4 shiftwidth=4
   colorscheme monokai
-  hi Cursor guifg=#313131 guibg=white
+  highlight Cursor guifg=#313131 guibg=white
+  highlight ColorColumn ctermbg=0 guibg=lightgrey
 
   " Move to the start of line
   nnoremap H ^
