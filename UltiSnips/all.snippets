@@ -12,9 +12,9 @@ from vimsnippets import get_comment_format
 endglobal
 
 snippet fold "Fold" b
-`!p snip.rv = get_comment_format()[0]`${1:Title} {{{$2
+`!p snip.rv = get_comment_format()[0]` $1{{{$2
 ${VISUAL}$0
-`!p snip.rv = get_comment_format()[0]`}}}$2
+`!p snip.rv = get_comment_format()[0]` }}}$2
 endsnippet
 
 ###########
