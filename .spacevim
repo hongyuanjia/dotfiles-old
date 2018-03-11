@@ -2,33 +2,24 @@
 " Comment it out if you don't like
 let g:spacevim_plug_home = '~/.vim/plugged'
 
-" The default leader key is space key.
-" Uncomment the line below and modify "<\Space>" if you prefer another
-" let g:spacevim_leader = "<\Space>"
-
-" The default local leader key is comma.
-" Uncomment the line below and modify ',' if you prefer another
-" let g:spacevim_localleader = ','
-
 " Enable the existing layers in space-vim
 let g:spacevim_layers = [
-      \ 'fzf', 'unite', 'better-defaults',
+      \ 'unite', 'better-defaults',
       \ 'which-key', 'code-snippets', 'deoplete',
       \ 'markdown', 'editing', 'file-manager',
       \ 'better-motion', 'programming', 'git'
       \ ]
 
-" If you want to have more control over the layer, try using Layer command.
-" if g:spacevim_gui
-"   Layer 'airline'
-" endif
-
 " Manage your own plugins, refer to vim-plug's instruction for more detials.
+" UserInit {{{
 function! UserInit()
 
   " Add plugin via Plug command.
-  Plug 'binss/vim-sublime-monokai'
   Plug 'jalvesaq/Nvim-R'
+  Plug 'airblade/vim-gitgutter', {'on' : []}
+  Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+  Plug 'Shougo/unite-outline'
+  Plug 'Shougo/junkfile.vim'
   Plug 'vim-pandoc/vim-pandoc'
   Plug 'vim-pandoc/vim-pandoc-syntax'
   Plug 'vim-pandoc/vim-rmarkdown'
@@ -40,18 +31,88 @@ function! UserInit()
   Plug 'terryma/vim-expand-region'
   Plug 'thinca/vim-qfreplace'
   Plug 'ervandew/supertab'
+  Plug 'Shougo/neomru.vim'
   Plug 'Shougo/unite-outline'
   Plug 'Shougo/vimproc.vim'
   Plug 'thinca/vim-qfreplace'
   Plug 'tpope/vim-commentary'
+  Plug 'ntpeters/vim-better-whitespace', { 'on': ['StripWhitespace', 'EnableStripWhitespaceOnSave'], 'for': ['r', 'vim'] }
 
 endfunction
+" }}}
 
 " Override the default settings as well as adding extras
+" UserConfig {{{
 function! UserConfig()
-
-  " If you have installed the powerline fonts and want to enable airline layer
-  " let g:airline_powerline_fonts=1
+  " Add custom leader guide {{{
+  runtime autoload/spacevim/plug/leaderGuide.vim
+  " Windows {{{
+  let g:spacevim#plug#leaderGuide#lmap['w']['\'] = [
+              \ 'call feedkeys("\<Plug>(window_v1)")', 'split-window-right']
+  let g:spacevim#plug#leaderGuide#lmap['w']['/'] = [
+              \ 'call feedkeys("\<Plug>(window_v1)")', 'split-window-right']
+  " }}}
+  " Files {{{
+  let g:spacevim#plug#leaderGuide#lmap['f'].f = [
+              \ "UniteWithBufferDir -silent -start-insert file file_mru",
+              \ 'Files' ]
+  let g:spacevim#plug#leaderGuide#lmap['f'].r = [
+              \ "Unite -silent -start-insert file_mru directory_mru",
+              \ 'Recent files' ]
+  let g:spacevim#plug#leaderGuide#lmap['f'].n = [
+              \ "UniteWithBufferDir -silent -start-insert file/new",
+              \ 'New file' ]
+  let g:spacevim#plug#leaderGuide#lmap['f'].N = [
+              \ "UniteWithBufferDir -silent -start-insert directory/new",
+              \ 'New directory' ]
+  let g:spacevim#plug#leaderGuide#lmap['f'].j = [
+              \ "UniteWithBufferDir -silent -start-insert junkfile/new junkfile",
+              \ 'Junkfile' ]
+  let g:spacevim#plug#leaderGuide#lmap['f'].d = [
+              \ "UniteWithBufferDir -silent -start-insert directory directory_mru",
+              \ 'Directory' ]
+  let g:spacevim#plug#leaderGuide#lmap['f'].v = [
+              \ 'e $HOME/.spacevim', 'Edit .spacevim' ]
+  " }}}
+  " Fold {{{
+  let g:spacevim#plug#leaderGuide#lmap['F'] = {
+              \ 'name' : 'Fold',
+              \ }
+  let g:spacevim#plug#leaderGuide#lmap['F'].m = [
+              \ "setlocal foldmethod=marker", 'Fold method = marker' ]
+  let g:spacevim#plug#leaderGuide#lmap['F'].e = [
+              \ "setlocal foldmethod=expr", 'Fold method = expression' ]
+  " }}}
+  " Search {{{
+  let g:spacevim#plug#leaderGuide#lmap['s'].o = [
+              \ 'Unite -no-quit -vertical -winwidth=40 '.
+              \ ' -direction=topleft -toggle outline',
+              \ 'Outline' ]
+  let g:spacevim#plug#leaderGuide#lmap['s'].O = [
+              \ 'Unite -start-insert -vertical -winwidth=40 '.
+              \ ' -direction=topleft -toggle outline',
+              \ 'Outline(insert)' ]
+  let g:spacevim#plug#leaderGuide#lmap['s'].p = [
+              \ 'Unite -start-insert grep:.', 'pt' ]
+  let g:spacevim#plug#leaderGuide#lmap['s'].l = [
+              \ 'Unite -start-insert line', 'search line' ]
+  let g:spacevim#plug#leaderGuide#lmap['s'].L = [
+              \ 'Unite -auto-preivew -start-insert line', 'search line(preview)' ]
+  let g:spacevim#plug#leaderGuide#lmap['s'].M = [
+              \ 'Unite -auto-preivew mark', 'mark' ]
+  " }}}
+  " Tabs {{{
+  let g:spacevim#plug#leaderGuide#lmap['t'].o = [ 'tabonly', 'Tab only' ]
+  let g:spacevim#plug#leaderGuide#lmap['t'].p = [ 'tabprev', 'Previous tab' ]
+  let g:spacevim#plug#leaderGuide#lmap['t'].n = [ 'tabnext', 'Next tab' ]
+  let g:spacevim#plug#leaderGuide#lmap['t'].d = [ 'tabclose', 'Close tab' ]
+  " }}}
+  " }}}
+  " Change to file's directory when vim-rooter failed
+  let g:rooter_change_directory_for_non_project_files = 'current'
+  " better defaults {{{
+  set dictionary+=$HOME/.vim/dict/english.dic
+  set complete+=k
   set guifont=DroidSansMonoForPowerline\ NF:h12
   set guifontwide=SimHei:h12
   set guioptions-=m
@@ -62,11 +123,9 @@ function! UserConfig()
   set softtabstop=4
   set list!
   set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
+  autocmd GUIEnter * simalt ~x
   au FileType cpp,vim setlocal tabstop=4 softtabstop=4 shiftwidth=4
-  " colorscheme monokai
-  highlight Cursor guifg=#313131 guibg=white
-  highlight ColorColumn ctermbg=0 guibg=lightgrey
-
+  nnoremap - <Nop>
   " Move to the start of line
   nnoremap H ^
   vnoremap H ^
@@ -76,8 +135,12 @@ function! UserConfig()
   " Quick command mode
   nnoremap ; :
   nnoremap : ;
+  " Toggle folding: \
+  nnoremap \ za
+  vnoremap \ za
+  " }}}
 
-  " Use gui colors in terminal if available
+  " Use gui colors in terminal if available {{{
   if has('termguicolors')
     set termguicolors
     if g:spacevim_tmux
@@ -87,14 +150,18 @@ function! UserConfig()
       let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
     endif
   endif
-
-  " Set folding method for specfic file types {{{
-  augroup ft_vim
+  " }}}
+  " Set color column for specific file type {{{
+  augroup cc_vim_r
       au!
-  au FileType vim setlocal foldmethod=marker
-  au FileType vim setlocal foldmarker={{{,}}}""
-  au FileType r setlocal foldmethod=marker
-  au FileType r setlocal foldmarker={{{,}}}
+      au FileType vim,r setlocal colorcolumn=80
+  augroup END
+  " }}}
+  " Set folding method for specfic file types {{{
+  augroup ft_vim_r
+      au!
+  au FileType vim,r setlocal foldmethod=marker
+  au FileType vim,r setlocal foldmarker={{{,}}}""
   augroup END
   " }}}
   " Commentary strings for different file types {{{
@@ -103,6 +170,7 @@ function! UserConfig()
       au FileType R setlocal commentstring=#%s
       au FileType idf setlocal commentstring=!\ %s
       au FileType osm setlocal commentstring=!\ %s
+      au FileType cpp setlocal commentstring=//%s
   augroup END
   " }}}
   " EnergyPlus file type {{{
@@ -117,6 +185,8 @@ function! UserConfig()
   " }}}
   " Auto quit R when close Vim {{{
   autocmd VimLeave * if exists("g:SendCmdToR") && string(g:SendCmdToR) != "function('SendCmdToR_fake')" | call RQuit("nosave") | endif
+  " Auto delete trailing spaces when saving R and vim files
+  autocmd FileType r,vim autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
   " }}}
   " Insert '%>%' pipe '.[]' operator in R {{{
   augroup r_pipe
@@ -129,27 +199,38 @@ function! UserConfig()
       autocmd FileType R inoremap <buffer> <C-o> <C-x><C-o>
   augroup END
   " }}}
+  " add key bindings for better R package development {{{
   augroup r_customcmd
+      autocmd FileType rbrowser nnoremap <buffer><silent> <CR> :call RBrowserDoubleClick()<CR>
+      autocmd FileType rbrowser nnoremap <buffer><silent> <2-LeftMouse> :call RBrowserDoubleClick()<CR>
+      autocmd FileType rbrowser nnoremap <buffer><silent> <RightMouse> :call RBrowserRightClick()<CR>
       autocmd FileType R nnoremap <buffer> <LocalLeader>la :RSend devtools::load_all()<cr>
       autocmd FileType cpp nnoremap <buffer> <LocalLeader>la :RSend devtools::load_all()<cr>
   augroup END
+  " }}}
+  " better key bindings for UltiSnipsExpandTrigger {{{
   let g:SuperTabDefaultCompletionType = '<C-n>'
-
-  " better key bindings for UltiSnipsExpandTrigger
   let g:UltiSnipsExpandTrigger = "<tab>"
   let g:UltiSnipsJumpForwardTrigger = "<tab>"
   let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-
+  " }}}
+  " Unite settings {{{
+  let g:unite_source_rec_async_command = ['pt', '--nocolor', '--nogroup', '--smart-case']
   let g:unite_source_grep_command='pt'
   let g:unite_source_grep_default_opts='--nocolor --nogroup --smart-case'
   let g:unite_source_grep_recursive_opt = ''
+  " }}}
+  " Fix conflicts between multiple cursor and deoplete
+  function! Multiple_cursors_before()
+      let b:deoplete_disable_auto_complete = 1
+  endfunction
 
-  nnoremap - <Nop>
-  autocmd GUIEnter * simalt ~x
-  autocmd FileType cpp setlocal commentstring=//%s
-
+  function! Multiple_cursors_after()
+      let b:deoplete_disable_auto_complete = 0
+  endfunction
   let g:python3_host_prog='c:/Python36/python.exe'
 endfunction
+" }}}
 
   " Nvim-R {{{
   let rmd_syn_hl_chunk = 1
@@ -158,17 +239,18 @@ endfunction
   " highlight R functions only if the `(` is typed
   " let R_hl_fun_paren = 1
   let R_hl_term = 1
-  let R_listmethods = 1
   " lists the arguments of a function, but and also the arguments of its methods
   let R_objbr_opendf = 0
   let Rout_more_colors = 1
   let R_objbr_openlist = 0
   " show a preview window of function arguments description and arguments
-  let R_show_arg_help = 1
+  let R_show_arg_help = 0
   let R_commented_lines = 1
   let R_assign_map = "<M-->"
   " clear R Console line before sending commands~
   let R_clear_line = 1
   let R_source_args = "print.eval = TRUE, max.deparse.length = 1000, echo = TRUE, encoding = 'UTF-8'"
   let R_in_buffer = 0
+  let R_path = "C:\\Program Files\\R\\R-3.3.3\\bin\\x64"
+
   " }}}
