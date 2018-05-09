@@ -5,7 +5,7 @@ let g:spacevim_plug_home = '~/.vim/plugged'
 " Enable the existing layers in space-vim
 let g:spacevim_layers = [
       \ 'unite', 'better-defaults',
-      \ 'which-key', 'code-snippets', 'deoplete',
+      \ 'which-key', 'code-snippets',
       \ 'markdown', 'editing', 'file-manager',
       \ 'better-motion', 'programming', 'git'
       \ ]
@@ -15,8 +15,11 @@ let g:spacevim_layers = [
 function! UserInit()
 
   " Add plugin via Plug command.
+  Plug 'roxma/nvim-completion-manager'
+  Plug 'gaalcaras/ncm-R'
+  Plug 'Shougo/neco-vim'
+  Plug 'roxma/vim-hug-neovim-rpc'
   Plug 'jalvesaq/Nvim-R'
-  Plug 'airblade/vim-gitgutter', {'on' : []}
   Plug 'Shougo/vimproc.vim', {'do' : 'make'}
   Plug 'Shougo/unite-outline'
   Plug 'Shougo/junkfile.vim'
@@ -30,13 +33,14 @@ function! UserInit()
   Plug 'sgur/vim-textobj-parameter'
   Plug 'terryma/vim-expand-region'
   Plug 'thinca/vim-qfreplace'
-  Plug 'ervandew/supertab'
+  " Plug 'ervandew/supertab'
   Plug 'Shougo/neomru.vim'
   Plug 'Shougo/unite-outline'
   Plug 'Shougo/vimproc.vim'
   Plug 'thinca/vim-qfreplace'
   Plug 'tpope/vim-commentary'
   Plug 'ntpeters/vim-better-whitespace', { 'on': ['StripWhitespace', 'EnableStripWhitespaceOnSave'], 'for': ['r', 'vim'] }
+  Plug 'justinmk/vim-sneak'
 
 endfunction
 " }}}
@@ -46,6 +50,10 @@ endfunction
 function! UserConfig()
   " Add custom leader guide {{{
   runtime autoload/spacevim/plug/leaderGuide.vim
+  " Buffer {{{
+  let g:spacevim#plug#leaderGuide#lmap['b'].b = [
+              \ "Unite -start-insert buffer", 'buffer-list']
+  " }}}
   " Windows {{{
   let g:spacevim#plug#leaderGuide#lmap['w']['\'] = [
               \ 'call feedkeys("\<Plug>(window_v1)")', 'split-window-right']
@@ -123,9 +131,16 @@ function! UserConfig()
   set softtabstop=4
   set list!
   set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
+  set textwidth=80
+  set formatoptions+=M "don't insert a space before or after a multi-byte when join
+  set formatoptions+=m "Multibyte line breaking
+  set formatoptions+=j "Remove a comment leader when joining
+  set formatoptions+=q "New line will start with a commen leader
+  set formatoptions+=n "When formatting text, recognize numbered lists
+
+  noremap - <Nop>
   autocmd GUIEnter * simalt ~x
   au FileType cpp,vim setlocal tabstop=4 softtabstop=4 shiftwidth=4
-  nnoremap - <Nop>
   " Move to the start of line
   nnoremap H ^
   vnoremap H ^
@@ -171,8 +186,15 @@ function! UserConfig()
       au FileType idf setlocal commentstring=!\ %s
       au FileType osm setlocal commentstring=!\ %s
       au FileType cpp setlocal commentstring=//%s
+      au FileType R setlocal comments+=b:#'
   augroup END
   " }}}
+  " set format options for R
+  augroup fo_R
+      au!
+      au Filetype r setlocal formatoptions+=q
+      au Filetype r setlocal formatoptions+=r
+      au Filetype r setlocal formatoptions-=t
   " EnergyPlus file type {{{
   augroup ft_idf
       au!
@@ -205,6 +227,8 @@ function! UserConfig()
       autocmd FileType rbrowser nnoremap <buffer><silent> <2-LeftMouse> :call RBrowserDoubleClick()<CR>
       autocmd FileType rbrowser nnoremap <buffer><silent> <RightMouse> :call RBrowserRightClick()<CR>
       autocmd FileType R nnoremap <buffer> <LocalLeader>la :RSend devtools::load_all()<cr>
+      autocmd FileType R nnoremap <buffer> <LocalLeader>tb :RSend traceback()<cr>
+      autocmd FileType R nnoremap <buffer> <LocalLeader>q :RSend Q<cr>
       autocmd FileType cpp nnoremap <buffer> <LocalLeader>la :RSend devtools::load_all()<cr>
   augroup END
   " }}}
@@ -237,7 +261,7 @@ endfunction
   " not losing focus every time that you generate the pdf
   let R_openpdf = 1
   " highlight R functions only if the `(` is typed
-  " let R_hl_fun_paren = 1
+  let R_hl_fun_paren = 1
   let R_hl_term = 1
   " lists the arguments of a function, but and also the arguments of its methods
   let R_objbr_opendf = 0
@@ -249,8 +273,24 @@ endfunction
   let R_assign_map = "<M-->"
   " clear R Console line before sending commands~
   let R_clear_line = 1
-  let R_source_args = "print.eval = TRUE, max.deparse.length = 1000, echo = TRUE, encoding = 'UTF-8'"
+  let R_source_args = "print.eval = TRUE, local = TRUE, max.deparse.length = 1000, echo = TRUE, encoding = 'UTF-8'"
   let R_in_buffer = 0
-  let R_path = "C:\\Program Files\\R\\R-3.3.3\\bin\\x64"
-
   " }}}
+" ToggleSlash {{{
+function! ToggleSlash(independent) range
+  let from = ''
+  for lnum in range(a:firstline, a:lastline)
+    let line = getline(lnum)
+    let first = matchstr(line, '[/\\]')
+    if !empty(first)
+      if a:independent || empty(from)
+        let from = first
+      endif
+      let opposite = (from == '/' ? '\' : '/')
+      call setline(lnum, substitute(line, from, opposite, 'g'))
+    endif
+  endfor
+endfunction
+command! -bang -range ToggleSlash <line1>,<line2>call ToggleSlash(<bang>1)
+nnoremap <Leader>r<BSlash> :ToggleSlash<CR>
+" }}}
