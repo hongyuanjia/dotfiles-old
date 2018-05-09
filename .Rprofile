@@ -16,11 +16,6 @@ local({r <- getOption("repos")
       r["CRAN"] <- "https://mirrors.tuna.tsinghua.edu.cn/CRAN"
       options(repos=r)})
 
-# Give a fortune cookie, but only to interactive sessions
-# (This would need the fortunes package to be installed.)
-#  if (interactive())
-#    fortunes::fortune()
-
 # Suggestions from devtools
 # https://github.com/hadley/devtools
 .First <- function() {
@@ -29,6 +24,4 @@ local({r <- getOption("repos")
     deparse.max.lines = 2)
 }
 
-if (interactive()) {
-  suppressMessages(require(devtools))
-}
+try(startup::startup())
