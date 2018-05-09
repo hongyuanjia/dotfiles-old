@@ -10,6 +10,10 @@ snippet roxygen "a templete of inserting R function documentation." b
 #' $7
 endsnippet
 
+snippet lib "library" b
+library($1)
+endsnippet
+
 snippet ## "" b
 #' ${VISUAL}$0
 endsnippet
@@ -38,16 +42,15 @@ snippet inst "install package" b
 install.packages("$1${VISUAL}")
 endsnippet
 
-snippet tb "traceback"
-traceback()
+snippet br "browser"
+browser()
 endsnippet
 
 snippet ffold "function with folds"
-# ${1:name} {{{$2
+# ${1:name}
+# {{{$2
 $1 <- function ($3) {
     ${VISUAL}$0
-
-	return()
 }
 # }}}$2
 endsnippet
@@ -99,4 +102,37 @@ snippet syst "system.time" b
 system.time({
     ${VISUAL}$0
 })
+endsnippet
+
+snippet ofun "function in R6 class" b
+$1 = function ($2) {
+    ${4:# $3}
+    # {{{
+    $5
+    # }}}
+}${6:,}
+endsnippet
+
+snippet desc "insert a describe test block" b
+describe("$1", {
+    ${VISUAL}$0
+})
+endsnippet
+
+snippet its "insert a it block without code in `describe()`" b
+it("$0")
+endsnippet
+
+snippet itb "insert a it block with code in `describe()`" b
+it("$1", {
+    ${VISUAL}$0
+})
+endsnippet
+
+snippet sql "insert SQL query" b
+RSQLite::${1:dbExecute}(${2:con}, glue::glue(
+    "
+    $0
+    "
+))
 endsnippet
