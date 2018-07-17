@@ -1,5 +1,5 @@
 # set the default help type
-  options(help_type="html")
+options(help_type="html")
 
 # set a CRAN mirror
 local({r <- getOption("repos")
@@ -13,3 +13,6 @@ local({r <- getOption("repos")
     browserNLdisabled = TRUE,
     deparse.max.lines = 2)
 }
+
+.libPaths("C:/Users/hongy/Documents/R/win-library/3.5")
+
