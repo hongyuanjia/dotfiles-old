@@ -3,7 +3,8 @@ let g:spacevim_layers = [
       \ 'unite', 'better-defaults',
       \ 'which-key', 'code-snippets',
       \ 'markdown', 'programming',
-      \ 'git', 'text-align'
+      \ 'git', 'text-align',
+      \ 'auto-completion'
       \ ]
 
 function! UserInit()
@@ -20,9 +21,6 @@ function! UserInit()
   Plug 'Shougo/vimfiler'
 
   " For R
-  Plug 'roxma/nvim-completion-manager'
-  Plug 'gaalcaras/ncm-R'
-  Plug 'roxma/vim-hug-neovim-rpc'
   Plug 'jalvesaq/Nvim-R'
   Plug 'jalvesaq/R-Vim-runtime'
 
@@ -289,3 +287,5 @@ endfunction
     let g:multi_cursor_skip_key='<C-x>'
     let g:multi_cursor_quit_key='<Esc>'
   " }
+
+  let g:completor_r_omni_trigger = '.'
