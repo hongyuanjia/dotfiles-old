@@ -13,6 +13,9 @@ function! UserInit()
   Plug 'tpope/vim-sleuth'
   Plug 'tpope/vim-repeat'
 
+  " For Git
+  Plug 'lambdalisue/gina.vim'
+
   " For Unite
   Plug 'Shougo/unite-outline'
   Plug 'thinca/vim-qfreplace'
