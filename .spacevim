@@ -50,7 +50,7 @@ function! UserConfig()
   " better defaults {
   set dictionary+=$HOME/.vim/dict/english.dic
   set complete+=k
-  set guifont=DroidSansMonoForPowerline\ NF:h12
+  set guifont=DejaVuSansMono\ NF:h12
   set guifontwide=SimHei:h12
   set guioptions-=m
   set showtabline=2
