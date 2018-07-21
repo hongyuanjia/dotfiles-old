@@ -4,7 +4,7 @@ let g:spacevim_layers = [
       \ 'which-key', 'code-snippets',
       \ 'markdown', 'programming',
       \ 'git', 'text-align',
-      \ 'auto-completion'
+      \ 'auto-completion', 'lightline'
       \ ]
 
 function! UserInit()
