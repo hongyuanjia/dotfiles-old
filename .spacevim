@@ -195,9 +195,7 @@ function! UserConfig()
     au FileType R setlocal comments+=b:#'
 
     au FileType rmd setlocal commentstring=<!--%s-->
-
-    au BufNewFile,BufRead *.rmd,*.rmarkdown set filetype=rmd.markdown
-    let g:vim_markdown_frontmatter = 1
+    au FileType rmd setlocal comments=b:*,b:-,b:+,n:>
 
     " Keybindings
     au FileType R inoremap <buffer> ½ <c-v><Space>%>%<c-v><Space>
