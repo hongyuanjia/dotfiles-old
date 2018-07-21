@@ -190,11 +190,12 @@ function! UserConfig()
   " AutoCmd {
   augroup au_R
     au!
-    au FileType R setlocal colorcolumn=80
+    au FileType R,rmd setlocal colorcolumn=80
 
     au FileType R setlocal foldmethod=marker
     au FileType R setlocal foldmarker={{{,}}}
 
+    au BufNewFile,BufRead *.rmd,*.rmarkdown set filetype=rmd.markdown 
     au FileType R setlocal commentstring=#%s
     au FileType R setlocal comments+=b:#'
 
