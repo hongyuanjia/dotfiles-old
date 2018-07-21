@@ -28,7 +28,6 @@ function! UserInit()
   Plug 'jalvesaq/R-Vim-runtime'
 
   " For RMarkdown
-  Plug 'plasticboy/vim-markdown'
   Plug 'rafaqz/citation.vim'
 
   " For Text editing
