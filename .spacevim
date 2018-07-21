@@ -207,7 +207,19 @@ function! UserConfig()
     au FileType rbrowser nnoremap <buffer><silent> <CR> :call RBrowserDoubleClick()<CR>
     au FileType rbrowser nnoremap <buffer><silent> <2-LeftMouse> :call RBrowserDoubleClick()<CR>
     au FileType rbrowser nnoremap <buffer><silent> <RightMouse> :call RBrowserRightClick()<CR>
+    au FileType rmd nnoremap <buffer> <LocalLeader>kk :call RenderRmd()<CR>
   augroup END
+  " }
+
+  " RenderRmd {
+  function RenderRmd()
+    let rmdPath = expand("%:p")
+    if has("win32")
+      let rmdPath = substitute(rmdPath, '\\', '/', 'g')
+    endif
+    let cmd = "RSend rmarkdown::render('" . rmdPath. "', encoding = 'UTF-8')"
+    exec cmd
+  endfunction
   " }
 
   " R markdown citation
