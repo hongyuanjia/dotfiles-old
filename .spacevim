@@ -244,6 +244,26 @@ function! UserConfig()
   let g:sneak#s_next = 1
   " }
 
+  " lightline {
+  let g:lightline = {
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+        \ },
+        \ 'component_function': {
+        \   'gitbranch': 'gina#component#repo#branch'
+        \ },
+        \ }
+  " }
+  " Gina {
+  nnoremap <silent> <Leader>gs :<C-u>Gina status<CR>
+  nnoremap <silent> <Leader>gc :<C-u>Gina commit<CR>
+  nnoremap <silent> <Leader>gC :<C-u>Gina commit --amend<CR>
+  call gina#custom#command#option(
+        \ 'status',
+        \ '--opener', 'split'
+        \)
+  " }
 endfunction
 
   " Toggle file path slash {
