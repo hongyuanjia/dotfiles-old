@@ -1,3 +1,5 @@
+Set-ExecutionPolicy Bypass -Scope Process -Force
+
 # Change directory to $Home
 Push-Location  ~
 # By default PowerShell uses TLS 1.0, but GitHub requires TLS 1.2
@@ -11,11 +13,12 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://cho
 refreshenv
 
 # Install pacakges
-choco install -y`
+choco install -y `
     7zip.install`
     autohotkey.install`
     conemu`
     dotnet4.5`
+    dropbox`
     everything`
     git.install`
     googlechrome`
@@ -24,14 +27,14 @@ choco install -y`
     pandoc`
     pt`
     python3`
-    r.project r.studio`
+    python2`
+    r.project`
+    r.studio`
     sumatrapdf.install`
     vcredist-all`
     vim-tux.install`
-    visualstudiocode`
     zotero-standalone`
     gitkraken
+
 # For 'LyX' specifically, ignore MikTex
 choco install lyx --ignore-dependencies -y
-
-Rscript install.R
