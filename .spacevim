@@ -263,6 +263,8 @@ function! UserConfig()
         \ 'status',
         \ '--opener', 'split'
         \)
+  " start diff vertically
+  set diffopt+=vertical
   " }
 endfunction
 
