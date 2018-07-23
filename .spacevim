@@ -195,7 +195,7 @@ function! UserConfig()
     au FileType R setlocal foldmethod=marker
     au FileType R setlocal foldmarker={{{,}}}
 
-    au BufNewFile,BufRead *.rmd,*.rmarkdown set filetype=rmd.markdown 
+    " au BufNewFile,BufRead *.rmd,*.rmarkdown set filetype=rmd.markdown 
     au FileType R setlocal commentstring=#%s
     au FileType R setlocal comments+=b:#'
 
