@@ -106,7 +106,6 @@ function! UserConfig()
   " }
 
   " better key bindings for UltiSnipsExpandTrigger {
-  let g:SuperTabDefaultCompletionType = '<C-n>'
   let g:UltiSnipsExpandTrigger = "<tab>"
   let g:UltiSnipsJumpForwardTrigger = "<tab>"
   let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
@@ -124,6 +123,8 @@ function! UserConfig()
       endif
     endif
   endfunction
+  " If your terminal(-emulator) supports true colors, uncomment the line below
+  call s:enable_termgui()
   " }
 
   " Load auto-pairs when first start to insert {
@@ -132,9 +133,6 @@ function! UserConfig()
     autocmd CursorHold,CursorHoldI,InsertEnter * call plug#load('auto-pairs') | autocmd! spacevimAutoPairs
   augroup END
   " }
-
-  " If your terminal(-emulator) supports true colors, uncomment the line below
-  " call s:enable_termgui()
 
   " Overwrite default leaderGuide settings and add new ones {
   runtime autoload/spacevim/plug/leaderGuide.vim
