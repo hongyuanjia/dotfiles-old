@@ -14,5 +14,3 @@ local({r <- getOption("repos")
     deparse.max.lines = 2)
 }
 
-.libPaths("C:/Users/hongy/Documents/R/win-library/3.5")
-
