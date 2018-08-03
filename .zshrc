@@ -94,7 +94,7 @@ source $ZSH/oh-my-zsh.sh
 #
 # Example aliases
 alias zshconfig="vim ~/.zshrc"
-alias i3config="vim ~/.i3/config"
+alias i3config="vim ~/.config/i3/config"
 
 bindkey '^[^M' autosuggest-execute
 bindkey '^[l' autosuggest-accept
