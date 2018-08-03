@@ -1,0 +1,330 @@
+let g:spacevim_plug_home = '~/.vim/plugged'
+
+" Layers {
+function! Layers()
+  Layer 'unite'
+
+  Layer 'better-defaults', {'exclude': [
+        \ 'xtal8/traces.vim',
+        \ 't9md/vim-choosewin'
+        \ ]}
+
+  Layer 'which-key'
+
+  Layer 'code-snippets'
+
+  Layer 'markdown', {'exclude': 'iamcco/markdown-preview.vim'}
+
+  Layer 'programming', {'exclude' : [
+        \ 'sheerun/vim-polyglot',
+        \ 'junegunn/rainbow_parentheses.vim',
+        \ 'majutsushi/tagbar',
+        \ 'matze/vim-move',
+        \ 'Yggdroot/indentLine'
+        \ ]}
+
+  Layer 'text-align'
+
+  Layer 'file-manager', {'exclude': 'danro/rename.vim'}
+
+  Layer 'auto-completion'
+
+  Layer 'lightline'
+endfunction
+" }
+
+" Plugins {
+function! UserInit()
+  " For better defaults
+  Plug 'tpope/vim-sensible'
+  Plug 'tpope/vim-sleuth'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-eunuch'
+
+  " For Git
+  Plug 'lambdalisue/gina.vim'
+
+  " For Unite
+  Plug 'Shougo/unite-outline'
+  Plug 'thinca/vim-qfreplace'
+  Plug 'Shougo/neomru.vim'
+  Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+
+  " For R
+  Plug 'jalvesaq/Nvim-R'
+  Plug 'jalvesaq/R-Vim-runtime'
+
+  " For Text editing
+  Plug 'tpope/vim-surround'
+  Plug 'terryma/vim-multiple-cursors'
+  Plug 'justinmk/vim-sneak'
+  Plug 'jiangmiao/auto-pairs'
+  Plug 'kana/vim-textobj-user'
+  Plug 'Julian/vim-textobj-variable-segment'
+  Plug 'Julian/vim-textobj-brace'
+  Plug 'terryma/vim-expand-region'
+  Plug 'tpope/vim-commentary'
+  Plug 'AndrewRadev/sideways.vim'
+  Plug 'chrisbra/Colorizer'
+
+  " For better looking
+  Plug 'ryanoasis/vim-devicons'
+
+endfunction
+" }
+
+function! UserConfig()
+
+  " Change to file's directory when vim-rooter failed
+  let g:rooter_change_directory_for_non_project_files = 'current'
+
+  " better defaults {
+  set dictionary+=$HOME/.vim/dict/english.dic
+  set complete+=k
+  set guifont=DejaVuSansMono\ NF:h12
+  set guifontwide=SimHei:h12
+  set guioptions-=m
+  set showtabline=2
+  set expandtab
+  set textwidth=80
+  set list!
+  set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+  set formatoptions+=M "don't insert a space before or after a multi-byte when join
+  set formatoptions+=m "Multibyte line breaking
+  set formatoptions+=j "Remove a comment leader when joining
+  set formatoptions+=q "New line will start with a commen leader
+  set formatoptions+=n "When formatting text, recognize numbered lists
+  set formatoptions+=r
+  set formatoptions-=t
+
+  noremap - <Nop>
+  autocmd GUIEnter * simalt ~x
+
+  " Quick command mode
+  nnoremap ; :
+  nnoremap : ;
+  " Visual select to beginning or end
+  vnoremap H ^
+  vnoremap L $
+  " }
+
+  " better key bindings for UltiSnipsExpandTrigger {
+  let g:UltiSnipsExpandTrigger = "<tab>"
+  let g:UltiSnipsJumpForwardTrigger = "<tab>"
+  let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+  " }
+
+  " Use gui colors in terminal if available {
+  function! s:enable_termgui()
+    if has('termguicolors')
+      set termguicolors
+      if g:spacevim.tmux
+        " If use vim inside tmux, see https://github.com/vim/vim/issues/993
+        " set Vim-specific sequences for RGB colors
+        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+      endif
+    endif
+  endfunction
+  " If your terminal(-emulator) supports true colors, uncomment the line below
+  call s:enable_termgui()
+  " }
+
+  " Load auto-pairs when first start to insert {
+  augroup spacevimAutoPairs
+    autocmd!
+    autocmd CursorHold,CursorHoldI,InsertEnter * call plug#load('auto-pairs') | autocmd! spacevimAutoPairs
+  augroup END
+  " }
+
+  " Overwrite default leaderGuide settings and add new ones {
+  runtime autoload/spacevim/plug/leaderGuide.vim
+  " Buffer {
+  let g:spacevim#plug#leaderGuide#lmap['b'].b = [
+              \ "Unite -start-insert buffer", 'buffer-list']
+  " }
+  " Files {
+  let g:spacevim#plug#leaderGuide#lmap['f'] = {
+        \ 'name' : '+find/files/fold'                                     ,
+        \ '0' : ['set foldlevel=0'                                        , '0-fold-level']       ,
+        \ '1' : ['set foldlevel=1'                                        , '1-fold-level']       ,
+        \ '2' : ['set foldlevel=2'                                        , '2-fold-level']       ,
+        \ '3' : ['set foldlevel=3'                                        , '3-fold-level']       ,
+        \ '4' : ['set foldlevel=4'                                        , '4-fold-level']       ,
+        \ '5' : ['set foldlevel=5'                                        , '5-fold-level']       ,
+        \ '6' : ['set foldlevel=6'                                        , '6-fold-level']       ,
+        \ '7' : ['set foldlevel=7'                                        , '7-fold-level']       ,
+        \ '8' : ['set foldlevel=8'                                        , '8-fold-level']       ,
+        \ '9' : ['set foldlevel=9'                                        , '9-fold-level']       ,
+        \ 'f' : ['UniteWithBufferDir -silent -start-insert file file_mru' , 'files']              ,
+        \ 'r' : ['Unite -silent -start-insert file_mru directory_mru'     , 'recent-files']       ,
+        \ 's' : ['save'                                                   , 'save-file']          ,
+        \ 't' : ['VimFiler'                                               , 'toggle-VimFiler']    ,
+        \ 'v' : ['e $HOME/.spacevim'                                      , 'edit-vimrc']         ,
+        \ 'D' : ['UniteWithBufferDir -silent -start-insert directory/new' , 'new-directory']      ,
+        \ 'E' : ['setlocal foldmethod=expr'                               , 'fold-method-expr']   ,
+        \ 'M' : ['setlocal foldmethod=marker'                             , 'fold-method-marker'] ,
+        \ 'N' : ['UniteWithBufferDir -silent -start-insert file/new'      , 'new-file']           ,
+        \ 'R' : ['source $MYVIMRC'                                        , 'reload-vimrc']
+        \ }
+  let g:spacevim#plug#leaderGuide#lmap['s'] = {
+        \ 'name' : '+search'  ,
+        \ 'c' : ['nohlsearch' , 'search-clear-highlight'],
+        \ 'o' : ['Unite -no-quit -vertical -winwidth=40 -direction=topleft -toggle outline', 'Outline toggle'],
+        \ 'O' : ['Unite -start-insert -vertical -winwidth=40  -direction=topleft -toggle outline', 'Outline toggle (insert)'],
+        \ 'p' : ['Unite -start-insert grep:.', 'pt'],
+        \ 'l' : ['Unite -start-insert line', 'search line'],
+        \ 'L' : ['Unite -auto-preivew -start-insert line', 'search line(preview)'],
+        \ 'M' : ['Unite -auto-preview mark', 'mark']
+        \ }
+  " }
+  " }
+
+  " Unite settings {
+  let g:unite_source_rec_async_command = ['pt', '--nocolor', '--nogroup', '--smart-case']
+  let g:unite_source_grep_command='pt'
+  let g:unite_source_grep_default_opts='--nocolor --nogroup --smart-case'
+  let g:unite_source_grep_recursive_opt = ''
+  " }
+
+  " set <M-->=-
+  set <M-=>==
+  set <M-;>=;
+  " R {
+  " AutoCmd {
+  augroup au_R
+    au!
+    au FileType r,rmd setlocal colorcolumn=80
+
+    au FileType r setlocal foldmethod=marker
+    au FileType r setlocal foldmarker={{{,}}}
+
+    " au BufNewFile,BufRead *.rmd,*.rmarkdown set filetype=rmd.markdown 
+    au FileType r setlocal commentstring=#%s
+    au FileType r setlocal comments+=b:#'
+
+    au FileType rmd setlocal commentstring=<!--%s-->
+    au FileType rmd setlocal comments=b:*,b:-,b:+,n:>
+
+    " Keybindings
+    au FileType r inoremap <buffer> <M-=> <c-v><Space>%>%<c-v><Space>
+    au FileType r inoremap <buffer> <M-;> <c-v><Space>:=<c-v><Space>
+    au FileType r inoremap <buffer> <C-o> <C-x><C-o>
+    au FileType r nnoremap <buffer> <LocalLeader>da :RSend devtools::load_all()<cr>
+    au FileType r,rmd nnoremap <buffer> <LocalLeader>tb :RSend traceback()<cr>
+    au FileType r,rmd nnoremap <buffer> <LocalLeader>sq :RSend Q<cr>
+    au FileType r,rmd nnoremap <buffer> <LocalLeader>sc :RSend c<cr>
+    au FileType r,rmd nnoremap <buffer> <LocalLeader>sn :RSend n<cr>
+    au FileType rbrowser nnoremap <buffer><silent> <CR> :call RBrowserDoubleClick()<CR>
+    au FileType rbrowser nnoremap <buffer><silent> <2-LeftMouse> :call RBrowserDoubleClick()<CR>
+    au FileType rbrowser nnoremap <buffer><silent> <RightMouse> :call RBrowserRightClick()<CR>
+    au FileType rmd nnoremap <buffer> <LocalLeader>kk :call RenderRmd()<CR>
+  augroup END
+  " }
+
+  " RenderRmd {
+  function RenderRmd()
+    let rmdPath = expand("%:p")
+    if has("win32")
+      let rmdPath = substitute(rmdPath, '\\', '/', 'g')
+    endif
+    let cmd = "RSend rmarkdown::render('" . rmdPath. "', encoding = 'UTF-8')"
+    exec cmd
+  endfunction
+  " }
+  " }
+
+  " sideways {
+  omap aa <Plug>SidewaysArgumentTextobjA
+  xmap aa <Plug>SidewaysArgumentTextobjA
+  omap ia <Plug>SidewaysArgumentTextobjI
+  xmap ia <Plug>SidewaysArgumentTextobjI
+  nnoremap <leader>ah :SidewaysLeft<cr>
+  nnoremap <leader>al :SidewaysRight<cr>
+  " }
+
+  " sneak {
+  let g:sneak#s_next = 1
+  " }
+
+  " lightline {
+  let g:lightline = {
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+        \ },
+        \ 'component_function': {
+        \   'gitbranch': 'gina#component#repo#branch'
+        \ },
+        \ }
+  " }
+  " Gina {
+  nnoremap <silent> <Leader>gs :<C-u>Gina status<CR>
+  nnoremap <silent> <Leader>gc :<C-u>Gina commit<CR>
+  nnoremap <silent> <Leader>gC :<C-u>Gina commit --amend<CR>
+  nnoremap <silent> <Leader>gp :<C-u>Gina push<CR>
+  nnoremap <silent> <Leader>gl :<C-u>Gina log --oneline --decorate --graph<CR>
+
+  call gina#custom#command#option(
+        \ 'status',
+        \ '--opener', 'split'
+        \)
+  " start diff vertically
+  set diffopt+=vertical
+  " }
+endfunction
+
+  " Toggle file path slash {
+  function! ToggleSlash(independent) range
+    let from = ''
+    for lnum in range(a:firstline, a:lastline)
+      let line = getline(lnum)
+      let first = matchstr(line, '[/\\]')
+      if !empty(first)
+        if a:independent || empty(from)
+          let from = first
+        endif
+        let opposite = (from == '/' ? '\' : '/')
+        call setline(lnum, substitute(line, from, opposite, 'g'))
+      endif
+    endfor
+  endfunction
+  command! -bang -range ToggleSlash <line1>,<line2>call ToggleSlash(<bang>1)
+  nnoremap <Leader>r<BSlash> :ToggleSlash<CR>
+  " }
+
+  " Nvim-R {
+  let r_indent_align_args = 0
+  let rmd_syn_hl_chunk = 1
+  " not losing focus every time that you generate the pdf
+  let R_openpdf = 1
+  " open html output
+  let R_openhtml = 1
+  " highlight R functions only if the `(` is typed
+  let R_hl_fun_paren = 1
+  let R_hl_term = 1
+  " lists the arguments of a function, but and also the arguments of its methods
+  let R_objbr_opendf = 0
+  let Rout_more_colors = 1
+  let R_objbr_openlist = 0
+  " show a preview window of function arguments description and arguments
+  let R_show_arg_help = 0
+  let R_commented_lines = 1
+  let R_assign_map = "-"
+  " clear R Console line before sending commands~
+  let R_clear_line = 1
+  let R_source_args = "print.eval = TRUE, local = TRUE, max.deparse.length = 1000, echo = TRUE, encoding = 'UTF-8'"
+  if has("win32")
+    let R_in_buffer = 0
+  endif
+  " Auto quit R when close Vim
+  autocmd VimLeave * if exists("g:SendCmdToR") && string(g:SendCmdToR) != "function('SendCmdToR_fake')" | call RQuit("nosave") | endif
+  " }
+
+  " vim-multiple-cursors {
+    let g:multi_cursor_use_default_mapping=0
+    let g:multi_cursor_next_key='<C-j>'
+    let g:multi_cursor_prev_key='<C-k>'
+    let g:multi_cursor_skip_key='<C-x>'
+    let g:multi_cursor_quit_key='<Esc>'
+  " }

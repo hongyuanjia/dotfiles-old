@@ -14,3 +14,5 @@ local({r <- getOption("repos")
     deparse.max.lines = 2)
 }
 
+library(colorout)
+
