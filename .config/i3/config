@@ -196,7 +196,8 @@ assign [class="wps"] $ws2
 assign [class="wpp"] $ws2
 assign [class="et"] $ws2
 assign [class="chromium"] $ws3
-assign [class="electronic-wechat"] $ws3
+assign [class="electronic-wechat"] $ws4
+assign [class="vlc"] $ws5
 
 # Open specific applications in floating mode
 for_window [class="ss-qt5"] floating enable border pixcel 1
