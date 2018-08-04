@@ -139,7 +139,7 @@ type = internal/network
 interface = wlp3s0
 interval = 3.0
 
-format-connected = <ramp-signal> <label-connected>
+format-connected =  <ramp-signal> <label-connected>
 format-connected-underline = #9f78e1
 label-connected = %essid% %downspeed:9%  %upspeed:9% 
 
@@ -151,7 +151,7 @@ ramp-signal-2 = 😒
 ramp-signal-3 = 😊
 ramp-signal-4 = 😃
 ramp-signal-5 = 😈
-ramp-signal-foreground = ${colors.foreground}
+ramp-signal-foreground = ${colors.foreground-alt}
 
 [module/date]
 type = internal/date
@@ -214,9 +214,11 @@ label = %temperature-c%
 label-warn = %temperature-c%
 label-warn-foreground = ${colors.secondary}
 
-ramp-0 = 
-ramp-1 = 
+ramp-0 = 
+ramp-1 = 
 ramp-2 = 
+ramp-3 = 
+ramp-4 = 
 ramp-foreground = ${colors.foreground-alt}
 
 [settings]
