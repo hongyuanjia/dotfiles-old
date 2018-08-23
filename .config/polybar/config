@@ -42,8 +42,7 @@ font-1 = DejaVuSansMono Nerd Font:pixelsize=10;0
 font-2 = Font Awesome 5 Free Regular:pixelsize=14;0
 font-3 = Font Awesome 5 Brands:pixelsize=14;0
 
-modules-left = i3
-modules-center = xwindow
+modules-left = i3 xwindow
 modules-right = cpu memory filesystem temperature alsa wlan date
 
 tray-position = right
