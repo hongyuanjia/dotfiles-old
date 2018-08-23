@@ -62,7 +62,7 @@ bindsym $mod+Ctrl+m exec $term -e 'alsamixer'
 bindsym $mod+Ctrl+b exec $term -e 'bmenu'
 bindsym $mod+F2 exec chromium
 bindsym $mod+F3 exec $term -e ranger
-bindsym $mod+Shift+F3 exec gksu pcmanfm
+bindsym $mod+Shift+F3 exec pcmanfm
 bindsym $mod+F5 exec $term -e 'mocp'
 bindsym $mod+t exec --no-startup-id pkill compton
 bindsym $mod+Ctrl+t exec --no-startup-id compton -b
