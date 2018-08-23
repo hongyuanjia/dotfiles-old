@@ -65,11 +65,14 @@ function! UserInit()
   Plug 'terryma/vim-expand-region'
   Plug 'tpope/vim-commentary'
   Plug 'AndrewRadev/sideways.vim'
-  Plug 'chrisbra/Colorizer'
+
+  " File Manager
+  Plug 'francoiscabrol/ranger.vim'
   Plug 'tyru/open-browser.vim'
 
   " For better looking
   Plug 'ryanoasis/vim-devicons'
+  Plug 'chrisbra/Colorizer'
 
 endfunction
 " }
@@ -302,6 +305,10 @@ function! UserConfig()
     let g:multi_cursor_prev_key='<C-k>'
     let g:multi_cursor_skip_key='<C-x>'
     let g:multi_cursor_quit_key='<Esc>'
+  " }
+
+  " Ranger {
+  let g:ranger_map_keys = 0
   " }
 
   " Citation {
