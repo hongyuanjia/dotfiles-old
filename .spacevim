@@ -99,6 +99,23 @@ function! UserConfig()
   set formatoptions+=r
   set formatoptions-=t
 
+  " https://github.com/liuchengxu/space-vim/issues/184
+  set <F20>=
+  set <F21>=
+  iunmap jj
+  vunmap <F20>
+  vunmap <F21>
+  nunmap <F20>
+  nunmap <F21>
+  " for different cursor shapes
+  " http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes
+  let &t_SI = "\<Esc>[6 q"
+  let &t_SR = "\<Esc>[4 q"
+  let &t_EI = "\<Esc>[2 q"
+
+  " disable meta keybindings in rsi.vim
+  let g:rsi_no_meta = 1
+
   noremap - <Nop>
   autocmd GUIEnter * simalt ~x
 
@@ -190,11 +207,10 @@ function! UserConfig()
   " }
 
   " R {
-  " https://www.johnhawthorn.com/2012/09/vi-escape-delays
-  set timeoutlen=1000 ttimeoutlen=0
-
   set <M-=>==
   set <M-;>=;
+  imap = <M-=>
+  imap ; <M-;>
 
   " AutoCmd {
   augroup au_R
@@ -204,7 +220,6 @@ function! UserConfig()
     au FileType r setlocal foldmethod=marker
     au FileType r setlocal foldmarker={{{,}}}
 
-    " au BufNewFile,BufRead *.rmd,*.rmarkdown set filetype=rmd.markdown 
     au FileType r setlocal commentstring=#%s
     au FileType r setlocal comments+=b:#'
 
@@ -264,6 +279,23 @@ function! UserConfig()
         \ }
   " }
 endfunction
+  " Auto-pairs {
+  " Disable all keybindings
+  let g:AutoPairsShortcutToggle = '<Leader>ap'
+  let g:AutoPairsMapCR = 0
+  let g:AutoPairsShortcutFastWrap = ''
+  let g:AutoPairsShortcutJump = ''
+  let g:AutoPairsShortcutBackInsert = ''
+  " }
+
+  " vim-multiple-cursors {
+    let g:multi_cursor_use_default_mapping=0
+    let g:multi_cursor_next_key='<C-j>'
+    let g:multi_cursor_prev_key='<C-k>'
+    let g:multi_cursor_skip_key='<C-x>'
+    let g:multi_cursor_quit_key='<Esc>'
+  " }
+
 
   " Toggle file path slash {
   function! ToggleSlash(independent) range
@@ -292,7 +324,7 @@ endfunction
   " open html output
   let R_openhtml = 1
   " highlight R functions only if the `(` is typed
-  let R_hl_fun_paren = 1
+  " let R_hl_fun_paren = 1
   let R_hl_term = 1
   " lists the arguments of a function, but and also the arguments of its methods
   let R_objbr_opendf = 0
@@ -310,12 +342,4 @@ endfunction
   endif
   " Auto quit R when close Vim
   autocmd VimLeave * if exists("g:SendCmdToR") && string(g:SendCmdToR) != "function('SendCmdToR_fake')" | call RQuit("nosave") | endif
-  " }
-
-  " vim-multiple-cursors {
-    let g:multi_cursor_use_default_mapping=0
-    let g:multi_cursor_next_key='<C-j>'
-    let g:multi_cursor_prev_key='<C-k>'
-    let g:multi_cursor_skip_key='<C-x>'
-    let g:multi_cursor_quit_key='<Esc>'
   " }
