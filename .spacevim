@@ -13,7 +13,7 @@ function! Layers()
 
   Layer 'code-snippets'
 
-  Layer 'markdown', {'exclude': 'iamcco/markdown-preview.vim'}
+  Layer 'markdown'
 
   Layer 'programming', {'exclude' : [
         \ 'sheerun/vim-polyglot',
@@ -43,9 +43,6 @@ function! UserInit()
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-eunuch'
 
-"   " For Git
-"   Plug 'lambdalisue/gina.vim'
-
   " For Unite
   Plug 'Shougo/unite-outline'
   Plug 'thinca/vim-qfreplace'
@@ -55,6 +52,7 @@ function! UserInit()
   " For R
   Plug 'jalvesaq/Nvim-R'
   Plug 'jalvesaq/R-Vim-runtime'
+  Plug 'rafaqz/citation.vim'
 
   " For Text editing
   Plug 'tpope/vim-surround'
@@ -68,6 +66,7 @@ function! UserInit()
   Plug 'tpope/vim-commentary'
   Plug 'AndrewRadev/sideways.vim'
   Plug 'chrisbra/Colorizer'
+  Plug 'tyru/open-browser.vim'
 
   " For better looking
   Plug 'ryanoasis/vim-devicons'
@@ -239,6 +238,11 @@ function! UserConfig()
     au FileType rbrowser nnoremap <buffer><silent> <2-LeftMouse> :call RBrowserDoubleClick()<CR>
     au FileType rbrowser nnoremap <buffer><silent> <RightMouse> :call RBrowserRightClick()<CR>
     au FileType rmd nnoremap <buffer> <LocalLeader>kk :call RenderRmd()<CR>
+
+    " Switch to R buffer
+    if (!has("win32"))
+      au FileType r,rmd nnoremap <buffer> <LocalLeader><LocalLeader>r :buffer !R<CR>
+    endif
   augroup END
   " }
 
@@ -278,7 +282,7 @@ function! UserConfig()
         \ },
         \ }
   " }
-endfunction
+
   " Auto-pairs {
   " Disable all keybindings
   let g:AutoPairsShortcutToggle = '<Leader>ap'
@@ -286,6 +290,10 @@ endfunction
   let g:AutoPairsShortcutFastWrap = ''
   let g:AutoPairsShortcutJump = ''
   let g:AutoPairsShortcutBackInsert = ''
+  " }
+
+  " Markdown {
+  let g:previm_open_cmd = ''
   " }
 
   " vim-multiple-cursors {
@@ -296,6 +304,15 @@ endfunction
     let g:multi_cursor_quit_key='<Esc>'
   " }
 
+  " Citation {
+  let g:citation_vim_zotero_path = "/home/hongyuanjia/Dropbox/literatures/Zotero/"
+  let g:citation_vim_zotero_version=5
+  let g:citation_vim_zotero_attachment_path="/home/hongyuanjia/Dropbox/literatures/attachments"
+  let g:citation_vim_cache_path='~/.cache/vim-citation'
+  let g:citation_vim_outer_prefix="["
+  let g:citation_vim_inner_prefix="@"
+  let g:citation_vim_suffix="]"
+  " }
 
   " Toggle file path slash {
   function! ToggleSlash(independent) range
@@ -315,6 +332,8 @@ endfunction
   command! -bang -range ToggleSlash <line1>,<line2>call ToggleSlash(<bang>1)
   nnoremap <Leader>r<BSlash> :ToggleSlash<CR>
   " }
+
+endfunction
 
   " Nvim-R {
   let r_indent_align_args = 0
