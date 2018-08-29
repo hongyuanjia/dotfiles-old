@@ -102,18 +102,21 @@ function! UserConfig()
   set formatoptions-=t
 
   " https://github.com/liuchengxu/space-vim/issues/184
-  set <F20>=
-  set <F21>=
-  iunmap jj
-  vunmap <F20>
-  vunmap <F21>
-  nunmap <F20>
-  nunmap <F21>
-  " for different cursor shapes
-  " http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes
-  let &t_SI = "\<Esc>[6 q"
-  let &t_SR = "\<Esc>[4 q"
-  let &t_EI = "\<Esc>[2 q"
+  if (has("gui"))
+    set <F20>=
+    set <F21>=
+    iunmap jj
+    vunmap <F20>
+    vunmap <F21>
+    nunmap <F20>
+    nunmap <F21>
+
+    " for different cursor shapes
+    " http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes
+    let &t_SI = "\<Esc>[6 q"
+    let &t_SR = "\<Esc>[4 q"
+    let &t_EI = "\<Esc>[2 q"
+  endif
 
   " disable meta keybindings in rsi.vim
   let g:rsi_no_meta = 1
@@ -209,10 +212,12 @@ function! UserConfig()
   " }
 
   " R {
-  set <M-=>==
-  set <M-;>=;
-  imap = <M-=>
-  imap ; <M-;>
+  if (!has("win32"))
+    set <M-=>==
+    set <M-;>=;
+    imap = <M-=>
+    imap ; <M-;>
+  endif
 
   " AutoCmd {
   augroup au_R
@@ -229,10 +234,13 @@ function! UserConfig()
     au FileType rmd setlocal comments=b:*,b:-,b:+,n:>
 
     " Keybindings
-    au FileType r inoremap <buffer> <M-=> <c-v><Space>%>%<c-v><Space>
-    au FileType r inoremap <buffer> <M-;> <c-v><Space>:=<c-v><Space>
-    au FileType r inoremap <buffer> <C-o> <C-x><C-o>
-    au FileType r nnoremap <buffer> <LocalLeader>da :RSend devtools::load_all()<cr>
+    if (has("win32"))
+      au FileType r,rmd inoremap <buffer> ½ <c-v><Space>%>%<c-v><Space>
+      au FileType r,rmd inoremap <buffer> » <c-v><Space>:=<c-v><Space>
+    endif
+    au FileType r,rmd inoremap <buffer> <M-=> <c-v><Space>%>%<c-v><Space>
+    au FileType r,rmd inoremap <buffer> <M-;> <c-v><Space>:=<c-v><Space>
+    au FileType r,rmd nnoremap <buffer> <LocalLeader>da :RSend devtools::load_all()<cr>
     au FileType r,rmd nnoremap <buffer> <LocalLeader>tb :RSend traceback()<cr>
     au FileType r,rmd nnoremap <buffer> <LocalLeader>sq :RSend Q<cr>
     au FileType r,rmd nnoremap <buffer> <LocalLeader>sc :RSend c<cr>
@@ -359,7 +367,11 @@ endfunction
   " show a preview window of function arguments description and arguments
   let R_show_arg_help = 0
   let R_commented_lines = 1
-  let R_assign_map = "-"
+  if (has("win32"))
+    let R_assign_map = "<M-->"
+  else
+    let R_assign_map = "-"
+  endif
   " clear R Console line before sending commands~
   let R_clear_line = 1
   let R_source_args = "print.eval = TRUE, local = TRUE, max.deparse.length = 1000, echo = TRUE, encoding = 'UTF-8'"
