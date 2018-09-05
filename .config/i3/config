@@ -36,7 +36,9 @@ bindsym $mod+Return exec $term
 bindsym $mod+Shift+q kill
 
 # start program launcher
-bindsym $mod+d exec --no-startup-id rofi -show run
+bindsym $mod+d exec --no-startup-id "rofi -show run"
+# start calculator
+bindsym $mod+c exec --no-startup-id "rofi -show calc -modi calc -no-show-match -no-sort"
 # bindsym $mod+d exec --no-startup-id dmenu_recency
 
 # launch categorized menu
