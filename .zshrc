@@ -101,3 +101,5 @@ alias i3config="vim ~/.config/i3/config"
 KEYTIMEOUT=1
 bindkey '^[^M' autosuggest-execute
 bindkey '^[l' autosuggest-accept
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
