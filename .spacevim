@@ -4,6 +4,8 @@ let g:spacevim_plug_home = '~/.vim/plugged'
 function! Layers()
   Layer 'unite'
 
+  Layer 'fzf'
+
   Layer 'better-defaults', {'exclude': [
         \ 'xtal8/traces.vim',
         \ 't9md/vim-choosewin'
@@ -159,45 +161,14 @@ function! UserConfig()
   " }
 
   " Overwrite default leaderGuide settings and add new ones {
-  runtime autoload/spacevim/plug/leaderGuide.vim
-  " Buffer {
-  let g:spacevim#plug#leaderGuide#lmap['b'].b = [
-              \ "Unite -start-insert buffer", 'buffer-list']
-  " }
   " Files {
-  let g:spacevim#plug#leaderGuide#lmap['f'] = {
-        \ 'name' : '+find/files/fold'                                     ,
-        \ '0' : ['set foldlevel=0'                                        , '0-fold-level']       ,
-        \ '1' : ['set foldlevel=1'                                        , '1-fold-level']       ,
-        \ '2' : ['set foldlevel=2'                                        , '2-fold-level']       ,
-        \ '3' : ['set foldlevel=3'                                        , '3-fold-level']       ,
-        \ '4' : ['set foldlevel=4'                                        , '4-fold-level']       ,
-        \ '5' : ['set foldlevel=5'                                        , '5-fold-level']       ,
-        \ '6' : ['set foldlevel=6'                                        , '6-fold-level']       ,
-        \ '7' : ['set foldlevel=7'                                        , '7-fold-level']       ,
-        \ '8' : ['set foldlevel=8'                                        , '8-fold-level']       ,
-        \ '9' : ['set foldlevel=9'                                        , '9-fold-level']       ,
-        \ 'f' : ['UniteWithBufferDir -silent -start-insert file file_mru' , 'files']              ,
-        \ 'r' : ['Unite -silent -start-insert file_mru directory_mru'     , 'recent-files']       ,
-        \ 's' : ['save'                                                   , 'save-file']          ,
-        \ 't' : ['VimFiler'                                               , 'toggle-VimFiler']    ,
-        \ 'v' : ['e $HOME/.spacevim'                                      , 'edit-vimrc']         ,
-        \ 'D' : ['UniteWithBufferDir -silent -start-insert directory/new' , 'new-directory']      ,
-        \ 'E' : ['setlocal foldmethod=expr'                               , 'fold-method-expr']   ,
-        \ 'M' : ['setlocal foldmethod=marker'                             , 'fold-method-marker'] ,
-        \ 'N' : ['UniteWithBufferDir -silent -start-insert file/new'      , 'new-file']           ,
-        \ 'R' : ['source $MYVIMRC'                                        , 'reload-vimrc']
-        \ }
-  let g:spacevim#plug#leaderGuide#lmap['s'] = {
-        \ 'name' : '+search'  ,
-        \ 'c' : ['nohlsearch' , 'search-clear-highlight'],
-        \ 'o' : ['Unite -no-quit -vertical -winwidth=40 -direction=topleft -toggle outline', 'Outline toggle'],
-        \ 'O' : ['Unite -start-insert -vertical -winwidth=40  -direction=topleft -toggle outline', 'Outline toggle (insert)'],
-        \ 'p' : ['Unite -start-insert grep:.', 'pt'],
-        \ 'l' : ['Unite -start-insert line', 'search line'],
-        \ 'L' : ['Unite -auto-preivew -start-insert line', 'search line(preview)'],
-        \ 'M' : ['Unite -auto-preview mark', 'mark']
-        \ }
+  nnoremap <silent> <Leader>ft :Ranger<CR>
+  nnoremap <silent> <Leader>fv :e $HOME/.spacevim<CR>
+  " }
+  " Search {
+  nnoremap <silent> <Leader>so :Unite -start-insert -toggle outline<CR>
+  nnoremap <silent> <Leader>sp :Unite -start-insert grep:.<CR>
+  nnoremap <silent> <Leader>sl :Unite -start-insert line<CR>
   " }
   " }
 
