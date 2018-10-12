@@ -167,6 +167,7 @@ function! UserConfig()
   " Files {
   nnoremap <silent> <Leader>ft :Ranger<CR>
   nnoremap <silent> <Leader>fv :e $HOME/.spacevim<CR>
+  nnoremap <silent> <Leader>fr :History<CR>
   " }
   " Search {
   nnoremap <silent> <Leader>so :Unite -start-insert -toggle outline<CR>
