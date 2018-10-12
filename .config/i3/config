@@ -62,7 +62,7 @@ bindsym $mod+Ctrl+m exec $term -e 'alsamixer'
 
 # Start Applications
 bindsym $mod+Ctrl+b exec $term -e 'bmenu'
-bindsym $mod+F2 exec chromium
+bindsym $mod+F2 exec google-chrome-stable
 bindsym $mod+F3 exec $term -e ranger
 bindsym $mod+Shift+F3 exec pcmanfm
 bindsym $mod+F5 exec $term -e 'mocp'
@@ -196,7 +196,8 @@ assign [class="Xfce4-terminal"] $ws1
 assign [class="wps"] $ws2
 assign [class="wpp"] $ws2
 assign [class="et"] $ws2
-assign [class="Chromium"] $ws3
+assign [class="google-chrome"] $ws3
+assign [class="Google-chrome"] $ws3
 assign [class="electronic-wechat"] $ws4
 assign [class="Thunderbird"] $ws5
 assign [class="netease-cloud-music"] $ws6
