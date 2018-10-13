@@ -39,6 +39,9 @@ endfunction
 
 " Plugins {
 function! UserInit()
+  " For save sessions
+  Plug 'tpope/vim-obsession'
+
   " For Git
   Plug 'jreybert/vimagit'
 
