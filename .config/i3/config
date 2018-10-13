@@ -204,8 +204,9 @@ assign [class="netease-cloud-music"] $ws6
 assign [class="vlc"] $ws6
 
 # Open specific applications in floating mode
+for_window [class="GitKraken"] floating enable
 for_window [class="ao"] floating enable sticky enable
-for_window [class="shadowsocks-qt5"] floating enable sticky enable
+for_window [class="shadowsocks-qt5"] floating enable
 for_window [title="alsamixer"] floating enable
 for_window [class="calamares"] floating enable
 for_window [class="Clipgrab"] floating enable
