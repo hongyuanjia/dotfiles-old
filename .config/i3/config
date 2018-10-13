@@ -62,9 +62,9 @@ bindsym $mod+Ctrl+m exec $term -e 'alsamixer'
 
 # Start Applications
 bindsym $mod+Ctrl+b exec $term -e 'bmenu'
-bindsym $mod+F2 exec google-chrome-stable
-bindsym $mod+F3 exec $term -e ranger
-bindsym $mod+Shift+F3 exec pcmanfm
+bindsym $mod+F2 exec $term -e ranger
+bindsym $mod+Shift+F2 exec pcmanfm
+bindsym $mod+F3 exec google-chrome-stable
 bindsym $mod+F5 exec $term -e 'mocp'
 bindsym $mod+t exec --no-startup-id pkill compton
 bindsym $mod+Ctrl+t exec --no-startup-id compton -b
