@@ -15,12 +15,11 @@ function! Layers()
 
   Layer 'code-snippets'
 
-  Layer 'markdown'
+  " Layer 'markdown'
 
   Layer 'programming', {'exclude' : [
         \ 'sheerun/vim-polyglot',
         \ 'junegunn/rainbow_parentheses.vim',
-        \ 'majutsushi/tagbar',
         \ 'matze/vim-move',
         \ 'Yggdroot/indentLine'
         \ ]}
@@ -58,9 +57,10 @@ function! UserInit()
   Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 
   " For R
-  Plug 'jalvesaq/Nvim-R'
+  Plug 'jalvesaq/Nvim-R', {'commit' : 'd6c9a8a3a2fd6aecb4ab00ce530cbec1054eab2f'}
   Plug 'jalvesaq/R-Vim-runtime'
   Plug 'rafaqz/citation.vim'
+  Plug 'gabrielelana/vim-markdown'
 
   " For Text editing
   Plug 'tpope/vim-surround'
@@ -210,6 +210,7 @@ function! UserConfig()
 
     au FileType rmd setlocal commentstring=<!--%s-->
     au FileType rmd setlocal comments=b:*,b:-,b:+,n:>
+    nnoremap <buffer> <LocalLeader>ts :call ToggleSpace()<CR>
 
     " Keybindings
     if (has("win32"))
@@ -227,6 +228,18 @@ function! UserConfig()
     au FileType rbrowser nnoremap <buffer><silent> <2-LeftMouse> :call RBrowserDoubleClick()<CR>
     au FileType rbrowser nnoremap <buffer><silent> <RightMouse> :call RBrowserRightClick()<CR>
     au FileType rmd nnoremap <buffer> <LocalLeader>kk :call RenderRmd()<CR>
+    au FileType rmd nnoremap <buffer> <LocalLeader>kb :call RenderBook()<CR>
+
+    au FileType rmd noremap <leader>z "=ZoteroCite()<CR>p
+    au FileType rmd inoremap <C-z> <C-r>=ZoteroCite()<CR>
+    au FileType rmd nmap <Leader>u [unite]
+    au FileType rmd nnoremap [unite] <nop>
+    " To insert a citation
+    au FileType rmd nnoremap <silent>[unite]cc :<C-u>Unite -buffer-name=citation-start-insert -default-action=append citation/key<cr>
+    " To immediately open a file from a citation under the cursor
+    au FileType rmd nnoremap <silent>[unite]co :<C-u>Unite -input=<C-R><C-W> -default-action=start -force-immediately citation/file<cr>
+    " To view all citation information from a citation under the cursor:
+    au FileType rmd nnoremap <silent>[unite]ci :<C-u>Unite -input=<C-R><C-W> -default-action=preview -force-immediately citation/combined<cr>
 
     " Switch to R buffer
     if (!has("win32"))
@@ -235,6 +248,24 @@ function! UserConfig()
   augroup END
   " }
 
+  nnoremap <buffer> <Leader>tS :call ToggleSpace()<CR>
+  function! ToggleSpace()
+      let showed = &listchars
+      if showed=~#"space"
+        set listchars-=space:·
+      else
+        set listchars+=space:·
+      endif
+  endfunction
+
+  function! ZoteroCite()
+    " pick a format based on the filetype (customize at will)
+    let format = &filetype =~ '.*tex' ? 'citep' : 'pandoc'
+    let api_call = 'http://localhost:23119/better-bibtex/cayw?format='.format.'&brackets=1'
+    let ref = system('curl -s '.shellescape(api_call))
+    return ref
+  endfunction
+
   " RenderRmd {
   function RenderRmd()
     let rmdPath = expand("%:p")
@@ -242,6 +273,16 @@ function! UserConfig()
       let rmdPath = substitute(rmdPath, '\\', '/', 'g')
     endif
     let cmd = "RSend rmarkdown::render('" . rmdPath. "', encoding = 'UTF-8')"
+    exec cmd
+  endfunction
+  " }
+  " RenderBook {
+  function RenderBook()
+    let rmdPath = expand("%:p")
+    if has("win32")
+      let rmdPath = substitute(rmdPath, '\\', '/', 'g')
+    endif
+    let cmd = "RSend bookdown::render_book('" . rmdPath. "', encoding = 'UTF-8')"
     exec cmd
   endfunction
   " }
@@ -298,13 +339,14 @@ function! UserConfig()
   " }
 
   " Citation {
-  let g:citation_vim_zotero_path = "/home/hongyuanjia/Dropbox/literatures/Zotero/"
   let g:citation_vim_zotero_version=5
-  let g:citation_vim_zotero_attachment_path="/home/hongyuanjia/Dropbox/literatures/attachments"
+  let g:citation_vim_zotero_path = "~/Dropbox/literatures/Zotero/"
+  let g:citation_vim_zotero_attachment_path= "~/Dropbox/literatures/attachments"
   let g:citation_vim_cache_path='~/.cache/vim-citation'
   let g:citation_vim_outer_prefix="["
   let g:citation_vim_inner_prefix="@"
   let g:citation_vim_suffix="]"
+  let g:citation_vim_collection='Dissertation'
   " }
 
   " Toggle file path slash {
@@ -326,13 +368,46 @@ function! UserConfig()
   nnoremap <Leader>r<BSlash> :ToggleSlash<CR>
   " }
 
+  " SynGroup{
+  function! SynGroup()
+      let l:s = synID(line('.'), col('.'), 1)
+      echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+  endfun
+  " }
+
+  " tagbar for markdown {
+  let g:tagbar_ctags_bin="c:/tools/ctags/ctags.exe"
+  let g:tagbar_type_rmd = {
+        \   'ctagstype':'rmd',
+        \   'ctagsbin': $HOME.'/.vim/rmd2ctags/rmd2ctags.bat',
+        \   'ctagsargs':'',
+        \   'kinds':['h:header', 'c:chunk'],
+        \   'sro':'&&&',
+        \   'kind2scope':{'h':'header', 'c':'chunk'},
+        \   'sort':0
+        \ }
+  let g:tagbar_type_markdown = {
+        \ 'ctagstype': 'markdown',
+        \ 'ctagsbin' : '~/.vim/markdown2ctags/markdown2ctags.py',
+        \ 'ctagsargs' : '-f - --sort=yes',
+        \ 'kinds' : ['s:sections', 'i:images'],
+        \ 'sro' : '|',
+        \ 'kind2scope' : {'s' : 'section'},
+        \ 'sort': 0
+        \ }
+  " }
+  let g:tagbar_systemenc = 'cp936'
 endfunction
 
   " Nvim-R {
+  if has("win32")
+    let R_source = "~/.vim/send.vim"
+  endif
   let r_indent_align_args = 0
   let rmd_syn_hl_chunk = 1
   " not losing focus every time that you generate the pdf
   let R_openpdf = 1
+  let R_nvimpager = "horizontal"
   " open html output
   let R_openhtml = 1
   " highlight R functions only if the `(` is typed
@@ -343,7 +418,7 @@ endfunction
   let Rout_more_colors = 1
   let R_objbr_openlist = 0
   " show a preview window of function arguments description and arguments
-  let R_show_arg_help = 0
+  let R_show_arg_help = 1
   let R_commented_lines = 1
   if (has("win32"))
     let R_assign_map = "<M-->"
@@ -352,7 +427,7 @@ endfunction
   endif
   " clear R Console line before sending commands~
   let R_clear_line = 1
-  let R_source_args = "print.eval = TRUE, local = TRUE, max.deparse.length = 1000, echo = TRUE, encoding = 'UTF-8'"
+  let R_source_args = "print.eval = TRUE, local = TRUE, encoding = 'UTF-8'"
   if has("win32")
     let R_in_buffer = 0
   endif
