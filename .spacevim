@@ -30,7 +30,7 @@ function! Layers()
 
   Layer 'auto-completion'
 
-  Layer 'lightline'
+  Layer 'airline'
 
   Layer 'git'
 endfunction
