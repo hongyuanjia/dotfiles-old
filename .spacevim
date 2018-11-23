@@ -408,6 +408,21 @@ function! UserConfig()
         \ }
   " }
 
+  nnoremap  <Leader>tS :call ToggleSpace()<CR>
+  let g:markdown_enable_folding = 1
+  let loaded_matchparen = 1
+  set noshowmatch
+
+  function! g:DisableThatMatchParen ()
+      if exists(":NoMatchParen")
+          :NoMatchParen
+      endif
+  endfunction
+
+  augroup plugin_initialize
+      autocmd!
+      autocmd VimEnter * call DisableThatMatchParen()
+  augroup END
 endfunction
 
   " Nvim-R {
