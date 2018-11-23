@@ -300,21 +300,8 @@ function! UserConfig()
   let g:sneak#s_next = 1
   " }
 
-  " lightline {
-  let g:lightline = {
-        \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-        \ },
-        \ 'component_function': {
-        \   'gitbranch': 'fugitive#head'
-        \ },
-        \ }
-  " }
-
   " Auto-pairs {
   " Disable all keybindings
-  let g:AutoPairsShortcutToggle = '<Leader>ap'
   let g:AutoPairsMapCR = 0
   let g:AutoPairsShortcutFastWrap = ''
   let g:AutoPairsShortcutJump = ''
