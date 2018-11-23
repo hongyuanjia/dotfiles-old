@@ -196,12 +196,15 @@ assign [class="Xfce4-terminal"] $ws1
 assign [class="wps"] $ws2
 assign [class="wpp"] $ws2
 assign [class="et"] $ws2
+assign [class="Zathura"] $ws2
+assign [class="zathura"] $ws2
 assign [class="google-chrome"] $ws3
 assign [class="Google-chrome"] $ws3
 assign [class="electronic-wechat"] $ws4
 assign [class="Thunderbird"] $ws5
 assign [class="netease-cloud-music"] $ws6
 assign [class="vlc"] $ws6
+assign [class="r_x11"] $ws7
 
 # Open specific applications in floating mode
 for_window [class="GitKraken"] floating enable
