@@ -234,7 +234,7 @@ function! UserConfig()
     au FileType rmd nmap <Leader>u [unite]
     au FileType rmd nnoremap [unite] <nop>
     " To insert a citation
-    au FileType rmd nnoremap <silent>[unite]cc :<C-u>Unite -buffer-name=citation-start-insert -default-action=append citation/key<cr>
+    au FileType rmd nnoremap <silent>[unite]cc :<C-u>Unite -buffer-name=citation -start-insert -default-action=append citation/key<cr>
     " To immediately open a file from a citation under the cursor
     au FileType rmd nnoremap <silent>[unite]co :<C-u>Unite -input=<C-R><C-W> -default-action=start -force-immediately citation/file<cr>
     " To view all citation information from a citation under the cursor:
