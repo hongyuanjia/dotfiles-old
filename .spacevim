@@ -439,11 +439,14 @@ endfunction
     let R_assign_map = "-"
   endif
   " clear R Console line before sending commands~
-  let R_clear_line = 1
   let R_source_args = "print.eval = TRUE, local = TRUE, encoding = 'UTF-8'"
   if has("win32")
     let R_in_buffer = 0
   endif
   " Auto quit R when close Vim
   autocmd VimLeave * if exists("g:SendCmdToR") && string(g:SendCmdToR) != "function('SendCmdToR_fake')" | call RQuit("nosave") | endif
+  " Fix vim terminal error
+  " ref: https://github.com/vim-airline/vim-airline/issues/1726
+  let R_setwidth = 0
+  let R_clear_line = 0
   " }
