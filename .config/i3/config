@@ -5,7 +5,7 @@
 set $mod Mod4
 set $term --no-startup-id xfce4-terminal
 # Key mapping
-exec --no-startup-id $term -e 'setxkbmap -layout us -variant altgr-intl -option caps:escape'
+exec_always --no-startup-id $term -e 'setxkbmap -layout us -variant altgr-intl -option caps:escape'
 
 # set default desktop layout (default is tiling)
 # workspace_layout tabbed <stacking|tabbed>
