@@ -210,7 +210,6 @@ function! UserConfig()
 
     au FileType rmd setlocal commentstring=<!--%s-->
     au FileType rmd setlocal comments=b:*,b:-,b:+,n:>
-    nnoremap <buffer> <LocalLeader>ts :call ToggleSpace()<CR>
 
     " Keybindings
     if (has("win32"))
@@ -376,16 +375,28 @@ function! UserConfig()
   " }
 
   " tagbar for markdown {
-  let g:tagbar_ctags_bin="c:/tools/ctags/ctags.exe"
-  let g:tagbar_type_rmd = {
-        \   'ctagstype':'rmd',
-        \   'ctagsbin': $HOME.'/.vim/rmd2ctags/rmd2ctags.bat',
-        \   'ctagsargs':'',
-        \   'kinds':['h:header', 'c:chunk'],
-        \   'sro':'&&&',
-        \   'kind2scope':{'h':'header', 'c':'chunk'},
-        \   'sort':0
-        \ }
+  if has("win32")
+    let g:tagbar_ctags_bin="c:/tools/ctags/ctags.exe"
+    let g:tagbar_type_rmd = {
+          \   'ctagstype':'rmd',
+          \   'ctagsbin': $HOME.'/.vim/rmd2ctags/rmd2ctags.bat',
+          \   'ctagsargs':'',
+          \   'kinds':['y:yaml:1', 'h:header', 'c:chunk'],
+          \   'sro':'&&&',
+          \   'kind2scope':{'y':'yaml', 'h':'header', 'c':'chunk'},
+          \   'sort':0
+          \ }
+  else
+    let g:tagbar_type_rmd = {
+          \   'ctagstype':'rmd',
+          \   'ctagsbin': $HOME.'/.vim/rmd2ctags/rmd2ctags.R',
+          \   'ctagsargs':'',
+          \   'kinds':['y:yaml:1', 'h:header', 'c:chunk'],
+          \   'sro':'&&&',
+          \   'kind2scope':{'y':'yaml', 'h':'header', 'c':'chunk'},
+          \   'sort':0
+          \ }
+  endif
   let g:tagbar_type_markdown = {
         \ 'ctagstype': 'markdown',
         \ 'ctagsbin' : '~/.vim/markdown2ctags/markdown2ctags.py',
@@ -396,7 +407,7 @@ function! UserConfig()
         \ 'sort': 0
         \ }
   " }
-  let g:tagbar_systemenc = 'cp936'
+
 endfunction
 
   " Nvim-R {
