@@ -297,8 +297,8 @@ exec_always --no-startup-id fix_xcursor
 exec --no-startup-id ss-qt5
 exec --no-startup-id dropbox
 exec --no-startup-id fcitx
-exec_always xrandr --output LVDS1 --off
-exec_always xrandr --output DP1 --primary
+exec_always --no-startup-id xrandr --output LVDS1 --primary
+bindsym $mod+Shift+p exec --no-startup-id /home/hongyuanjia/.config/i3/dualscreen.sh
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # Color palette used for the terminal ( ~/.Xresources file )
