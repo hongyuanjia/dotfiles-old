@@ -57,7 +57,7 @@ function! UserInit()
   Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 
   " For R
-  Plug 'jalvesaq/Nvim-R', {'commit' : 'd6c9a8a3a2fd6aecb4ab00ce530cbec1054eab2f'}
+  Plug 'jalvesaq/Nvim-R'
   Plug 'jalvesaq/R-Vim-runtime'
   Plug 'rafaqz/citation.vim'
   Plug 'gabrielelana/vim-markdown'
