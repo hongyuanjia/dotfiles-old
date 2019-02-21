@@ -88,6 +88,15 @@ function! UserConfig()
   " Change to file's directory when vim-rooter failed
   let g:rooter_change_directory_for_non_project_files = 'current'
 
+  " Overwrite CurrentWord highlight
+  " See https://github.com/liuchengxu/space-vim-theme/issues/1
+  hi CurrentWord ctermfg=NONE ctermbg=60 guifg=NONE guibg=#544a65 guisp=NONE cterm=NONE,underline gui=NONE,underline
+  hi CurrentWordTwins ctermfg=NONE ctermbg=60 guifg=NONE guibg=#544a65 guisp=NONE cterm=NONE gui=NONE
+
+  " clear <C-R> map in command line mode
+  " See https://github.com/liuchengxu/space-vim/issues/383
+  cunmap <C-R>
+
   " better defaults {
   set dictionary+=$HOME/.vim/dict/english.dic
   set complete+=k
@@ -397,17 +406,6 @@ function! UserConfig()
   let g:markdown_enable_folding = 1
   let loaded_matchparen = 1
   set noshowmatch
-
-  function! g:DisableThatMatchParen ()
-      if exists(":NoMatchParen")
-          :NoMatchParen
-      endif
-  endfunction
-
-  augroup plugin_initialize
-      autocmd!
-      autocmd VimEnter * call DisableThatMatchParen()
-  augroup END
 endfunction
 
   " Nvim-R {
