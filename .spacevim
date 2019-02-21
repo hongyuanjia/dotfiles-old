@@ -30,8 +30,6 @@ function! Layers()
 
   Layer 'auto-completion'
 
-  Layer 'airline'
-
   Layer 'git'
 endfunction
 " }
@@ -43,6 +41,7 @@ function! UserInit()
 
   " For Git
   Plug 'jreybert/vimagit'
+  Plug 'tpope/vim-rhubarb'
 
   " For better defaults
   Plug 'tpope/vim-sensible'
@@ -81,7 +80,6 @@ function! UserInit()
   " For better looking
   Plug 'ryanoasis/vim-devicons'
   Plug 'chrisbra/Colorizer'
-
 endfunction
 " }
 
