@@ -409,9 +409,6 @@ function! UserConfig()
 endfunction
 
   " Nvim-R {
-  if has("win32")
-    let R_source = "~/.vim/send.vim"
-  endif
   let r_indent_align_args = 0
   let rmd_syn_hl_chunk = 1
   " not losing focus every time that you generate the pdf
@@ -435,7 +432,7 @@ endfunction
     let R_assign_map = "-"
   endif
   " clear R Console line before sending commands~
-  let R_source_args = "print.eval = TRUE, local = TRUE, encoding = 'UTF-8'"
+  let R_source_args = "print.eval = TRUE, encoding = 'UTF-8'"
   if has("win32")
     let R_in_buffer = 0
   endif
