@@ -80,6 +80,9 @@ function! UserInit()
   " For better looking
   Plug 'ryanoasis/vim-devicons'
   Plug 'chrisbra/Colorizer'
+
+  " For IM switching
+  Plug 'lilydjwg/fcitx.vim'
 endfunction
 " }
 
