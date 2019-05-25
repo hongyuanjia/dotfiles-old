@@ -92,7 +92,8 @@ function! UserInit()
   Plug 'chrisbra/Colorizer'
 
   " For IM switching
-  Plug 'lilydjwg/fcitx.vim'
+  " Plug 'lilydjwg/fcitx.vim'
+
   " Session
   Plug 'xolox/vim-misc'
   Plug 'xolox/vim-session'
