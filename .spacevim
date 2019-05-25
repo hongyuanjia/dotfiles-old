@@ -511,5 +511,3 @@ endfunction
   let R_hl_term=1
   let R_buffer_opts = "nobuflisted"
   " }
-endfunction
-
