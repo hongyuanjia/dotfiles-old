@@ -76,7 +76,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+  export EDITOR='nvim'
 # else
 #   export EDITOR='mvim'
 # fi
@@ -95,6 +95,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 alias zshconfig="vim ~/.zshrc"
 alias i3config="vim ~/.config/i3/config"
+alias vim="nvim"
 
 # ZSH uses the KEYTIMEOUT parameter to determine how long to wait (in hundredths
 # of a second) for additional characters in sequence. Default is 0.4 seconds.
