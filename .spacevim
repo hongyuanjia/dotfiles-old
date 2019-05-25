@@ -112,6 +112,7 @@ function! UserConfig()
   " See https://github.com/liuchengxu/space-vim-theme/issues/1
   hi CurrentWord ctermfg=NONE ctermbg=60 guifg=NONE guibg=#544a65 guisp=NONE cterm=NONE,underline gui=NONE,underline
   hi CurrentWordTwins ctermfg=NONE ctermbg=60 guifg=NONE guibg=#544a65 guisp=NONE cterm=NONE gui=NONE
+  hi Comment gui=NONE
 
   " clear <C-R> map in command line mode
   " See https://github.com/liuchengxu/space-vim/issues/383
