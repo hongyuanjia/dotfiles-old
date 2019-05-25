@@ -45,8 +45,8 @@ function! UserInit()
   Plug 'tpope/vim-obsession'
 
   " For Git
-  Plug 'jreybert/vimagit'
   Plug 'tpope/vim-rhubarb'
+  Plug 'gregsexton/gitv'
 
   " For better defaults
   Plug 'tpope/vim-sensible'
