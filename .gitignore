@@ -1,4 +1,6 @@
 __pycache__/
 *.py[cod]
 
-\.config/aria2/aria2\.session
+/.config/aria2/aria2\.session
+/.config/ranger/history
+/.config/ranger/bookmarks
