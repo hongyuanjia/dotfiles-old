@@ -428,7 +428,12 @@ function! UserConfig()
   " clear R Console line before sending commands~
   let R_source_args = "print.eval = TRUE, encoding = 'UTF-8'"
   if has("win32")
+    let R_source_args = "print.eval = TRUE, encoding = 'UTF-8', echo = TRUE"
     let R_in_buffer = 0
+    " See https://github.com/jalvesaq/Nvim-R/issues/151
+    let g:R_source = $HOME."/.vim/nvim-r-winpatch/send.vim"
+  else
+    let R_source_args = "print.eval = TRUE, encoding = 'UTF-8', echo = TRUE"
   endif
   " Auto quit R when close Vim
   autocmd VimLeave * if exists("g:SendCmdToR") && string(g:SendCmdToR) != "function('SendCmdToR_fake')" | call RQuit("nosave") | endif

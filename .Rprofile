@@ -24,6 +24,10 @@ setHook(
         warnPartialMatchArgs = TRUE,
         datatable.print.class = TRUE
     )
+
+    if (.Platform$OS.type == "windows") {
+        Sys.setlocale("LC_CTYPE", "Chinese (Simplified)_China.936")
+    }
 }
 
 # vim: noai:ts=4:sw=4
