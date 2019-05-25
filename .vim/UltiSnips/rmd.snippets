@@ -28,11 +28,14 @@ snippet sir "sirange"
 \SIrange{$1}{$2}{$3}
 endsnippet
 
-snippet SI "si with number"
-\SI{$1}{$2}
+snippet si "si with number"
+\SI{${1:num}${VISUAL}}{${3:\text{${2:unit}}}}
 endsnippet
 
 snippet num "number"
 \num{$1${VISUAL}}$0
 endsnippet
 
+snippet ref "cross-reference"
+\@ref($1${VISUAL})$0
+endsnippet
