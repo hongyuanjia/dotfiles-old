@@ -61,10 +61,12 @@ function! UserInit()
   Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 
   " For R
-  Plug 'jalvesaq/Nvim-R'
-  Plug 'jalvesaq/R-Vim-runtime'
-  Plug 'rafaqz/citation.vim'
-  Plug 'gabrielelana/vim-markdown'
+  Plug 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
+  Plug 'jalvesaq/R-Vim-runtime', {'for': ['r', 'rmd']}
+  Plug 'rafaqz/citation.vim', {'for': ['r', 'rmd', 'tex', 'rmd']}
+  Plug 'vim-pandoc/vim-pandoc-syntax'
+  Plug 'liuchengxu/vista.vim'
+  Plug 'lervag/vimtex', {'for': ['tex', 'rmd']}
 
   " For Text editing
   Plug 'tpope/vim-surround'
@@ -80,6 +82,9 @@ function! UserInit()
 
   " File Manager
   Plug 'francoiscabrol/ranger.vim'
+  if (has("nvim"))
+    Plug 'rbgrouleff/bclose.vim'
+  endif
   Plug 'tyru/open-browser.vim'
 
   " For better looking
@@ -104,6 +109,27 @@ function! UserConfig()
   " clear <C-R> map in command line mode
   " See https://github.com/liuchengxu/space-vim/issues/383
   cunmap <C-R>
+
+  if (!has("win32"))
+    iunmap <C-x><C-o>
+  endif
+
+  if !has("win32")
+    let g:LanguageClient_serverCommands = {
+          \ 'c': ['ccls', '--log-file=/tmp/cq.log'],
+          \ 'cpp': ['ccls', '--log-file=/tmp/cq.log'],
+          \ 'objc': ['ccls'],
+          \ 'go': ['go-langserver', '-gocodecompletion', '-func-snippet-enabled', '-logfile=/tmp/gols.log'],
+          \ 'python': ['pyls', '--log-file=/tmp/pyls.log'],
+          \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+          \ 'sh': ['bash-language-server', 'start'],
+          \ 'typescript': ['javascript-typescript-stdio'],
+          \ 'javascript': ['javascript-typescript-stdio'],
+          \ 'javascript.jsx': ['javascript-typescript-stdio'],
+          \ 'haskell': ['hie-wrapper', '--lsp', '-r', spacevim#util#RootDirectory()],
+          \ 'r': ['R', '--slave', '-e', 'languageserver::run()']
+          \ }
+  endif
 
   " better defaults {
   set dictionary+=$HOME/.vim/dict/english.dic
@@ -186,12 +212,15 @@ function! UserConfig()
 
   " Overwrite default leaderGuide settings and add new ones {
   " Files {
-  nnoremap <silent> <Leader>ft :Ranger<CR>
+  if (!has("win32"))
+    nnoremap <silent> <Leader>ft :Ranger<CR>
+  endif
+  nnoremap <silent> <Leader>fT :NERDTreeToggle<CR>
   nnoremap <silent> <Leader>fv :e $HOME/.spacevim<CR>
   nnoremap <silent> <Leader>fr :History<CR>
   " }
   " Search {
-  nnoremap <silent> <Leader>so :Unite -start-insert -toggle outline<CR>
+  nnoremap <silent> <Leader>so :Vista finder<CR>
   nnoremap <silent> <Leader>sp :Unite -start-insert grep:.<CR>
   nnoremap <silent> <Leader>sl :Unite -start-insert line<CR>
   " }
@@ -228,6 +257,7 @@ function! UserConfig()
     au FileType r,rmd inoremap <buffer> <M-=> <c-v><Space>%>%<c-v><Space>
     au FileType r,rmd inoremap <buffer> <M-;> <c-v><Space>:=<c-v><Space>
     au FileType r,rmd nnoremap <buffer> <LocalLeader>da :RSend devtools::load_all()<cr>
+    au FileType r,rmd nnoremap <buffer> <LocalLeader>dd :RSend devtools::document()<cr>
     au FileType r,rmd nnoremap <buffer> <LocalLeader>tb :RSend traceback()<cr>
     au FileType r,rmd nnoremap <buffer> <LocalLeader>sq :RSend Q<cr>
     au FileType r,rmd nnoremap <buffer> <LocalLeader>sc :RSend c<cr>
@@ -237,9 +267,8 @@ function! UserConfig()
     au FileType rbrowser nnoremap <buffer><silent> <RightMouse> :call RBrowserRightClick()<CR>
     au FileType rmd nnoremap <buffer> <LocalLeader>kk :call RenderRmd()<CR>
     au FileType rmd nnoremap <buffer> <LocalLeader>kb :call RenderBook()<CR>
+    au FileType rmd nnoremap <buffer> <LocalLeader>kp :call RenderChapter()<CR>
 
-    au FileType rmd noremap <leader>z "=ZoteroCite()<CR>p
-    au FileType rmd inoremap <C-z> <C-r>=ZoteroCite()<CR>
     au FileType rmd nmap <Leader>u [unite]
     au FileType rmd nnoremap [unite] <nop>
     " To insert a citation
@@ -291,6 +320,16 @@ function! UserConfig()
       let rmdPath = substitute(rmdPath, '\\', '/', 'g')
     endif
     let cmd = "RSend bookdown::render_book('" . rmdPath. "', encoding = 'UTF-8')"
+    exec cmd
+  endfunction
+  " }
+  " RenderChapter {
+  function RenderChapter()
+    let rmdPath = expand("%:p")
+    if has("win32")
+      let rmdPath = substitute(rmdPath, '\\', '/', 'g')
+    endif
+    let cmd = "RSend bookdown::preview_chapter('" . rmdPath. "', encoding = 'UTF-8')"
     exec cmd
   endfunction
   " }
@@ -380,18 +419,18 @@ function! UserConfig()
           \ }
   else
     let g:tagbar_type_rmd = {
-          \   'ctagstype':'rmd',
-          \   'ctagsbin': $HOME.'/.vim/rmd2ctags/rmd2ctags.R',
-          \   'ctagsargs':'',
-          \   'kinds':['y:yaml:1', 'h:header', 'c:chunk'],
-          \   'sro':'&&&',
-          \   'kind2scope':{'y':'yaml', 'h':'header', 'c':'chunk'},
-          \   'sort':0
+          \   'ctagstype':'rmd'
+          \ , 'kinds':['h:header', 'c:chunk', 'f:function', 'v:variable']
+          \ , 'sro':'&&&'
+          \ , 'kind2scope':{'h':'header', 'c':'chunk'}
+          \ , 'sort':0
+          \ , 'ctagsbin': $HOME.'/.vim/rmd2ctags/rmd2ctags.py'
+          \ , 'ctagsargs': ''
           \ }
   endif
   let g:tagbar_type_markdown = {
         \ 'ctagstype': 'markdown',
-        \ 'ctagsbin' : '~/.vim/markdown2ctags/markdown2ctags.py',
+        \ 'ctagsbin' : $HOME.'/.vim/markdown2ctags/markdown2ctags.py',
         \ 'ctagsargs' : '-f - --sort=yes',
         \ 'kinds' : ['s:sections', 'i:images'],
         \ 'sro' : '|',
@@ -401,8 +440,35 @@ function! UserConfig()
   " }
 
   nnoremap  <Leader>tS :call ToggleSpace()<CR>
-  " let g:markdown_enable_folding = 1
-  " let loaded_matchparen = 1
+  let g:markdown_enable_folding = 1
+  let loaded_matchparen = 1
+
+  let g:session_autosave='no'
+  let g:pandoc#syntax#conceal#use = 0
+
+  let g:vimtex_compiler_latexmk_engines = {
+        \ '_'                : '-xelatex',
+        \ 'pdflatex'         : '-xelatex',
+        \ 'dvipdfex'         : '-pdfdvi',
+        \ 'lualatex'         : '-lualatex',
+        \ 'xelatex'          : '-xelatex',
+        \ 'context (pdftex)' : '-pdf -pdflatex=texexec',
+        \ 'context (luatex)' : '-pdf -pdflatex=context',
+        \ 'context (xetex)'  : '-pdf -pdflatex=''texexec --xtx''',
+        \}
+
+  let g:vimtex_fold_enabled=1
+  let g:tex_flavor='latex'
+  if has("win32")
+    let g:vimtex_view_general_viewer="SumatraPDF"
+  endif
+
+  nnoremap <silent> <leader>oq  :copen<CR>
+  nnoremap <silent> <leader>ol  :lopen<CR>
+
+  let g:vista_default_executive = "coc"
+
+endfunction
 
   " Nvim-R {
   let r_indent_align_args = 0
@@ -412,22 +478,12 @@ function! UserConfig()
   let R_nvimpager = "horizontal"
   " open html output
   let R_openhtml = 1
-  " highlight R functions only if the `(` is typed
-  " let R_hl_fun_paren = 1
-  let R_hl_term = 1
-  " lists the arguments of a function, but and also the arguments of its methods
   let R_objbr_opendf = 0
-  let Rout_more_colors = 1
   let R_objbr_openlist = 0
+  let Rout_more_colors = 1
   " show a preview window of function arguments description and arguments
-  let R_show_arg_help = 1
   let R_commented_lines = 1
-  " Having mapping <ESC> will make vim wait for 1 sec before return to Normal
-  " Mode from Insert Mode.
-  " See: https://superuser.com/questions/588892/delay-when-switching-modes/588900#588900
-  let R_assign_map=""
   " clear R Console line before sending commands~
-  let R_source_args = "print.eval = TRUE, encoding = 'UTF-8'"
   if has("win32")
     let R_source_args = "print.eval = TRUE, encoding = 'UTF-8', echo = TRUE"
     let R_in_buffer = 0
@@ -438,10 +494,12 @@ function! UserConfig()
   endif
   " Auto quit R when close Vim
   autocmd VimLeave * if exists("g:SendCmdToR") && string(g:SendCmdToR) != "function('SendCmdToR_fake')" | call RQuit("nosave") | endif
-  " Fix vim terminal error
-  " ref: https://github.com/vim-airline/vim-airline/issues/1726
-  let R_setwidth = 0
-  let R_clear_line = 0
+  autocmd FileType rnoweb let b:rplugin_non_r_omnifunc = "g:omnifunc=vimtex#complete#omnifunc"
+  let R_latex_build_dir = 'build'
+  let R_texerr=1
+  let R_assign_map="<M-->"
+  let R_hl_term=1
+  let R_buffer_opts = "nobuflisted"
   " }
 endfunction
 
