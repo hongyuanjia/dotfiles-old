@@ -93,6 +93,13 @@ function! UserInit()
 
   " For IM switching
   Plug 'lilydjwg/fcitx.vim'
+  " Session
+  Plug 'xolox/vim-misc'
+  Plug 'xolox/vim-session'
+
+  " Switch windows
+  Plug 'wesQ3/vim-windowswap'
+
 endfunction
 " }
 
