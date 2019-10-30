@@ -82,14 +82,6 @@ assertthat::on_failure(${VISUAL}$1) <- function (call, env) {
 }
 endsnippet
 
-snippet code "\code{}"
-\code{${VISUAL}$1}
-endsnippet
-
-snippet link "\link{}"
-\link{${VISUAL}$1}
-endsnippet
-
 snippet bm "microbenchmark"
 microbenchmark::microbenchmark(
     $1 = $2,
@@ -112,26 +104,15 @@ $1 = function ($2) {
 }${6:,}
 endsnippet
 
-snippet desc "insert a describe test block" b
-describe("$1", {
-    ${VISUAL}$0
-})
+snippet mdesc "method roxygen skeleton in R6 class" b
+#' @description
+#' $1
+#'
+#' @details
+#' $2
+#' @param $3 $4
+#' @return $5
+#' @examples
+#' $6
 endsnippet
 
-snippet its "insert a it block without code in `describe()`" b
-it("$0")
-endsnippet
-
-snippet itb "insert a it block with code in `describe()`" b
-it("$1", {
-    ${VISUAL}$0
-})
-endsnippet
-
-snippet sql "insert SQL query" b
-RSQLite::${1:dbExecute}(${2:con}, glue::glue(
-    "
-    $0
-    "
-))
-endsnippet
