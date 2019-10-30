@@ -19,7 +19,6 @@ function! Layers()
   Layer 'code-snippets'
 
   Layer 'programming', {'exclude' : [
-        \ 'sheerun/vim-polyglot',
         \ 'junegunn/rainbow_parentheses.vim',
         \ 'matze/vim-move',
         \ 'Yggdroot/indentLine'
