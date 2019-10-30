@@ -1,5 +1,6 @@
 let g:spacevim_plug_home = '~/.vim/plugged'
 let g:spacevim_lsp_engine = 'coc'
+let g:spacevim_enable_clap = 1
 
 " Layers {
 function! Layers()
@@ -86,7 +87,9 @@ function! UserInit()
   Plug 'chrisbra/Colorizer'
 
   " For IM switching
-  " Plug 'lilydjwg/fcitx.vim'
+  if !has("win32")
+    Plug 'lilydjwg/fcitx.vim'
+  endif
 
   " Session
   Plug 'xolox/vim-misc'
