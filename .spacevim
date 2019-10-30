@@ -113,9 +113,8 @@ function! UserConfig()
   " See https://github.com/liuchengxu/space-vim/issues/383
   cunmap <C-R>
 
-  if (!has("win32"))
-    iunmap <C-x><C-o>
-  endif
+  iunmap <C-x><C-o>
+
 
   if !has("win32")
     let g:LanguageClient_serverCommands = {
@@ -269,9 +268,10 @@ function! UserConfig()
     au FileType rbrowser nnoremap <buffer><silent> <CR> :call RBrowserDoubleClick()<CR>
     au FileType rbrowser nnoremap <buffer><silent> <2-LeftMouse> :call RBrowserDoubleClick()<CR>
     au FileType rbrowser nnoremap <buffer><silent> <RightMouse> :call RBrowserRightClick()<CR>
-    au FileType rmd nnoremap <buffer> <LocalLeader>kk :call RenderRmd()<CR>
-    au FileType rmd nnoremap <buffer> <LocalLeader>kb :call RenderBook()<CR>
-    au FileType rmd nnoremap <buffer> <LocalLeader>kp :call RenderChapter()<CR>
+    au FileType r,rmd nnoremap <buffer> <LocalLeader>kk :call RenderRmd()<CR>
+    au FileType r nnoremap <buffer> <LocalLeader>ki :call SpinRmd()<CR>
+    au FileType r,rmd nnoremap <buffer> <LocalLeader>kb :call RenderBook()<CR>
+    au FileType r,rmd nnoremap <buffer> <LocalLeader>kp :call RenderChapter()<CR>
 
     au FileType rmd nmap <Leader>u [unite]
     au FileType rmd nnoremap [unite] <nop>
@@ -307,6 +307,16 @@ function! UserConfig()
     return ref
   endfunction
 
+  " SpinRmd {
+  function SpinRmd()
+    let rmdPath = expand("%:p")
+    if has("win32")
+      let rmdPath = substitute(rmdPath, '\\', '/', 'g')
+    endif
+    let cmd = "RSend knitr::spin('" . rmdPath. "', knit = FALSE, report = FALSE)"
+    exec cmd
+  endfunction
+  " }
   " RenderRmd {
   function RenderRmd()
     let rmdPath = expand("%:p")
