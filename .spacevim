@@ -1,7 +1,5 @@
 let g:spacevim_plug_home = '~/.vim/plugged'
-if !has("win32")
-  let g:spacevim_lsp_engine = 'coc'
-endif
+let g:spacevim_lsp_engine = 'coc'
 
 " Layers {
 function! Layers()
@@ -26,13 +24,9 @@ function! Layers()
 
   Layer 'text-align'
 
-  Layer 'file-manager', {'exclude': 'danro/rename.vim'}
+  Layer 'file-manager'
 
-  if (has("win32"))
-    Layer 'auto-completion'
-  else
-    Layer 'lsp'
-  endif
+  Layer 'lsp'
 
   Layer 'git'
 endfunction
