@@ -60,6 +60,7 @@ function! UserInit()
   Plug 'vim-pandoc/vim-pandoc-syntax'
   Plug 'liuchengxu/vista.vim'
   Plug 'lervag/vimtex', {'for': ['tex', 'rmd']}
+  Plug 'maverickg/stan.vim'
 
   " For Text editing
   Plug 'tpope/vim-surround'
@@ -91,8 +92,8 @@ function! UserInit()
   Plug 'xolox/vim-misc'
   Plug 'xolox/vim-session'
 
-  " Switch windows
-  Plug 'wesQ3/vim-windowswap'
+  " EnergyPlus IDD/IDF Syntax Highlighting
+  Plug 'mitchpaulus/energyplus-vim'
 
 endfunction
 " }
