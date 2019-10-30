@@ -251,6 +251,9 @@ function! UserConfig()
     au FileType rmd setlocal commentstring=<!--%s-->
     au FileType rmd setlocal comments=b:*,b:-,b:+,n:>
 
+    " add EnergyPlus class dict
+    au FileType r,rmd setlocal dictionary+=$HOME/.vim/dict/idd.dic
+
     " Keybindings
     if (has("win32"))
       au FileType r,rmd inoremap <buffer> ½ <c-v><Space>%>%<c-v><Space>
