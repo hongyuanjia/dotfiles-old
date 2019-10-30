@@ -9,7 +9,13 @@ setHook(
     function(...) {
         options(languageserver.default_linters = lintr::with_defaults(
                 line_length_linter = NULL,
-                object_usage_linter = NULL
+                object_usage_linter = NULL,
+                infix_spaces_linter = NULL,
+                spaces_left_parentheses_linter = NULL,
+                absolute_path_linter = NULL,
+                object_name_linter = NULL,
+                blogdown.ext = ".Rmd",
+                blogdown.author = "Hongyuan Jia"
                 ))
     }
 )
