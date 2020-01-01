@@ -28,7 +28,16 @@ setHook(
         deparse.max.lines = 2,
         warnPartialMatchDollar = TRUE,
         warnPartialMatchArgs = TRUE,
-        datatable.print.class = TRUE
+        datatable.print.class = TRUE,
+
+        # usethis
+        usethis.full_name = "Hongyuan Jia",
+        usethis.description = list(
+            `Authors@R` = 'person("Hongyuan", "Jia", email = "hongyuan.jia@bears-berkeley.sg", role = c("aut", "cre"),
+                                 comment = c(ORCID = "0000-0002-0075-8183"))',
+            License = "MIT + file LICENSE",
+            Version = "0.0.0.9000"
+        )
     )
 
     if (.Platform$OS.type == "windows") {
