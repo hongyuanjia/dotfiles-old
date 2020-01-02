@@ -6,7 +6,9 @@
 "
 
 " Author: @hongyuanjia
-" Date: 2020-01-01
+" Date: 2020-01-03
+
+set runtimepath^=~/.vim
 
 " Initialize {{{
 if ! filereadable(expand('~/.vim/autoload/plug.vim'))
@@ -40,23 +42,21 @@ Plug 'junegunn/gv.vim', { 'on': ['GV', 'GV!'] }
 " Gbrowser
 Plug 'tpope/vim-rhubarb'
 
-" Diff on sign column
-Plug 'mhinz/vim-signify'
+" Maximize and restore the current window
+Plug 'szw/vim-maximizer'
 
 " Text editing
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'justinmk/vim-sneak'
 Plug 'kana/vim-textobj-user'
 Plug 'Julian/vim-textobj-variable-segment'
 Plug 'Julian/vim-textobj-brace'
-Plug 'terryma/vim-expand-region'
 Plug 'AndrewRadev/sideways.vim'
-Plug 'justinmk/vim-sneak'
-Plug 'easymotion/vim-easymotion', { 'on': [] }
+Plug 'easymotion/vim-easymotion'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 " R
 Plug 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
@@ -86,23 +86,25 @@ Plug 'ryanoasis/vim-devicons'
 " For IM switching
 Plug 'rlue/vim-barbaric'
 
-" On-demand lazy load
-Plug 'liuchengxu/vim-which-key'
+" Key menu
+Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 
-" Use vim-clap as finder
-Plug 'liuchengxu/vim-clap', { 'do': function('clap#helper#build_all') }
-Plug 'junegunn/fzf',  { 'dir': '~/.fzf', 'do': './install --all', 'on': [] }
-Plug 'junegunn/fzf.vim', { 'on': [] }
-
+" Autocompletion
 Plug 'neoclide/coc.nvim', { 'do': { -> coc#util#install()} }
+
+" vimscript lsp
 Plug 'Shougo/neco-vim'
 Plug 'neoclide/coc-neco'
 
+" fuzzy finder
+Plug 'Yggdroot/LeaderF'
+
 " Colorscheme
 Plug 'liuchengxu/space-vim-theme'
+Plug 'kaicataldo/material.vim'
 
 " Status line
-Plug 'liuchengxu/eleline.vim'
+Plug 'itchyny/lightline.vim'
 
 " Align
 Plug 'godlygeek/tabular',        { 'on': 'Tabularize' }
@@ -115,71 +117,114 @@ Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 
 " Snippets
-Plug 'SirVer/ultisnips', { 'on': [], 'on_event': 'InsertEnter' }
-Plug 'honza/vim-snippets', { 'on': [], 'on_event': 'InsertEnter' }
+Plug 'honza/vim-snippets'
 
-Plug 'luochen1990/rainbow'
+" Rainbow Parentheses Improved
+Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle'}
+
+" Language pack
 Plug 'sheerun/vim-polyglot'
+
+" Auto change working directory
 Plug 'airblade/vim-rooter'
 
-Plug 'liuchengxu/vista.vim', { 'on': 'Vista' }
+" Show indent line
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle' }
 
 " Open dir of current file
 Plug 'justinmk/vim-gtfo'
 
+" Delete buffers and close files without closing windows
+Plug 'moll/vim-bbye'
+
 " Markdown
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'mzlogin/vim-markdown-toc', { 'on': ['GenTocGFM', 'GenTocRedcarpet', 'GenTocGitLab', 'UpdateToc', 'RemoveToc'] }
-Plug 'iamcco/markdown-preview.nvim', { 'do': ':call mkdp#util#install()', 'for': 'markdown', 'on': 'MarkdownPreview' }
-Plug 'vimwiki/vimwiki'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
+Plug 'vimwiki/vimwiki'
 
 " LaTeX preview
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 
 " EnergyPlus IDF syntax highlighting
-Plug 'mitchpaulus/energyplus-vim'
+Plug 'mitchpaulus/energyplus-vim', {'for' : 'idf' }
 
-Plug 'itchyny/calendar.vim'
 call plug#end()
 " }}}
 
 " Better Defaults {{{
+
+" Always use utf-8 encoding
+set langmenu=en_US.UTF-8
+language en
+set encoding=utf-8
+set fileencodings=utf-8,ucs-bom,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+set fileencoding=utf-8
+set termencoding=utf-8
+
 " Use gui colors in terminal if available
 if has('termguicolors')
     set termguicolors
 endif
 
-set background=dark
-colorscheme space_vim_theme
-
-autocmd FileType vim setlocal foldmethod=marker
-autocmd FileType vim setlocal foldmarker={{{,}}}
+let g:material_terminal_italics = 1
+let g:material_theme_style = 'palenight'
+colorscheme material
 
 " Enable syntax highlight
 syntax on
 
 " Enable filetype plugins
-filetype plugin on
+filetype plugin indent on
 
 " Copy indent from current line when starting a new line
 set autoindent
 
+" Do not wrap long lines
+set nowrap
+
+" Use backup and swap
+if has('win32')
+    silent execute '!mkdir '.expandcmd($TEMP.'\backup')
+    silent execute '!mkdir '.expandcmd($TEMP.'\undo')
+else
+    silent execute '!mkdir -p'.expandcmd($TEMP.'/backup')
+    silent execute '!mkdir -p'.expandcmd($TEMP.'/undo')
+endif
+set backupdir=$TEMP/backup,.
+set directory=$TEMP/backup,.
+
+if has('persistent_undo')
+    set undofile
+    set undodir=$TEMP/undo,.
+endif
+
 " Set English word dictionary
 set dictionary+=$HOME/.vim/dict/english.dic
 
+" Backspace can go up above
 set backspace=indent,eol,start
 
 " Do not display information in preview window
 set complete-=i
 
 " Set Chinese fonts
-" set guifont=Source\ Code\ Pro:h12
+set guifont=DejaVuSansMono\ NF:h12
 set guifontwide=SimHei:h12
 
 " Disable GUI menu
+au GUIEnter * simalt ~x
 set guioptions-=m
+set guioptions-=r        " Hide the right scrollbar
+set guioptions-=L        " Hide the left scrollbar
+set guioptions-=T
+set guioptions-=e
+
+" No annoying sound on errors
+set noerrorbells
+set novisualbell
+set visualbell t_vb=
 
 " Always show tabline
 set showtabline=2
@@ -199,7 +244,7 @@ set textwidth=80
 
 " Show special characters
 set list!
-set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+set listchars=tab:>\ ,trail:~,extends:>,precedes:<,nbsp:+
 
 " Format options
 set formatoptions+=M " Don't insert a space before or after a multi-byte when join
@@ -214,6 +259,9 @@ set formatoptions-=t " Do not auto format text
 set number
 set relativenumber
 
+" Enable cursor line
+set cursorline
+
 " Always open new windows in the right bottom
 set splitright
 set splitbelow
@@ -223,9 +271,6 @@ set ignorecase
 
 " Use smart case
 set smartcase
-
-" Show substitute command effects in a small window
-set inccommand=split
 
 " Show matches on the fly when searching
 set incsearch
@@ -248,9 +293,6 @@ set scrolloff=5
 " The minimal number of screen columns to keep to the left and to the right of the cursor
 set sidescrolloff=5
 
-" Always use utf-8 encoding
-set encoding=utf-8
-
 " Auto read modified files
 set autoread
 
@@ -267,9 +309,6 @@ set viewoptions-=options
 " Use system clipboard as the default
 set clipboard=unnamed,unnamedplus
 
-" Better display for messages
-set cmdheight=2
-
 " Always show signcolumns
 set signcolumn=yes
 
@@ -284,11 +323,20 @@ let &t_SI = "\<Esc>[6 q"
 let &t_SR = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[2 q"
 
-" Use Ctrl-Tab and Alt-Tab to switch tab
-map    <C-Tab>  :tabnext<CR>
-imap   <C-Tab>  <C-O>:tabnext<CR>
-map    <M-Tab>  :tabprev<CR>
-imap   <M-Tab>  <C-O>:tabprev<CR>
+" Jump to the last position when reopen a file
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+" Move through wrapped lines
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+
+" Toggle folding: \
+nnoremap \ za
+vnoremap \ za
 
 " Picked from https://github.com/tpope/vim-unimpaired
 " Buffers
@@ -319,6 +367,14 @@ vnoremap Y "+y
 nnoremap < <<
 nnoremap > >>
 
+" Visual shifting: <>
+vnoremap < <gv
+vnoremap > >gv
+
+" Always show the matched in center
+nnoremap n nzz
+nnoremap N Nzz
+
 " Movement in insert mode
 inoremap <C-h> <C-o>h
 inoremap <C-l> <C-o>a
@@ -327,7 +383,7 @@ inoremap <C-k> <C-o>k
 inoremap <C-^> <C-o><C-^>
 
 " <Leader>c Close quickfix/location window
-nnoremap <leader>c :cclose<bar>lclose<cr>
+nnoremap <leader>q :cclose<bar>lclose<cr>
 
 " Readline-style key bindings in command-line (excerpt from rsi.vim)
 cnoremap        <C-A> <Home>
@@ -339,33 +395,61 @@ cnoremap        <M-f> <S-Right>
 silent! exe "set <S-Left>=\<Esc>b"
 silent! exe "set <S-Right>=\<Esc>f"
 
+" Manipulate font size, from tpope
+command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
+command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
+
 " Terminal keybindings
-if has('nvim')
-    tnoremap <Esc> <C-\><C-n>
-    tnoremap <M-[> <Esc>
-    tnoremap <C-v><Esc> <Esc>
-    tnoremap <c-w>h <c-\><c-n><c-w>h
-    tnoremap <c-w>j <c-\><c-n><c-w>j
-    tnoremap <c-w>k <c-\><c-n><c-w>k
-    tnoremap <c-w>l <c-\><c-n><c-w>l
-endif
+tnoremap <Esc> <C-\><C-n>
+tnoremap <M-[> <Esc>
+tnoremap <C-v><Esc> <Esc>
+tnoremap <c-w>h <c-\><c-n><c-w>h
+tnoremap <c-w>j <c-\><c-n><c-w>j
+tnoremap <c-w>k <c-\><c-n><c-w>k
+tnoremap <c-w>l <c-\><c-n><c-w>l
 " }}}
 
 " Plugins Specific {{{
+autocmd FileType vim setlocal foldmethod=marker
+autocmd FileType vim setlocal foldmarker={{{,}}}
+
+" vim-maximizer {{{
+" Do not use the default mapping (F3)
+let g:maximizer_set_default_mapping = 1
+" }}}
+
+" lightline {{{
+let g:lightline = {
+    \ 'colorscheme': 'material_vim',
+    \ }
+" }}}
+
+
+" LeaderF {{{
+let g:Lf_ShortcutF = '<leader>ff'
+let g:Lf_ShortcutB = '<leader>bb'
+" popup mode
+let g:Lf_StlColorscheme = 'one'
+" remove separators
+let g:Lf_StlSeparator = { 'left': '', 'right': '' }
+" }}}
 
 " Coc.nvim {{{
 " fix the most annoying bug that coc has
-silent! au BufEnter,BufRead,BufNewFile * silent! unmap if
+" silent! au BufEnter,BufRead,BufNewFile * silent! unmap if
 let g:coc_global_extensions = [
     \ 'coc-pairs',
     \ 'coc-dictionary',
+    \ 'coc-git',
     \ 'coc-gitignore',
     \ 'coc-json',
     \ 'coc-lists',
     \ 'coc-r-lsp',
-    \ 'coc-ultisnips',
+    \ 'coc-snippets',
+    \ 'coc-tabnine',
     \ 'coc-vimlsp',
     \ 'coc-word',
+    \ 'coc-yank',
     \ ]
 
 " use <tab> for trigger completion and navigate to the next complete item
@@ -380,6 +464,15 @@ inoremap <silent><expr> <Tab>
     \ coc#refresh()
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <silent><expr> <c-space> coc#refresh()
+
+inoremap <silent><expr> <TAB>
+    \ pumvisible() ? coc#_select_confirm() :
+    \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ coc#refresh()
+
+let g:coc_snippet_prev = '<s-tab>'
+let g:coc_snippet_next = '<tab>'
 " }}}
 
 " undotree {{{
@@ -394,21 +487,13 @@ function g:Undotree_CustomMap()
     nmap <buffer> j <plug>UndotreePreviousState
     nmap <buffer> K 5<plug>UndotreeNextState
     nmap <buffer> J 5<plug>UndotreePreviousState
-endfunc
-" }}}
-
-" UltiSnips {{{
-if !has("win32")
-    let g:python3_host_prog = '/bin/python3'
-endif
-let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips', $HOME.'/.vim/plugged/vim-snippets/UltiSnips']
-let g:UltiSnipsSnippetsDir = $HOME.'/.vim/UltiSnips'
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+endfunction
 " }}}
 
 " vim-root {{{
+"  Stop echoing
+let g:rooter_silent_chdir = 1
+
 " Change to file's directory when vim-rooter failed
 let g:rooter_change_directory_for_non_project_files = 'current'
 " }}}
@@ -419,7 +504,7 @@ let g:indentLine_enabled=1
 let g:indentLine_color_term=239
 let g:indentLine_color_gui = '#4A9586'
 let g:indentLine_concealcursor='vc'      " default 'inc'
-let g:indentLine_fileTypeExclude = ['help', 'startify', 'vimfiler']
+let g:indentLine_fileTypeExclude = ['help', 'startify']
 " }}}
 
 " vim-markdown-toc {{{
@@ -440,7 +525,6 @@ xmap ia <Plug>SidewaysArgumentTextobjI
 " vimtex {{{
 let g:tex_flavor='latex'
 let g:vimtex_fold_enabled=1
-let g:vimtex_compiler_progname = 'nvr'
 let g:vimtex_compiler_latexmk_engines = {
       \ '_'                : '-xelatex',
       \ 'pdflatex'         : '-xelatex',
@@ -453,12 +537,12 @@ let g:vimtex_compiler_latexmk_engines = {
       \ }
 
 if has("win32")
-  let g:vimtex_view_general_viewer="SumatraPDF"
+    let g:vimtex_view_general_viewer="SumatraPDF"
 endif
 " }}}
 
 " vim-markdown {{{
-" Turn off most of the features of this plug-in; I really just want the folding.
+" Turn off most of the features
 let g:vim_markdown_override_foldtext=0
 let g:vim_markdown_no_default_key_mappings=1
 let g:vim_markdown_emphasis_multiline=0
@@ -482,14 +566,7 @@ let Rout_more_colors = 1
 " show a preview window of function arguments description and arguments
 let R_commented_lines = 1
 " clear R Console line before sending commands~
-if has("win32")
-    let R_source_args = "print.eval = TRUE, encoding = 'UTF-8', echo = TRUE"
-    let R_in_buffer = 0
-    " See https://github.com/jalvesaq/Nvim-R/issues/151
-    let g:R_source = $HOME."/.vim/nvim-r-winpatch/send.vim"
-else
-    let R_source_args = "print.eval = TRUE, encoding = 'UTF-8', echo = TRUE"
-endif
+let R_source_args = "print.eval = TRUE, encoding = 'UTF-8', echo = TRUE"
 " Auto quit R when close Vim
 autocmd VimLeave * if exists("g:SendCmdToR") && string(g:SendCmdToR) != "function('SendCmdToR_fake')" | call RQuit("nosave") | endif
 autocmd FileType rnoweb let b:rplugin_non_r_omnifunc = "g:omnifunc=vimtex#complete#omnifunc"
@@ -530,9 +607,8 @@ let g:mkdp_port = ''
 let g:mkdp_page_title = '「${name}」'
 " }}}
 
-" calendar {{{
-let g:calendar_google_calendar=1
-let g:calendar_google_task = 1
+" vim-pandox-syntax {{{
+let g:pandoc#syntax#conceal#use=0
 " }}}
 
 " vim-anzu {{{
@@ -555,7 +631,7 @@ let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
 
 " Use which-key
-call which_key#register('<Space>', "g:which_key_map")
+autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
 nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
 vnoremap <silent> <leader>      :<c-u>WhichKeyVisual '<Space>'<CR>
 nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
@@ -567,39 +643,32 @@ let g:which_key_map =  {}
 " a {{{
 let g:which_key_map.a = {
     \ 'name' : '+arguments'  ,
-    \ 'h' : ['SidewaysLeft', 'argument-move-left'  ]  ,
-    \ 'l' : ['SidewaysRight' , 'argument-move-right'] ,
-    \ }
-" }}}
-
-" c {{{
-let g:which_key_map.c = {
-    \ 'name' : '+calendar'  ,
-    \ 'c' : [':Calendar', 'calendar-open'  ]  ,
-    \ 'C' : [':Calendar -view=clock -position=here' , 'clendar-clock'] ,
+    \ 'h' : ['SidewaysLeft'  , 'argument-move-left'  ] ,
+    \ 'l' : ['SidewaysRight' , 'argument-move-right']  ,
     \ }
 " }}}
 
 " b {{{
 let g:which_key_map.b = {
-    \ 'name' : '+buffer'   ,
-    \ '1' : ['b1'            , 'buffer-1']        ,
-    \ '2' : ['b2'            , 'buffer-2']        ,
-    \ '3' : ['b3'            , 'buffer-3']        ,
-    \ '4' : ['b4'            , 'buffer-4']        ,
-    \ '5' : ['b5'            , 'buffer-5']        ,
-    \ '6' : ['b6'            , 'buffer-6']        ,
-    \ '7' : ['b7'            , 'buffer-7']        ,
-    \ '8' : ['b8'            , 'buffer-8']        ,
-    \ '9' : ['b9'            , 'buffer-9']        ,
-    \ 'b' : [':Clap buffers' , 'buffer-list']     ,
-    \ 'c' : ['bclose'        , 'buffer-close']    ,
-    \ 'd' : ['bdelete'       , 'buffer-delete']   ,
-    \ 'h' : ['Startify'      , 'open-home']       ,
-    \ 'k' : ['bw'            , 'buffer-kill']     ,
-    \ 'l' : [':Clap blines'  , 'buffer-lines']    ,
-    \ 'n' : ['bnext'         , 'buffer-next']     ,
-    \ 'p' : ['bprevious'     , 'buffer-previous'] ,
+    \ 'name' : '+buffer'      ,
+    \ '1' : ['b1'             , 'buffer-1']         ,
+    \ '2' : ['b2'             , 'buffer-2']         ,
+    \ '3' : ['b3'             , 'buffer-3']         ,
+    \ '4' : ['b4'             , 'buffer-4']         ,
+    \ '5' : ['b5'             , 'buffer-5']         ,
+    \ '6' : ['b6'             , 'buffer-6']         ,
+    \ '7' : ['b7'             , 'buffer-7']         ,
+    \ '8' : ['b8'             , 'buffer-8']         ,
+    \ '9' : ['b9'             , 'buffer-9']         ,
+    \ 'b' : ['LeaderfBuffer'  , 'buffer-list']      ,
+    \ 'c' : ['bclose'         , 'buffer-close']     ,
+    \ 'd' : ['Bdelete'        , 'buffer-delete']    ,
+    \ 'h' : ['Startify'       , 'open-home']        ,
+    \ 'l' : ['LeaderfLine'    , 'buffer-lines']     ,
+    \ 'L' : ['LeaderfLineAll' , 'buffer-lines-all'] ,
+    \ 'k' : ['Bwipeout'       , 'buffer-kill']      ,
+    \ 'n' : ['bnext'          , 'buffer-next']      ,
+    \ 'p' : ['bprevious'      , 'buffer-previous']  ,
     \ }
 " }}}
 
@@ -629,9 +698,9 @@ nnoremap <silent> <leader>fR :source $MYVIMRC<CR>
 let g:which_key_map.f.R = 'reload-vimrc'
 nnoremap <silent> <leader>fd :NERDTreeFind<CR>
 let g:which_key_map.f.d = 'find-current-buffer-in-NERDTree'
-nnoremap <silent> <leader>ff :Clap files<CR>
+nnoremap <silent> <leader>ff :LeaderfFile<CR>
 let g:which_key_map.f.f = 'files-in-current-directory'
-nnoremap <silent> <leader>fh :Clap history<CR>
+nnoremap <silent> <leader>fh :LeaderfMru<CR>
 let g:which_key_map.f.h = 'history-file'
 nnoremap <silent> <leader>fs :update<CR>
 let g:which_key_map.f.s = 'save-file'
@@ -683,59 +752,78 @@ let g:which_key_map.Q = [ 'qa!', 'quit-without-saving' ]
 
 " s {{{
 let g:which_key_map.s = {
-    \ 'name' : '+search/show'  ,
-    \ 'C' : [':Clap command'   , 'search-commands']          ,
-    \ 'H' : [':Clap hist'      , 'search-command-history']   ,
-    \ 'c' : [':Clap colors'    , 'search-colorschemes']      ,
-    \ 'l' : [':Clap lines'     , 'search-lines']             ,
-    \ 'm' : [':Clap marks'     , 'search-marks']             ,
-    \ 'n' : [':nohlsearch'     , 'disable-highlight-search'] ,
-    \ 'p' : [':Clap grep'      , 'grep-on-the-fly']          ,
-    \ 'r' : [':Clap registers' , 'search-registers']         ,
-    \ 't' : [':Clap tags'      , 'search-tags']              ,
-    \ 'y' : [':Clap yanks'     , 'search-yanks']             ,
+    \ 'name' : '+search/show'       ,
+    \ 'C' : [':LeaderfCommand'       , 'search-commands']          ,
+    \ 'F' : [':LeaderfFileType'      , 'search-file-types']        ,
+    \ 'H' : [':LeaderfHistoryCmd'    , 'search-command-history']   ,
+    \ 'M' : [':CocList maps'         , 'search-maps']              ,
+    \ 'c' : [':LeaderfColorscheme'   , 'search-colorschemes']      ,
+    \ 'f' : [':LeaderfFunction'      , 'search-functions']         ,
+    \ 'h' : [':LeaderfHelp'          , 'search-help-tags']         ,
+    \ 'l' : [':LeaderfLine'          , 'search-lines']             ,
+    \ 'm' : [':CocList marks'        , 'search-marks']             ,
+    \ 'n' : [':nohlsearch'           , 'disable-highlight-search'] ,
+    \ 'p' : [':LeaderfRgInteractive' , 'grep-on-the-fly']          ,
+    \ 't' : [':LeaderfTag'            , 'search-tags']             ,
     \ }
-nnoremap <silent> <leader>sn 
+
+nnoremap <silent> <leader>sy  :<C-u>CocList -A --normal yank<cr>
+let g:which_key_map.s.y = 'search-yanks'
+
+" Keymapping for grep word under cursor with interactive mode
+nnoremap <silent> <Leader>sw :<C-u>call <Plug>LeaderfRgCwordLiteralNoBoundary<CR>
+let g:which_key_map.s.w = 'search-current-word'
+nnoremap <silent> <Leader>sW :<C-u>call <Plug>LeaderfRgCwordLiteralBoundary<CR>
+let g:which_key_map.s.W = 'search-current-word-literal'
+
+vnoremap <leader>ss :<C-u>call LeaderfRgVisualLiteralNoBoundary<CR>
+vnoremap <leader>sS :<C-u>call LeaderfRgVisualLiteralBoundary<CR>
+let g:which_key_map.s.s = 'search-selected'
+let g:which_key_map.s.S = 'search-selected-literal'
 " }}}
 
 " t {{{
 let g:which_key_map.t = {
-    \ 'name' : '+toggle'                  ,
-    \ 'C' :  [':call ToggleColorColumn()' , 'toggle-color-column']    ,
-    \ 'N' :  ['tabnew'                    , 'tab-new']                ,
-    \ 'P' :  ['MarkdownPreview'           , 'toggle-markdown-preview'],
-    \ '\' :  [':call ToggleSlash()'       , 'toggle-file-path-style'] ,
-    \ 'c' :  ['tabclose'                  , 'tab-close']              ,
-    \ 'f' :  [':1tabnext'                 , 'tab-first']              ,
-    \ 'i' :  ['IndentLinesToggle'         , 'toggle-indent-lines']    ,
-    \ 'l' :  [':$tabnext'                 , 'tab-last']               ,
-    \ 'm' :  ['TableModeToggle'           , 'toggle-table-mode']      ,
-    \ 'n' :  [':+tabnext'                 , 'tab-next']               ,
-    \ 'p' :  [':-tabnext'                 , 'tab-previcus']           ,
-    \ 'u' :  ['UndotreeToggle'            , 'toggle-undotree']        ,
+    \ 'name' : '+tabs/toggle'             ,
+    \ 'C' :  [':call ToggleColorColumn()' , 'toggle-color-column']        ,
+    \ 'N' :  ['tabnew'                    , 'tab-new']                    ,
+    \ 'L' :  [':call ToggleLineNumber()'  , 'toggle-line-number']         ,
+    \ 'P' :  [':MarkdownPreview'          , 'toggle-markdown-preview']    ,
+    \ 'R' :  [':RainbowToggle'            , 'toggle-rainbow-parentheses'] ,
+    \ 'S' :  [':call ToggleSpellCheck()'  , 'toggle-spell-check']         ,
+    \ '\' :  ['ToggleSlash'               , 'toggle-file-path-style']     ,
+    \ 'c' :  ['tabclose'                  , 'tab-close']                  ,
+    \ 'f' :  [':1tabnext'                 , 'tab-first']                  ,
+    \ 'i' :  ['IndentLinesToggle'         , 'toggle-indent-lines']        ,
+    \ 'l' :  [':$tabnext'                 , 'tab-last']                   ,
+    \ 'm' :  ['TableModeToggle'           , 'toggle-table-mode']          ,
+    \ 'n' :  [':+tabnext'                 , 'tab-next']                   ,
+    \ 'p' :  [':-tabnext'                 , 'tab-previcus']               ,
+    \ 's' :  [':call ToggleCursorLine()'  , 'toggle-cursor-line']         ,
+    \ 'u' :  ['UndotreeToggle'            , 'toggle-undotree']            ,
     \ }
 " }}}
 
 " w {{{
 let g:which_key_map.w = {
-    \ 'name' : '+windows' ,
-    \ 'w' :  ['<c-w>w'    , 'window-other']            ,
-    \ 'c' :  ['<c-w>c'    , 'window-close']            ,
-    \ '-' :  ['<c-w>s'    , 'window-split-below']      ,
-    \ '|' :  ['<c-w>v'    , 'window-split-right']      ,
-    \ '\' :  ['<c-w>v'    , 'window-split-right']      ,
-    \ 'o' :  ['only'      , 'windows-close-all-other'] ,
-    \ 'h' :  ['<c-w>h'    , 'window-left']             ,
-    \ 'j' :  ['<c-w>j'    , 'window-below']            ,
-    \ 'l' :  ['<c-w>l'    , 'window-right']            ,
-    \ 'k' :  ['<c-w>k'    , 'window-up']               ,
-    \ 'H' :  ['<c-w>5<'   , 'window-expand-left']      ,
-    \ 'J' :  [':resize +5' , 'window-expand-below']     ,
-    \ 'L' :  ['<c-w>5>'   , 'window-expand-right']     ,
-    \ 'K' :  [':resize -5' , 'window-expand-up']        ,
-    \ '=' :  ['<c-w>='    , 'window-balance']          ,
-    \ 's' :  ['<c-w>s'    , 'split-window-below']      ,
-    \ 'v' :  ['<c-w>v'    , 'split-window-below']      ,
+    \ 'name' : '+windows'       ,
+    \ 'w' :  ['<c-w>w'          , 'window-other']             ,
+    \ 'c' :  ['<c-w>c'          , 'window-close']             ,
+    \ '-' :  ['<c-w>s'          , 'window-split-below']       ,
+    \ '|' :  ['<c-w>v'          , 'window-split-right']       ,
+    \ '\' :  ['<c-w>v'          , 'window-split-right']       ,
+    \ 'm' :  ['MaximizerToggle' , 'windows-maximizer-toggle'] ,
+    \ 'h' :  ['<c-w>h'          , 'window-left']              ,
+    \ 'j' :  ['<c-w>j'          , 'window-below']             ,
+    \ 'l' :  ['<c-w>l'          , 'window-right']             ,
+    \ 'k' :  ['<c-w>k'          , 'window-up']                ,
+    \ 'H' :  ['<c-w>5<'         , 'window-expand-left']       ,
+    \ 'J' :  [':resize +5'      , 'window-expand-below']      ,
+    \ 'L' :  ['<c-w>5>'         , 'window-expand-right']      ,
+    \ 'K' :  [':resize -5'      , 'window-expand-up']         ,
+    \ '=' :  ['<c-w>='          , 'window-balance']           ,
+    \ 's' :  ['<c-w>s'          , 'split-window-below']       ,
+    \ 'v' :  ['<c-w>v'          , 'split-window-below']       ,
     \ }
 " }}}
 
@@ -745,25 +833,36 @@ let g:which_key_map.x = {
     \ 'd' :  ['StripWhitespace', 'trim-whitespaces'] ,
     \ }
 " }}}
+
+" z {{{
+let g:which_key_map.x = {
+    \ 'name' : '+zoom'    ,
+    \ '+' :  ['zoom-in']  ,
+    \ '-' :  ['zoom-out'] ,
+    \ }
+
+noremap <silent><leader>z+ :Bigger<CR>
+noremap <silent><leader>z- :Smaller<CR>
+" }}}
+
 " }}}
 
 " R {{{
 " AutoCmd {{{
-" enable syntax folding
-let r_syntax_folding = 1
 augroup au_R
     au!
     " force showing color column
     au FileType r,rmd setlocal colorcolumn=80
 
-    au FileType r setlocal foldmethod=syntax
+    " au FileType r setlocal foldmethod=syntax
+    au FileType r setlocal foldmethod=marker
+    au FileType r setlocal foldmarker={{{,}}}
 
     " set comment string
     au FileType r setlocal commentstring=#%s
     au FileType r setlocal comments+=b:#'
 
-    " au FileType rmd setlocal commentstring=<!--%s-->
-    " au FileType rmd setlocal comments=b:*,b:-,b:+,n:>
+    au FileType rmd setlocal comments=b:*,b:-,b:+,n:>
 
     " add EnergyPlus class dict
     au FileType r,rmd setlocal dictionary+=$HOME/.vim/dict/idd.dic
@@ -791,7 +890,7 @@ augroup au_R
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dr :RSend devtools::build_readme()<cr>
 
     " doge to generate roxygen2 template
-    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>ro :DogeGenerate<cr>
+    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>rO :DogeGenerate<cr>
 
     " debug
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>tb :RSend traceback()<cr>
@@ -867,7 +966,7 @@ endfunction
 command! -bang -range ToggleSlash <line1>,<line2>call ToggleSlash(<bang>1)
 " }}}
 " ToggleCursorColumn {{{
-function! ToggleCursorColumn()
+function! ToggleCursorColumn() abort
     if &cursorcolumn
         setlocal nocursorcolumn
     else
@@ -876,12 +975,41 @@ function! ToggleCursorColumn()
 endfunction
 " }}}
 " ToggleCursorColumn {{{
-function! ToggleColorColumn()
+function! ToggleColorColumn() abort
     if &colorcolumn
         setlocal colorcolumn=
     else
         setlocal colorcolumn=80
     endif
+endfunction
+" }}}
+" ToggleSpellCheck {{{
+function! ToggleSpellCheck() abort
+    setlocal spell!
+    if &spell
+        echo "Spellcheck ON"
+    else
+        echo "Spellcheck OFF"
+    endif
+endfunction
+" }}}
+" ToggleCursorLine {{{
+function! ToggleCursorLine() abort
+    if(&cursorline == 1)
+        set nocursorline
+    else
+        set cursorline
+    endif
+endfunction
+" }}}
+" ToggleLineNumber {{{
+function! ToggleLineNumber() abort
+    execute {
+          \ '00': 'set relativenumber   | set number',
+          \ '01': 'set norelativenumber | set number',
+          \ '10': 'set norelativenumber | set nonumber',
+          \ '11': 'set norelativenumber | set number'
+          \ }[&number . &relativenumber]
 endfunction
 " }}}
 " }}}
