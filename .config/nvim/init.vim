@@ -22,6 +22,9 @@ endif
 " Load Plugins {{{
 call plug#begin('~/.vim/plugged')
 
+" fzf finder
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
 " Startup
 Plug 'mhinz/vim-startify'
 
