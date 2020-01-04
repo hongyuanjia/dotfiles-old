@@ -573,8 +573,16 @@ autocmd FileType rnoweb let b:rplugin_non_r_omnifunc = "g:omnifunc=vimtex#comple
 let R_latex_build_dir = 'build'
 let R_texerr=1
 let R_assign_map="<M-->"
-let R_hl_term=1
 let R_buffer_opts = "nobuflisted"
+if executable('radian')
+    let R_app = "radian"
+    let R_cmd = "R"
+    let R_hl_term = 0
+    let R_args = []
+    let R_bracketed_paste = 1
+else
+    let R_hl_term=1
+endif
 " }}}
 
 " vim-which-key {{{

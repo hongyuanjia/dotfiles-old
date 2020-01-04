@@ -20,10 +20,19 @@ setHook(
     }
 )
 
-# Suggestions from devtools
-# https://github.com/hadley/devtools
 .First <- function () {
     options(
+        # radian
+        radian.editing_mode = "vi",
+        radian.auto_match = TRUE,
+        radian.escape_key_map = list(
+            list(key = "-", value = " <- "),
+            list(key = "=", value = " %>% "),
+            list(key = ":", value = " := ")
+        ),
+
+        # Suggestions from devtools
+        # https://github.com/hadley/devtools
         browserNLdisabled = TRUE,
         deparse.max.lines = 2,
         warnPartialMatchDollar = TRUE,
