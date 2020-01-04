@@ -61,8 +61,6 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 " R
 Plug 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 Plug 'jalvesaq/R-Vim-runtime', {'for': ['r', 'rmd']}
-Plug 'jalvesaq/zotcite', {'for': ['r', 'rmd']}
-Plug 'rafaqz/citation.vim', {'for': ['r', 'rmd', 'tex']}
 Plug 'vim-pandoc/vim-pandoc-syntax',  {'for': ['rmd']}
 
 " Insert documentation template
