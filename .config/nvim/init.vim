@@ -155,11 +155,9 @@ call plug#end()
 
 " Always use utf-8 encoding
 set langmenu=en_US.UTF-8
-language en
 set encoding=utf-8
 set fileencodings=utf-8,ucs-bom,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set fileencoding=utf-8
-set termencoding=utf-8
 
 " Use gui colors in terminal if available
 if has('termguicolors')
@@ -187,8 +185,9 @@ if has('win32')
     silent execute '!mkdir '.expandcmd($TEMP.'\backup')
     silent execute '!mkdir '.expandcmd($TEMP.'\undo')
 else
-    silent execute '!mkdir -p'.expandcmd($TEMP.'/backup')
-    silent execute '!mkdir -p'.expandcmd($TEMP.'/undo')
+    let $TEMP="/tmp"
+    silent execute '!mkdir -p /tmp/backup'
+    silent execute '!mkdir -p /tmp/undo'
 endif
 set backupdir=$TEMP/backup,.
 set directory=$TEMP/backup,.
