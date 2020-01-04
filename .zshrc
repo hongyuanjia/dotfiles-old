@@ -121,6 +121,5 @@ bindkey '^[l' autosuggest-accept
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.local/bin:$PATH"
 if grep -qE "(Microsoft|WSL)" /proc/version &> /dev/null ; then
-    export BROWSER="/mnt/c/Program Files (x86)/Chromium/Application/chrome.exe"
     export DISPLAY=:0
 fi
