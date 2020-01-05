@@ -446,7 +446,6 @@ let g:coc_global_extensions = [
     \ 'coc-lists',
     \ 'coc-r-lsp',
     \ 'coc-snippets',
-    \ 'coc-tabnine',
     \ 'coc-vimlsp',
     \ 'coc-word',
     \ 'coc-yank',
@@ -911,6 +910,9 @@ augroup au_R
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>kk :call RenderRmd()<CR>
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>kb :call RenderBook()<CR>
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>kp :call RenderChapter()<CR>
+
+    " Blogdown
+    autocmd FileType rmd nnoremap <buffer> <LocalLeader>Ss :RSend blogdown::serve_site()<CR>
 augroup END
 " }}}
 " }}}
