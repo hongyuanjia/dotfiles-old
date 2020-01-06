@@ -102,16 +102,15 @@ Plug 'Yggdroot/LeaderF'
 
 " Colorscheme
 Plug 'liuchengxu/space-vim-theme'
-Plug 'kaicataldo/material.vim'
 
 " Status line
 Plug 'itchyny/lightline.vim'
 
 " Align
-Plug 'godlygeek/tabular',        { 'on': 'Tabularize' }
+Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 
 " Rename a buffer within Vim
-Plug 'danro/rename.vim',               { 'on' : 'Rename' }
+Plug 'danro/rename.vim', { 'on' : 'Rename' }
 
 " Refer to https://github.com/junegunn/dotfiles  vimrc
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
@@ -167,9 +166,9 @@ if has('termguicolors')
     set termguicolors
 endif
 
-let g:material_terminal_italics = 1
-let g:material_theme_style = 'palenight'
-colorscheme material
+" Theme
+set background=dark
+colorscheme space_vim_theme
 
 " Enable syntax highlight
 syntax on
