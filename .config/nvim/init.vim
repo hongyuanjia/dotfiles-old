@@ -106,6 +106,9 @@ Plug 'liuchengxu/space-vim-theme'
 " Status line
 Plug 'itchyny/lightline.vim'
 
+" Highlight current word
+Plug 'RRethy/vim-illuminate'
+
 " Align
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 
@@ -136,7 +139,7 @@ Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle' }
 Plug 'justinmk/vim-gtfo'
 
 " Delete buffers and close files without closing windows
-Plug 'moll/vim-bbye'
+Plug 'moll/vim-bbye', { 'on': ['Bdelete', 'Bwipeout'] }
 
 " Markdown
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
