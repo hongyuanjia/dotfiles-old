@@ -41,7 +41,7 @@ Plug 'osyo-manga/vim-anzu', { 'on': ['<Plug>(anzu-n-with-echo)', '<Plug>(anzu-N-
 " Main
 Plug 'tpope/vim-fugitive'
 " Git commit browser
-Plug 'junegunn/gv.vim', { 'on': ['GV', 'GV!'] }
+Plug 'rbong/vim-flog', { 'on': ['Flog'] }
 " Gbrowser
 Plug 'tpope/vim-rhubarb'
 
