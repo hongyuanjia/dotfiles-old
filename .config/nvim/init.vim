@@ -118,6 +118,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 
 " Snippets
 Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
 
 " Rainbow Parentheses Improved
 Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle'}
@@ -456,21 +457,23 @@ function! s:check_back_space() abort
     return !col || getline('.')[col - 1]	=~ '\s'
 endfunction
 
-inoremap <silent><expr> <Tab>
-    \ pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<Tab>" :
-    \ coc#refresh()
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <silent><expr> <c-space> coc#refresh()
-
 inoremap <silent><expr> <TAB>
-    \ pumvisible() ? coc#_select_confirm() :
-    \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-    \ <SID>check_back_space() ? "\<TAB>" :
-    \ coc#refresh()
-
-let g:coc_snippet_prev = '<s-tab>'
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+inoremap <silent><expr><cr>    pumvisible() ? "\<c-y>\<cr>" : "\<cr>"
+inoremap <silent><expr> <c-space> coc#refresh()
 let g:coc_snippet_next = '<tab>'
+" }}}
+
+" Ultisnips {{{
+let g:UltiSnipsExpandTrigger = '<nop>'
+let g:UltiSnipsJumpForwardTrigger = '<c-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
+let g:UltiSnipsRemoveSelectModeMappings = 0
+let g:UltiSnipsSnippetDirectories = [$HOME.'/.vim/Ultisnips']
 " }}}
 
 " undotree {{{
@@ -676,6 +679,16 @@ let g:which_key_map.b = {
     \ 'n' : ['bnext'          , 'buffer-next']      ,
     \ 'p' : ['bprevious'      , 'buffer-previous']  ,
     \ }
+" }}}
+
+" e {{{
+let g:which_key_map.b = {
+    \ 'name' : '+edit'      ,
+    \ 's' : 'edit-snippets' ,
+    \ 'S' : 'edit-snippets-all' ,
+    \ }
+nnoremap <leader>es :UltiSnipsEdit<cr>
+nnoremap <leader>eS :UltiSnipsEdit!<cr>
 " }}}
 
 " f {{{
