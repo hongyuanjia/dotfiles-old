@@ -420,7 +420,14 @@ let g:maximizer_set_default_mapping = 1
 
 " lightline {{{
 let g:lightline = {
-    \ 'colorscheme': 'material_vim',
+    \ 'active': {
+    \   'left': [ [ 'mode', 'paste' ],
+    \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+    \ },
+    \ 'component_function': {
+    \   'gitbranch': 'fugitive#head'
+    \ },
+    \ 'colorscheme': 'darcula',
     \ }
 " }}}
 
