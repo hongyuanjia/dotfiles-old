@@ -146,13 +146,15 @@ Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'mzlogin/vim-markdown-toc', { 'on': ['GenTocGFM', 'GenTocRedcarpet', 'GenTocGitLab', 'UpdateToc', 'RemoveToc'] }
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
-Plug 'vimwiki/vimwiki'
 
 " LaTeX preview
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 
 " EnergyPlus IDF syntax highlighting
 Plug 'mitchpaulus/energyplus-vim', {'for' : 'idf' }
+
+" Note taking
+Plug 'lervag/wiki.vim'
 
 call plug#end()
 " }}}
@@ -185,6 +187,9 @@ set autoindent
 
 " Do not wrap long lines
 set nowrap
+
+" Disable fold when opening
+set nofoldenable
 
 " Use backup and swap
 if has('win32')
@@ -639,6 +644,13 @@ nmap # <Plug>(anzu-sharp-with-echo)
 
 " clear status
 nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
+" }}}
+
+" wiki.vim {{{
+let g:wiki_root = $HOME.'/Dropbox/wiki'
+let g:wiki_filetypes = ['md']
+let g:wiki_link_extenstion = '.md'
+let g:wiki_link_target_type = 'md'
 " }}}
 " }}}
 
