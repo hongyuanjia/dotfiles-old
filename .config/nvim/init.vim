@@ -100,6 +100,9 @@ Plug 'neoclide/coc-neco'
 " fuzzy finder
 Plug 'Yggdroot/LeaderF'
 
+" grepper
+Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
+
 " Colorscheme
 Plug 'liuchengxu/space-vim-theme'
 
