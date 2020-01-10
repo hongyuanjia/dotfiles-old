@@ -35,7 +35,7 @@ Plug 'kshenoy/vim-signature'
 Plug 'ntpeters/vim-better-whitespace', { 'on': 'StripWhitespace' }
 
 " Show search status
-Plug 'osyo-manga/vim-anzu', { 'on': ['<Plug>(anzu-n-with-echo)', '<Plug>(anzu-N-with-echo)'] }
+Plug 'osyo-manga/vim-anzu'
 
 " Git integration
 " Main
@@ -439,7 +439,6 @@ let g:lightline = {
     \ }
 " }}}
 
-
 " LeaderF {{{
 let g:Lf_ShortcutF = '<leader>ff'
 let g:Lf_ShortcutB = '<leader>bb'
@@ -447,6 +446,8 @@ let g:Lf_ShortcutB = '<leader>bb'
 let g:Lf_StlColorscheme = 'one'
 " remove separators
 let g:Lf_StlSeparator = { 'left': '', 'right': '' }
+" auto detect ancestor
+let g:Lf_WorkingDirectoryMode = 'A'
 " }}}
 
 " Coc.nvim {{{
@@ -795,22 +796,24 @@ let g:which_key_map.s = {
     \ 'h' : [':LeaderfHelp'          , 'search-help-tags']         ,
     \ 'l' : [':LeaderfLine'          , 'search-lines']             ,
     \ 'm' : [':CocList marks'        , 'search-marks']             ,
-    \ 'n' : [':nohlsearch'           , 'disable-highlight-search'] ,
     \ 'p' : [':LeaderfRgInteractive' , 'grep-on-the-fly']          ,
-    \ 't' : [':LeaderfTag'            , 'search-tags']             ,
+    \ 't' : [':LeaderfTag'           , 'search-tags']             ,
     \ }
+
+nnoremap <silent> <Leader>sn :nohlsearch<CR>
+let g:which_key_map.s.n = 'disable-highlight-search'
 
 nnoremap <silent> <leader>sy  :<C-u>CocList -A --normal yank<cr>
 let g:which_key_map.s.y = 'search-yanks'
 
 " Keymapping for grep word under cursor with interactive mode
-nnoremap <silent> <Leader>sw :<C-u>call <Plug>LeaderfRgCwordLiteralNoBoundary<CR>
+nnoremap <silent> <Leader>sw <Plug>LeaderfRgCwordLiteralNoBoundary
 let g:which_key_map.s.w = 'search-current-word'
-nnoremap <silent> <Leader>sW :<C-u>call <Plug>LeaderfRgCwordLiteralBoundary<CR>
+nnoremap <silent> <Leader>sW <Plug>LeaderfRgCwordLiteralBoundary
 let g:which_key_map.s.W = 'search-current-word-literal'
 
-vnoremap <leader>ss :<C-u>call LeaderfRgVisualLiteralNoBoundary<CR>
-vnoremap <leader>sS :<C-u>call LeaderfRgVisualLiteralBoundary<CR>
+vnoremap <leader>ss LeaderfRgVisualLiteralNoBoundary
+vnoremap <leader>sS LeaderfRgVisualLiteralBoundary
 let g:which_key_map.s.s = 'search-selected'
 let g:which_key_map.s.S = 'search-selected-literal'
 " }}}
