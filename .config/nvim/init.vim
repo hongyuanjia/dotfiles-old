@@ -22,6 +22,9 @@ endif
 " Load Plugins {{{
 call plug#begin('~/.vim/plugged')
 
+" fzf finder
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
 " Startup
 Plug 'mhinz/vim-startify'
 
@@ -32,13 +35,13 @@ Plug 'kshenoy/vim-signature'
 Plug 'ntpeters/vim-better-whitespace', { 'on': 'StripWhitespace' }
 
 " Show search status
-Plug 'osyo-manga/vim-anzu', { 'on': ['<Plug>(anzu-n-with-echo)', '<Plug>(anzu-N-with-echo)'] }
+Plug 'osyo-manga/vim-anzu'
 
 " Git integration
 " Main
 Plug 'tpope/vim-fugitive'
 " Git commit browser
-Plug 'junegunn/gv.vim', { 'on': ['GV', 'GV!'] }
+Plug 'rbong/vim-flog', { 'on': ['Flog'] }
 " Gbrowser
 Plug 'tpope/vim-rhubarb'
 
@@ -61,8 +64,6 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 " R
 Plug 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 Plug 'jalvesaq/R-Vim-runtime', {'for': ['r', 'rmd']}
-Plug 'jalvesaq/zotcite', {'for': ['r', 'rmd']}
-Plug 'rafaqz/citation.vim', {'for': ['r', 'rmd', 'tex']}
 Plug 'vim-pandoc/vim-pandoc-syntax',  {'for': ['rmd']}
 
 " Insert documentation template
@@ -101,16 +102,18 @@ Plug 'Yggdroot/LeaderF'
 
 " Colorscheme
 Plug 'liuchengxu/space-vim-theme'
-Plug 'kaicataldo/material.vim'
 
 " Status line
 Plug 'itchyny/lightline.vim'
 
+" Highlight current word
+Plug 'RRethy/vim-illuminate'
+
 " Align
-Plug 'godlygeek/tabular',        { 'on': 'Tabularize' }
+Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 
 " Rename a buffer within Vim
-Plug 'danro/rename.vim',               { 'on' : 'Rename' }
+Plug 'danro/rename.vim', { 'on' : 'Rename' }
 
 " Refer to https://github.com/junegunn/dotfiles  vimrc
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
@@ -118,6 +121,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 
 " Snippets
 Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
 
 " Rainbow Parentheses Improved
 Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle'}
@@ -135,20 +139,22 @@ Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle' }
 Plug 'justinmk/vim-gtfo'
 
 " Delete buffers and close files without closing windows
-Plug 'moll/vim-bbye'
+Plug 'moll/vim-bbye', { 'on': ['Bdelete', 'Bwipeout'] }
 
 " Markdown
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'mzlogin/vim-markdown-toc', { 'on': ['GenTocGFM', 'GenTocRedcarpet', 'GenTocGitLab', 'UpdateToc', 'RemoveToc'] }
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
-Plug 'vimwiki/vimwiki'
 
 " LaTeX preview
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 
 " EnergyPlus IDF syntax highlighting
 Plug 'mitchpaulus/energyplus-vim', {'for' : 'idf' }
+
+" Note taking
+Plug 'lervag/wiki.vim'
 
 call plug#end()
 " }}}
@@ -157,20 +163,18 @@ call plug#end()
 
 " Always use utf-8 encoding
 set langmenu=en_US.UTF-8
-language en
 set encoding=utf-8
 set fileencodings=utf-8,ucs-bom,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set fileencoding=utf-8
-set termencoding=utf-8
 
 " Use gui colors in terminal if available
 if has('termguicolors')
     set termguicolors
 endif
 
-let g:material_terminal_italics = 1
-let g:material_theme_style = 'palenight'
-colorscheme material
+" Theme
+set background=dark
+colorscheme space_vim_theme
 
 " Enable syntax highlight
 syntax on
@@ -184,13 +188,17 @@ set autoindent
 " Do not wrap long lines
 set nowrap
 
+" Disable fold when opening
+set nofoldenable
+
 " Use backup and swap
 if has('win32')
     silent execute '!mkdir '.expandcmd($TEMP.'\backup')
     silent execute '!mkdir '.expandcmd($TEMP.'\undo')
 else
-    silent execute '!mkdir -p'.expandcmd($TEMP.'/backup')
-    silent execute '!mkdir -p'.expandcmd($TEMP.'/undo')
+    let $TEMP="/tmp"
+    silent execute '!mkdir -p /tmp/backup'
+    silent execute '!mkdir -p /tmp/undo'
 endif
 set backupdir=$TEMP/backup,.
 set directory=$TEMP/backup,.
@@ -420,10 +428,16 @@ let g:maximizer_set_default_mapping = 1
 
 " lightline {{{
 let g:lightline = {
-    \ 'colorscheme': 'material_vim',
+    \ 'active': {
+    \   'left': [ [ 'mode', 'paste' ],
+    \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+    \ },
+    \ 'component_function': {
+    \   'gitbranch': 'fugitive#head'
+    \ },
+    \ 'colorscheme': 'darcula',
     \ }
 " }}}
-
 
 " LeaderF {{{
 let g:Lf_ShortcutF = '<leader>ff'
@@ -432,6 +446,8 @@ let g:Lf_ShortcutB = '<leader>bb'
 let g:Lf_StlColorscheme = 'one'
 " remove separators
 let g:Lf_StlSeparator = { 'left': '', 'right': '' }
+" auto detect ancestor
+let g:Lf_WorkingDirectoryMode = 'A'
 " }}}
 
 " Coc.nvim {{{
@@ -446,7 +462,6 @@ let g:coc_global_extensions = [
     \ 'coc-lists',
     \ 'coc-r-lsp',
     \ 'coc-snippets',
-    \ 'coc-tabnine',
     \ 'coc-vimlsp',
     \ 'coc-word',
     \ 'coc-yank',
@@ -458,21 +473,23 @@ function! s:check_back_space() abort
     return !col || getline('.')[col - 1]	=~ '\s'
 endfunction
 
-inoremap <silent><expr> <Tab>
-    \ pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<Tab>" :
-    \ coc#refresh()
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <silent><expr> <c-space> coc#refresh()
-
 inoremap <silent><expr> <TAB>
-    \ pumvisible() ? coc#_select_confirm() :
-    \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-    \ <SID>check_back_space() ? "\<TAB>" :
-    \ coc#refresh()
-
-let g:coc_snippet_prev = '<s-tab>'
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+inoremap <silent><expr><cr>    pumvisible() ? "\<c-y>\<cr>" : "\<cr>"
+inoremap <silent><expr> <c-space> coc#refresh()
 let g:coc_snippet_next = '<tab>'
+" }}}
+
+" Ultisnips {{{
+let g:UltiSnipsExpandTrigger = '<nop>'
+let g:UltiSnipsJumpForwardTrigger = '<c-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
+let g:UltiSnipsRemoveSelectModeMappings = 0
+let g:UltiSnipsSnippetDirectories = [$HOME.'/.vim/Ultisnips']
 " }}}
 
 " undotree {{{
@@ -573,8 +590,8 @@ autocmd FileType rnoweb let b:rplugin_non_r_omnifunc = "g:omnifunc=vimtex#comple
 let R_latex_build_dir = 'build'
 let R_texerr=1
 let R_assign_map="<M-->"
-let R_hl_term=1
 let R_buffer_opts = "nobuflisted"
+let R_hl_term=1
 " }}}
 
 " vim-which-key {{{
@@ -620,6 +637,13 @@ nmap # <Plug>(anzu-sharp-with-echo)
 
 " clear status
 nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
+" }}}
+
+" wiki.vim {{{
+let g:wiki_root = $HOME.'/Dropbox/wiki'
+let g:wiki_filetypes = ['md']
+let g:wiki_link_extenstion = '.md'
+let g:wiki_link_target_type = 'md'
 " }}}
 " }}}
 
@@ -670,6 +694,16 @@ let g:which_key_map.b = {
     \ 'n' : ['bnext'          , 'buffer-next']      ,
     \ 'p' : ['bprevious'      , 'buffer-previous']  ,
     \ }
+" }}}
+
+" e {{{
+let g:which_key_map.b = {
+    \ 'name' : '+edit'      ,
+    \ 's' : 'edit-snippets' ,
+    \ 'S' : 'edit-snippets-all' ,
+    \ }
+nnoremap <leader>es :UltiSnipsEdit<cr>
+nnoremap <leader>eS :UltiSnipsEdit!<cr>
 " }}}
 
 " f {{{
@@ -762,22 +796,24 @@ let g:which_key_map.s = {
     \ 'h' : [':LeaderfHelp'          , 'search-help-tags']         ,
     \ 'l' : [':LeaderfLine'          , 'search-lines']             ,
     \ 'm' : [':CocList marks'        , 'search-marks']             ,
-    \ 'n' : [':nohlsearch'           , 'disable-highlight-search'] ,
     \ 'p' : [':LeaderfRgInteractive' , 'grep-on-the-fly']          ,
-    \ 't' : [':LeaderfTag'            , 'search-tags']             ,
+    \ 't' : [':LeaderfTag'           , 'search-tags']             ,
     \ }
+
+nnoremap <silent> <Leader>sn :nohlsearch<CR>
+let g:which_key_map.s.n = 'disable-highlight-search'
 
 nnoremap <silent> <leader>sy  :<C-u>CocList -A --normal yank<cr>
 let g:which_key_map.s.y = 'search-yanks'
 
 " Keymapping for grep word under cursor with interactive mode
-nnoremap <silent> <Leader>sw :<C-u>call <Plug>LeaderfRgCwordLiteralNoBoundary<CR>
+nnoremap <silent> <Leader>sw <Plug>LeaderfRgCwordLiteralNoBoundary
 let g:which_key_map.s.w = 'search-current-word'
-nnoremap <silent> <Leader>sW :<C-u>call <Plug>LeaderfRgCwordLiteralBoundary<CR>
+nnoremap <silent> <Leader>sW <Plug>LeaderfRgCwordLiteralBoundary
 let g:which_key_map.s.W = 'search-current-word-literal'
 
-vnoremap <leader>ss :<C-u>call LeaderfRgVisualLiteralNoBoundary<CR>
-vnoremap <leader>sS :<C-u>call LeaderfRgVisualLiteralBoundary<CR>
+vnoremap <leader>ss LeaderfRgVisualLiteralNoBoundary
+vnoremap <leader>sS LeaderfRgVisualLiteralBoundary
 let g:which_key_map.s.s = 'search-selected'
 let g:which_key_map.s.S = 'search-selected-literal'
 " }}}
@@ -859,6 +895,7 @@ augroup au_R
     au FileType r setlocal foldmarker={{{,}}}
 
     " set comment string
+    au FileType r setlocal formatoptions+=r "insert the current comment leader
     au FileType r setlocal commentstring=#%s
     au FileType r setlocal comments+=b:#'
 
@@ -888,6 +925,7 @@ augroup au_R
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dt :RSend devtools::test()<cr>
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dc :RSend devtools::check()<cr>
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dr :RSend devtools::build_readme()<cr>
+    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dI :RSend devtools::install()<cr>
 
     " doge to generate roxygen2 template
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>rO :DogeGenerate<cr>
@@ -903,6 +941,9 @@ augroup au_R
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>kk :call RenderRmd()<CR>
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>kb :call RenderBook()<CR>
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>kp :call RenderChapter()<CR>
+
+    " Blogdown
+    autocmd FileType rmd nnoremap <buffer> <LocalLeader>Ss :RSend blogdown::serve_site()<CR>
 augroup END
 " }}}
 " }}}

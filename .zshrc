@@ -4,6 +4,19 @@
 # Path to your oh-my-zsh installation.
   export ZSH="/home/hongyuanjia/.oh-my-zsh"
 
+# use tmux in wsl-terminal
+[[ -z "$TMUX" && -n "$USE_TMUX" ]] && {
+    [[ -n "$ATTACH_ONLY" ]] && {
+        tmux a 2>/dev/null || {
+            cd && exec tmux
+        }
+        exit
+    }
+
+    tmux new-window -c "$PWD" 2>/dev/null && exec tmux a
+    exec tmux
+}
+
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
@@ -96,6 +109,7 @@ source $ZSH/oh-my-zsh.sh
 alias zshconfig="vim ~/.zshrc"
 alias i3config="vim ~/.config/i3/config"
 alias vim="nvim"
+alias rr="ranger"
 
 # ZSH uses the KEYTIMEOUT parameter to determine how long to wait (in hundredths
 # of a second) for additional characters in sequence. Default is 0.4 seconds.
@@ -105,4 +119,7 @@ bindkey '^[l' autosuggest-accept
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.local/bin:$PATH"
+if grep -qE "(Microsoft|WSL)" /proc/version &> /dev/null ; then
+    export DISPLAY=:0
+fi
