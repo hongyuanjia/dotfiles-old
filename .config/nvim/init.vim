@@ -590,15 +590,7 @@ let R_latex_build_dir = 'build'
 let R_texerr=1
 let R_assign_map="<M-->"
 let R_buffer_opts = "nobuflisted"
-if executable('radian')
-    let R_app = "radian"
-    let R_cmd = "R"
-    let R_hl_term = 0
-    let R_args = []
-    let R_bracketed_paste = 1
-else
-    let R_hl_term=1
-endif
+let R_hl_term=1
 " }}}
 
 " vim-which-key {{{
@@ -900,6 +892,7 @@ augroup au_R
     au FileType r setlocal foldmarker={{{,}}}
 
     " set comment string
+    au FileType r setlocal formatoptions+=r "insert the current comment leader
     au FileType r setlocal commentstring=#%s
     au FileType r setlocal comments+=b:#'
 
@@ -929,6 +922,7 @@ augroup au_R
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dt :RSend devtools::test()<cr>
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dc :RSend devtools::check()<cr>
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dr :RSend devtools::build_readme()<cr>
+    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dI :RSend devtools::install()<cr>
 
     " doge to generate roxygen2 template
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>rO :DogeGenerate<cr>
