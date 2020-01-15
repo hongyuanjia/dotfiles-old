@@ -24,6 +24,7 @@ call plug#begin('~/.vim/plugged')
 
 " fzf finder
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 " Startup
 Plug 'mhinz/vim-startify'
@@ -96,9 +97,6 @@ Plug 'neoclide/coc.nvim', { 'do': { -> coc#util#install()} }
 " vimscript lsp
 Plug 'Shougo/neco-vim'
 Plug 'neoclide/coc-neco'
-
-" fuzzy finder
-Plug 'Yggdroot/LeaderF'
 
 " grepper
 Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
@@ -442,17 +440,6 @@ let g:lightline = {
     \ }
 " }}}
 
-" LeaderF {{{
-let g:Lf_ShortcutF = '<leader>ff'
-let g:Lf_ShortcutB = '<leader>bb'
-" popup mode
-let g:Lf_StlColorscheme = 'one'
-" remove separators
-let g:Lf_StlSeparator = { 'left': '', 'right': '' }
-" auto detect ancestor
-let g:Lf_WorkingDirectoryMode = 'A'
-" }}}
-
 " Coc.nvim {{{
 " fix the most annoying bug that coc has
 " silent! au BufEnter,BufRead,BufNewFile * silent! unmap if
@@ -687,12 +674,12 @@ let g:which_key_map.b = {
     \ '7' : ['b7'             , 'buffer-7']         ,
     \ '8' : ['b8'             , 'buffer-8']         ,
     \ '9' : ['b9'             , 'buffer-9']         ,
-    \ 'b' : ['LeaderfBuffer'  , 'buffer-list']      ,
+    \ 'b' : ['Buffers'        , 'buffer-list']      ,
     \ 'c' : ['bclose'         , 'buffer-close']     ,
     \ 'd' : ['Bdelete'        , 'buffer-delete']    ,
     \ 'h' : ['Startify'       , 'open-home']        ,
-    \ 'l' : ['LeaderfLine'    , 'buffer-lines']     ,
-    \ 'L' : ['LeaderfLineAll' , 'buffer-lines-all'] ,
+    \ 'l' : ['BLines'         , 'buffer-lines']     ,
+    \ 'L' : ['Lines'          , 'buffer-lines-all'] ,
     \ 'k' : ['Bwipeout'       , 'buffer-kill']      ,
     \ 'n' : ['bnext'          , 'buffer-next']      ,
     \ 'p' : ['bprevious'      , 'buffer-previous']  ,
@@ -700,7 +687,7 @@ let g:which_key_map.b = {
 " }}}
 
 " e {{{
-let g:which_key_map.b = {
+let g:which_key_map.e = {
     \ 'name' : '+edit'      ,
     \ 's' : 'edit-snippets' ,
     \ 'S' : 'edit-snippets-all' ,
@@ -735,9 +722,9 @@ nnoremap <silent> <leader>fR :source $MYVIMRC<CR>
 let g:which_key_map.f.R = 'reload-vimrc'
 nnoremap <silent> <leader>fd :NERDTreeFind<CR>
 let g:which_key_map.f.d = 'find-current-buffer-in-NERDTree'
-nnoremap <silent> <leader>ff :LeaderfFile<CR>
+nnoremap <silent> <leader>ff :Files<CR>
 let g:which_key_map.f.f = 'files-in-current-directory'
-nnoremap <silent> <leader>fh :LeaderfMru<CR>
+nnoremap <silent> <leader>fh :History<CR>
 let g:which_key_map.f.h = 'history-file'
 nnoremap <silent> <leader>fs :update<CR>
 let g:which_key_map.f.s = 'save-file'
@@ -789,18 +776,21 @@ let g:which_key_map.Q = [ 'qa!', 'quit-without-saving' ]
 
 " s {{{
 let g:which_key_map.s = {
-    \ 'name' : '+search/show'       ,
-    \ 'C' : [':LeaderfCommand'       , 'search-commands']          ,
-    \ 'F' : [':LeaderfFileType'      , 'search-file-types']        ,
-    \ 'H' : [':LeaderfHistoryCmd'    , 'search-command-history']   ,
-    \ 'M' : [':CocList maps'         , 'search-maps']              ,
-    \ 'c' : [':LeaderfColorscheme'   , 'search-colorschemes']      ,
-    \ 'f' : [':LeaderfFunction'      , 'search-functions']         ,
-    \ 'h' : [':LeaderfHelp'          , 'search-help-tags']         ,
-    \ 'l' : [':LeaderfLine'          , 'search-lines']             ,
-    \ 'm' : [':CocList marks'        , 'search-marks']             ,
-    \ 'p' : [':LeaderfRgInteractive' , 'grep-on-the-fly']          ,
-    \ 't' : [':LeaderfTag'           , 'search-tags']             ,
+    \ 'name' : '+search/show' ,
+    \ 'C' : [':Commands'      , 'search-commands']        ,
+    \ 'F' : [':Filetypes'     , 'search-file-types']      ,
+    \ 'H' : [':History:'      , 'search-command-history'] ,
+    \ 'M' : [':Maps'          , 'search-maps']            ,
+    \ 'S' : [':History/'      , 'search-search-history']  ,
+    \ 'b' : [':Buffers'       , 'search-buffers']         ,
+    \ 'c' : [':Colors'        , 'search-colorschemes']    ,
+    \ 'f' : [':BTags'         , 'search-functions']       ,
+    \ 'h' : [':Helptags'      , 'search-help-tags']       ,
+    \ 'l' : [':BLines'        , 'search-lines']           ,
+    \ 'm' : [':Marks'         , 'search-marks']           ,
+    \ 'p' : [':Rg'            , 'grep-on-the-fly']        ,
+    \ 't' : [':Tags'          , 'search-tags']            ,
+    \ 'w' : [':Windows'       , 'search-windows']         ,
     \ }
 
 nnoremap <silent> <Leader>sn :nohlsearch<CR>
@@ -808,17 +798,6 @@ let g:which_key_map.s.n = 'disable-highlight-search'
 
 nnoremap <silent> <leader>sy  :<C-u>CocList -A --normal yank<cr>
 let g:which_key_map.s.y = 'search-yanks'
-
-" Keymapping for grep word under cursor with interactive mode
-nnoremap <silent> <Leader>sw <Plug>LeaderfRgCwordLiteralNoBoundary
-let g:which_key_map.s.w = 'search-current-word'
-nnoremap <silent> <Leader>sW <Plug>LeaderfRgCwordLiteralBoundary
-let g:which_key_map.s.W = 'search-current-word-literal'
-
-vnoremap <leader>ss LeaderfRgVisualLiteralNoBoundary
-vnoremap <leader>sS LeaderfRgVisualLiteralBoundary
-let g:which_key_map.s.s = 'search-selected'
-let g:which_key_map.s.S = 'search-selected-literal'
 " }}}
 
 " t {{{
