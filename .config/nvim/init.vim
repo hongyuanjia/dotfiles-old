@@ -356,10 +356,6 @@ nnoremap [b :bprev<cr>
 nnoremap ]t :tabn<cr>
 nnoremap [t :tabp<cr>
 
-" Quick command mode
-nnoremap ; :
-nnoremap : ;
-
 " Visual select to beginning or end
 vnoremap H ^
 vnoremap L $
