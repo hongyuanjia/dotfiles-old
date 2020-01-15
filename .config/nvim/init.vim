@@ -189,6 +189,9 @@ set autoindent
 " Do not wrap long lines
 set nowrap
 
+" Change buffer without saving
+set hidden
+
 " Disable fold when opening
 set nofoldenable
 
