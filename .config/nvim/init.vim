@@ -416,6 +416,15 @@ tnoremap <c-w>h <c-\><c-n><c-w>h
 tnoremap <c-w>j <c-\><c-n><c-w>j
 tnoremap <c-w>k <c-\><c-n><c-w>k
 tnoremap <c-w>l <c-\><c-n><c-w>l
+
+" Enable clipboard in WSL
+" https://vi.stackexchange.com/questions/12376/vim-on-wsl-synchronize-system-clipboard-set-clipboard-unnamed
+if has('wsl')
+    augroup Yank
+        autocmd!
+        autocmd TextYankPost * :call system('clip.exe ',@")
+    augroup END
+endif
 " }}}
 
 " Plugins Specific {{{
