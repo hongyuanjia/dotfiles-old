@@ -861,9 +861,10 @@ let g:which_key_map.x = {
 " }}}
 
 " z {{{
-let g:which_key_map.x = {
+let g:which_key_map.z = {
     \ 'name' : '+zoom'    ,
     \ '+' :  ['zoom-in']  ,
+    \ '=' :  ['zoom-in']  ,
     \ '-' :  ['zoom-out'] ,
     \ }
 
