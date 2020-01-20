@@ -104,7 +104,7 @@ $1 = function ($2) {
 }${6:,}
 endsnippet
 
-snippet mdesc "method roxygen skeleton in R6 class" b
+snippet r6desc "method roxygen skeleton in R6 class" b
 #' @description
 #' $1
 #'
@@ -116,3 +116,6 @@ snippet mdesc "method roxygen skeleton in R6 class" b
 #' $6
 endsnippet
 
+snippet r6ref "R6 method cross-reference"
+\href{../../${1:eplusr}/html/${2:IdfObject}.html#method-${3:set}}{\code{$$3()}}
+endsnippet
