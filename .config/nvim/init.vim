@@ -119,6 +119,7 @@ Plug 'danro/rename.vim', { 'on' : 'Rename' }
 " Refer to https://github.com/junegunn/dotfiles  vimrc
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
+Plug 'vifm/vifm.vim'
 
 " Snippets
 Plug 'honza/vim-snippets'
@@ -259,7 +260,7 @@ set list!
 set listchars=tab:>\ ,trail:~,extends:>,precedes:<,nbsp:+
 
 " Format options
-set formatoptions+=M " Don't insert a space before or after a multi-byte when join
+set formatoptions+=B " Don't insert a space before or after a multi-byte when join
 set formatoptions+=m " Multibyte line breaking
 set formatoptions+=j " Remove a comment leader when joining
 set formatoptions+=q " New line will start with a commen leader
