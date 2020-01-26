@@ -581,7 +581,7 @@ let Rout_more_colors = 1
 " show a preview window of function arguments description and arguments
 let R_commented_lines = 1
 " clear R Console line before sending commands~
-let R_source_args = "print.eval = TRUE, encoding = 'UTF-8'"
+let R_source_args = "print.eval = TRUE, encoding = 'UTF-8', echo = TRUE"
 " Auto quit R when close Vim
 autocmd VimLeave * if exists("g:SendCmdToR") && string(g:SendCmdToR) != "function('SendCmdToR_fake')" | call RQuit("nosave") | endif
 autocmd FileType rnoweb let b:rplugin_non_r_omnifunc = "g:omnifunc=vimtex#complete#omnifunc"
