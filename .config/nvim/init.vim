@@ -524,7 +524,7 @@ let g:indentLine_fileTypeExclude = ['help', 'startify']
 " }}}
 
 " vim-markdown-toc {{{
-let g:vmt_auto_update_on_save = 1
+let g:vmt_auto_update_on_save = 0
 let g:vmt_dont_insert_fence = 0
 let g:vim_markdown_toc_autofit = 1
 let g:vmt_fence_text = get(g:, 'g:vmt_fence_text', 'TOC')
