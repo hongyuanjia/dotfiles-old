@@ -642,7 +642,7 @@ nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
 " }}}
 
 " wiki.vim {{{
-let g:wiki_root = $HOME.'/Dropbox/wiki'
+let g:wiki_root = $HOME.'/Dropbox/github_repo/wiki'
 let g:wiki_filetypes = ['md']
 let g:wiki_link_extenstion = '.md'
 let g:wiki_link_target_type = 'md'
