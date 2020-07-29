@@ -1,24 +1,8 @@
 # set a CRAN mirror
 local({r <- getOption("repos")
-      r["CRAN"] <- "https://cran.stat.nus.edu.sg/"
+      r["CRAN"] <- "https://cloud.r-project.org/"
       options(repos=r)
 })
-
-setHook(
-    packageEvent("languageserver", "onLoad"),
-    function(...) {
-        options(languageserver.default_linters = lintr::with_defaults(
-                line_length_linter = NULL,
-                object_usage_linter = NULL,
-                infix_spaces_linter = NULL,
-                spaces_left_parentheses_linter = NULL,
-                absolute_path_linter = NULL,
-                object_name_linter = NULL,
-                blogdown.ext = ".Rmd",
-                blogdown.author = "Hongyuan Jia"
-                ))
-    }
-)
 
 .First <- function () {
     options(
@@ -38,6 +22,10 @@ setHook(
         warnPartialMatchDollar = TRUE,
         warnPartialMatchArgs = TRUE,
         datatable.print.class = TRUE,
+
+        # blogdown
+        blogdown.ext = ".Rmd",
+        blogdown.author = "Hongyuan Jia",
 
         # usethis
         usethis.full_name = "Hongyuan Jia",
