@@ -61,11 +61,18 @@ Plug 'AndrewRadev/sideways.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'cohama/lexima.vim'
+Plug 'rhysd/vim-grammarous'
+Plug 'unblevable/quick-scope'
+Plug 'justinmk/vim-sneak'
 
 " R
 Plug 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 Plug 'jalvesaq/R-Vim-runtime', {'for': ['r', 'rmd']}
-Plug 'vim-pandoc/vim-pandoc-syntax',  {'for': ['rmd']}
+Plug 'hongyuanjia/vim-pandoc',  {'for': ['rmd', 'markdown']}
+Plug 'vim-pandoc/vim-pandoc-syntax',  {'for': ['rmd', 'markdown']}
+" Plug 'chrisbra/csv.vim'
+" Plug 'vim-pandoc/vim-rmarkdown'
 
 " Insert documentation template
 Plug 'kkoomen/vim-doge'
@@ -123,7 +130,6 @@ Plug 'vifm/vifm.vim'
 
 " Snippets
 Plug 'honza/vim-snippets'
-Plug 'SirVer/ultisnips'
 
 " Rainbow Parentheses Improved
 Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle'}
@@ -144,8 +150,8 @@ Plug 'justinmk/vim-gtfo'
 Plug 'moll/vim-bbye', { 'on': ['Bdelete', 'Bwipeout'] }
 
 " Markdown
-Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
-Plug 'mzlogin/vim-markdown-toc', { 'on': ['GenTocGFM', 'GenTocRedcarpet', 'GenTocGitLab', 'UpdateToc', 'RemoveToc'] }
+" Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+Plug 'mzlogin/vim-markdown-toc', { 'on': ['GenTocGFM', 'GenTocRedcarpet', 'GenTocGitLab', 'UpdateToc', 'RemoveToc'] , 'for' :['markdown', 'rmd'] }
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 
@@ -157,6 +163,9 @@ Plug 'mitchpaulus/energyplus-vim', {'for' : 'idf' }
 
 " Note taking
 Plug 'lervag/wiki.vim'
+
+" Window Management
+Plug 't9md/vim-choosewin'
 
 call plug#end()
 " }}}
@@ -431,6 +440,10 @@ endif
 autocmd FileType vim setlocal foldmethod=marker
 autocmd FileType vim setlocal foldmarker={{{,}}}
 
+" vim-choosewin {{{
+nmap  -  <Plug>(choosewin)
+" }}}
+
 " vim-maximizer {{{
 " Do not use the default mapping (F3)
 let g:maximizer_set_default_mapping = 1
@@ -453,7 +466,6 @@ let g:lightline = {
 " fix the most annoying bug that coc has
 " silent! au BufEnter,BufRead,BufNewFile * silent! unmap if
 let g:coc_global_extensions = [
-    \ 'coc-pairs',
     \ 'coc-dictionary',
     \ 'coc-git',
     \ 'coc-gitignore',
@@ -466,29 +478,19 @@ let g:coc_global_extensions = [
     \ 'coc-yank',
     \ ]
 
-" use <tab> for trigger completion and navigate to the next complete item
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]	=~ '\s'
-endfunction
-
+" Make <tab> used for trigger completion, completion confirm, snippet expand and jump like VSCode.
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? coc#_select_confirm() :
       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
-inoremap <silent><expr><cr>    pumvisible() ? "\<c-y>\<cr>" : "\<cr>"
-inoremap <silent><expr> <c-space> coc#refresh()
-let g:coc_snippet_next = '<tab>'
-" }}}
 
-" Ultisnips {{{
-let g:UltiSnipsExpandTrigger = '<nop>'
-let g:UltiSnipsJumpForwardTrigger = '<c-j>'
-let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
-let g:UltiSnipsRemoveSelectModeMappings = 0
-let g:UltiSnipsSnippetDirectories = [$HOME.'/.vim/Ultisnips']
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
 " }}}
 
 " undotree {{{
@@ -589,11 +591,12 @@ autocmd FileType rnoweb let b:rplugin_non_r_omnifunc = "g:omnifunc=vimtex#comple
 let R_latex_build_dir = 'build'
 let R_texerr=1
 let R_assign_map="<M-->"
-let R_buffer_opts = "nobuflisted"
-let R_hl_term=1
 if has("win32") && !has("wsl")
-    let R_in_buffer = 0
+    let R_external_term = 1
 endif
+let R_debug = 0
+" let R_args = ['--quiet', '--no-save', '-d', 'gdb']
+" let R_args = ['--quiet', '--no-save', '--debugger=valgrind']
 " }}}
 
 " vim-which-key {{{
@@ -626,6 +629,11 @@ let g:mkdp_port = ''
 let g:mkdp_page_title = '「${name}」'
 " }}}
 
+" vim-pandox {{{
+let g:pandoc#folding#fold_yaml=1
+let g:pandoc#folding#fold_fenced_codeblocks=1
+" }}}
+
 " vim-pandox-syntax {{{
 let g:pandoc#syntax#conceal#use=0
 " }}}
@@ -646,6 +654,26 @@ let g:wiki_root = $HOME.'/Dropbox/github_repo/wiki'
 let g:wiki_filetypes = ['md']
 let g:wiki_link_extenstion = '.md'
 let g:wiki_link_target_type = 'md'
+let g:wiki_mappings_use_defaults = 0
+" }}}
+
+" vim-quickscope {{{
+" Trigger a highlight in the appropriate direction when pressing these keys:
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+" }}}
+
+" sneak {{{
+let g:sneak#label = 1
+
+" case insensitive sneak
+let g:sneak#use_ic_scs = 1
+
+" immediately move to the next instance of search, if you move the cursor sneak is back to default behavior
+let g:sneak#s_next = 1
+
+" remap so I can use , and ; with f and t
+map gS <Plug>Sneak_,
+map gs <Plug>Sneak_;
 " }}}
 " }}}
 
@@ -696,16 +724,6 @@ let g:which_key_map.b = {
     \ 'n' : ['bnext'          , 'buffer-next']      ,
     \ 'p' : ['bprevious'      , 'buffer-previous']  ,
     \ }
-" }}}
-
-" e {{{
-let g:which_key_map.e = {
-    \ 'name' : '+edit'      ,
-    \ 's' : 'edit-snippets' ,
-    \ 'S' : 'edit-snippets-all' ,
-    \ }
-nnoremap <leader>es :UltiSnipsEdit<cr>
-nnoremap <leader>eS :UltiSnipsEdit!<cr>
 " }}}
 
 " f {{{
@@ -771,6 +789,21 @@ let g:which_key_map.g = {
     \ }
 " }}}
 
+" l {{{
+let g:which_key_map.l = {
+    \ 'name' : '+list'      ,
+    \ 's' : 'list-symbols' ,
+    \ 'c' : 'list-commits-buffer' ,
+    \ 'C' : 'list-commits-project' ,
+    \ 'R' : 'list-resume' ,
+    \ }
+nnoremap <leader>ls :CocList symbols<cr>
+nnoremap <leader>lc :CocList bcommits<cr>
+nnoremap <leader>lo :CocList outline<cr>
+nnoremap <leader>lC :CocList commits<cr>
+nnoremap <leader>lR :CocListResume<cr>
+" }}}
+
 " o {{{
 let g:which_key_map.o = {
     \ 'name' : '+open'    ,
@@ -784,6 +817,9 @@ nnoremap <silent> <leader>q :q<CR>
 let g:which_key_map.q = [ 'q', 'quit' ]
 nnoremap <silent> <leader>Q :qa!<CR>
 let g:which_key_map.Q = [ 'qa!', 'quit-without-saving' ]
+
+" fix FZF job issue on Windows
+autocmd FileType fzf nnoremap <silent> <leader>q :q!<CR>
 " }}}
 
 " s {{{
@@ -855,6 +891,61 @@ let g:which_key_map.w = {
     \ 's' :  ['<c-w>s'          , 'split-window-below']       ,
     \ 'v' :  ['<c-w>v'          , 'split-window-below']       ,
     \ }
+" }}}
+
+" W {{{
+let g:which_key_map.W = {
+      \ 'name' : '+Wiki',
+      \ 'i' : ['<plug>(wiki-index)', 'Index'],
+      \ 'o' : ['<plug>(wiki-open)', 'Open'],
+      \ 'j' : ['<plug>(wiki-journal)', 'Journal'],
+      \ 'd' : ['<plug>(wiki-page-delete)', 'PageDelete'],
+      \ 'r' : ['<plug>(wiki-page-rename)', 'PageRename'],
+      \ 'E' : ['<plug>(wiki-export)', 'Export'],
+      \ '/' : ['<plug>(wiki-fzf-pages)', 'FzfPages'],
+      \ 'g' : {
+      \   'name' : '+ Graph',
+      \   'b' : ['<plug>(wiki-graph-find-backlinks)', 'Find Backlinks'],
+      \   't' : ['<plug>(wiki-graph-in)', 'Graph to current Page'],
+      \   'f' : ['<plug>(wiki-graph-out)', 'Graph from current Paget'],
+      \  },
+      \ 'J' : {
+      \   'name' : '+ Journal',
+      \   'i' : ['<plug>(wiki-journal-index)', 'Create Index'],
+      \   'I' : ['<plug>(wiki-journal-index-md)', 'Create Index md-style'],
+      \   'n' : ['<plug>(wiki-journal-next)', 'Next'],
+      \   'p' : ['<plug>(wiki-journal-prev)', 'Prev'],
+      \   'cn' : ['<plug>(wiki-journal-copy-tonext)', 'CopyToNext'],
+      \   'w' : ['<plug>(wiki-journal-toweek)', 'To Week Summary'],
+      \   'm' : ['<plug>(wiki-journal-tomonth)', 'To Month Summary'],
+      \  },
+      \ 'l' : {
+      \   'name' : '+ List',
+      \   't' : ['<plug>(wiki-list-toggle)', 'Toggle item'],
+      \   'u' : ['<plug>(wiki-list-uniq)', 'Remove duplicates'],
+      \   'U' : ['<plug>(wiki-list-uniq-local)', 'Rem. duplicates local'],
+      \  },
+      \ 'L' : {
+      \   'name' : '+ Link',
+      \   'n' : ['<plug>(wiki-link-next)', 'Next'],
+      \   'p' : ['<plug>(wiki-link-prev)', 'Prev'],
+      \   'o' : ['<plug>(wiki-link-open)', 'Open'],
+      \   's' : ['<plug>(wiki-link-open-split)', 'Open in Split'],
+      \   'b' : ['<plug>(wiki-link-return)', 'Back to prev. page'],
+      \  },
+      \ 't' : {
+      \   'name' : '+ Tag/ToC',
+      \   'l' : ['<plug>(wiki-tag-list)', 'List'],
+      \   'r' : ['<plug>(wiki-tag-reload)', 'Reload'],
+      \   's' : ['<plug>(wiki-tag-search)', 'Search' ],
+      \   't' : ['<plug>(wiki-page-toc)', 'Page ToC'],
+      \   'T' : ['<plug>(wiki-page-toc-local)', 'Page ToC Local'],
+      \  },
+      \ }
+let g:wiki_mappings_local = {
+      \ '<plug>(wiki-link-open)' : '<cr>',
+      \ '<plug>(wiki-link-return)' : '<bs>',
+      \}
 " }}}
 
 " x {{{
@@ -933,6 +1024,7 @@ augroup au_R
 
     " RMarkdown
     autocmd FileType r nnoremap <buffer> <LocalLeader>ki :call SpinRmd()<CR>
+    autocmd FileType rnoweb nnoremap <buffer> <LocalLeader>kk :call RenderRnw()<CR>
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>kk :call RenderRmd()<CR>
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>kb :call RenderBook()<CR>
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>kp :call RenderChapter()<CR>
@@ -951,6 +1043,16 @@ function SpinRmd()
         let rmdPath = substitute(rmdPath, '\\', '/', 'g')
     endif
     let cmd = "RSend knitr::spin('" . rmdPath. "', knit = FALSE, report = FALSE)"
+    exec cmd
+endfunction
+" }}}
+" RenderRnw {{{
+function RenderRnw()
+    let rnwPath = expand("%:p")
+    if has("win32")
+        let rnwPath = substitute(rnwPath, '\\', '/', 'g')
+    endif
+    let cmd = "RSend knitr::knit2pdf('" . rnwPath. "')"
     exec cmd
 endfunction
 " }}}
