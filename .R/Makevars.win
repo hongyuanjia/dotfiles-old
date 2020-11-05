@@ -1,0 +1,8 @@
+CXX14FLAGS=-O3 -mtune=native -march=native -Wno-unused-variable -Wno-unused-function  -Wno-macro-redefined
+CXX14 = $(BINPREF)g++ -m$(WIN) -std=c++1y
+
+CXX17 = g++-9
+CXX17STD = -std=gnu++17
+CXX17FLAGS = -g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g
+CXX17PICFLAGS = -fpic
+
