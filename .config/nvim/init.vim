@@ -68,6 +68,7 @@ Plug 'justinmk/vim-sneak'
 
 " R
 Plug 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
+Plug 'mllg/vim-devtools-plugin', { 'for': ['r', 'rmd', 'rnoweb']}
 Plug 'jalvesaq/R-Vim-runtime', {'for': ['r', 'rmd']}
 Plug 'hongyuanjia/vim-pandoc',  {'for': ['rmd', 'markdown']}
 Plug 'vim-pandoc/vim-pandoc-syntax',  {'for': ['rmd', 'markdown']}
@@ -1006,12 +1007,17 @@ augroup au_R
     autocmd FileType r,rmd inoremap <buffer> <M-;> <c-v><Space>:=<c-v><Space>
 
     " devtools integration
-    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>da :RSend devtools::load_all()<cr>
-    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dd :RSend devtools::document()<cr>
-    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dt :RSend devtools::test()<cr>
-    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dc :RSend devtools::check()<cr>
+    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>da :RLoadPackage<cr>
+    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dd :RDocumentPackage<cr>
+    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dt :RTestPackage<cr>
+    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>df :RTestFile<cr>
+    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dc :RCheckPackage<cr>
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dr :RSend devtools::build_readme()<cr>
-    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dI :RSend devtools::install()<cr>
+    autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>dI :RInstallPackage<cr>
+
+    " targets
+    autocmd FileType r nnoremap <buffer> <LocalLeader>tm :RSend targets::tar_make()<cr>
+    autocmd FileType r nnoremap <buffer> <LocalLeader>tM :RSend targets::tar_make(callr_function = NULL)<cr>
 
     " doge to generate roxygen2 template
     autocmd FileType r,rmd nnoremap <buffer> <LocalLeader>rO :DogeGenerate<cr>
