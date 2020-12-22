@@ -206,18 +206,6 @@ set hidden
 " Disable fold when opening
 set nofoldenable
 
-" Use backup and swap
-if has('win32')
-    silent execute '!mkdir '.expandcmd($TEMP.'\backup')
-    silent execute '!mkdir '.expandcmd($TEMP.'\undo')
-else
-    let $TEMP="/tmp"
-    silent execute '!mkdir -p /tmp/backup'
-    silent execute '!mkdir -p /tmp/undo'
-endif
-set backupdir=$TEMP/backup,.
-set directory=$TEMP/backup,.
-
 if has('persistent_undo')
     set undofile
     set undodir=$TEMP/undo,.
@@ -231,18 +219,6 @@ set backspace=indent,eol,start
 
 " Do not display information in preview window
 set complete-=i
-
-" Set Chinese fonts
-set guifont=DejaVuSansMono\ NF:h12
-set guifontwide=SimHei:h12
-
-" Disable GUI menu
-au GUIEnter * simalt ~x
-set guioptions-=m
-set guioptions-=r        " Hide the right scrollbar
-set guioptions-=L        " Hide the left scrollbar
-set guioptions-=T
-set guioptions-=e
 
 " No annoying sound on errors
 set noerrorbells
@@ -473,7 +449,6 @@ let g:coc_global_extensions = [
     \ 'coc-json',
     \ 'coc-lists',
     \ 'coc-r-lsp',
-    \ 'coc-snippets',
     \ 'coc-vimlsp',
     \ 'coc-word',
     \ 'coc-yank',
@@ -542,22 +517,13 @@ xmap ia <Plug>SidewaysArgumentTextobjI
 " }}}
 
 " vimtex {{{
-let g:tex_flavor='latex'
 let g:vimtex_fold_enabled=1
-let g:vimtex_compiler_latexmk_engines = {
-      \ '_'                : '-xelatex',
-      \ 'pdflatex'         : '-xelatex',
-      \ 'dvipdfex'         : '-pdfdvi',
-      \ 'lualatex'         : '-lualatex',
-      \ 'xelatex'          : '-xelatex',
-      \ 'context (pdftex)' : '-pdf -pdflatex=texexec',
-      \ 'context (luatex)' : '-pdf -pdflatex=context',
-      \ 'context (xetex)'  : '-pdf -pdflatex=''texexec --xtx''',
-      \ }
-
 if has("win32")
     let g:vimtex_view_general_viewer="SumatraPDF"
 endif
+" if has('nvim')
+"     g:vimtex_compiler_progname = 'nvr'
+" endif
 " }}}
 
 " vim-markdown {{{
@@ -592,7 +558,7 @@ autocmd FileType rnoweb let b:rplugin_non_r_omnifunc = "g:omnifunc=vimtex#comple
 let R_latex_build_dir = 'build'
 let R_texerr=1
 let R_assign_map="<M-->"
-if has("win32") && !has("wsl")
+if has("win32") && !has("nvim")
     let R_external_term = 1
 endif
 let R_debug = 0
