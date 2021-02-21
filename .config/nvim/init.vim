@@ -19,6 +19,9 @@ if ! filereadable(expand('~/.vim/autoload/plug.vim'))
 endif
 " }}}
 
+" polyglot
+let g:polyglot_disabled = ['csv']
+
 " Load Plugins {{{
 call plug#begin('~/.vim/plugged')
 
@@ -72,8 +75,6 @@ Plug 'mllg/vim-devtools-plugin', { 'for': ['r', 'rmd', 'rnoweb']}
 Plug 'jalvesaq/R-Vim-runtime', {'for': ['r', 'rmd']}
 Plug 'hongyuanjia/vim-pandoc',  {'for': ['rmd', 'markdown']}
 Plug 'vim-pandoc/vim-pandoc-syntax',  {'for': ['rmd', 'markdown']}
-" Plug 'chrisbra/csv.vim'
-" Plug 'vim-pandoc/vim-rmarkdown'
 
 " Insert documentation template
 Plug 'kkoomen/vim-doge'
@@ -219,6 +220,20 @@ set backspace=indent,eol,start
 
 " Do not display information in preview window
 set complete-=i
+
+if !has("nvim")
+    " Set Chinese fonts
+    set guifont=DejaVuSansMono\ NF:h12
+    set guifontwide=SimHei:h12
+
+    " Disable GUI menu
+    au GUIEnter * simalt ~x
+    set guioptions-=m
+    set guioptions-=r        " Hide the right scrollbar
+    set guioptions-=L        " Hide the left scrollbar
+    set guioptions-=T
+    set guioptions-=e
+endif
 
 " No annoying sound on errors
 set noerrorbells
@@ -596,7 +611,7 @@ let g:mkdp_port = ''
 let g:mkdp_page_title = '「${name}」'
 " }}}
 
-" vim-pandox {{{
+" vim-pandoc {{{
 let g:pandoc#folding#fold_yaml=1
 let g:pandoc#folding#fold_fenced_codeblocks=1
 " }}}
