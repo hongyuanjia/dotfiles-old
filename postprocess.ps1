@@ -37,7 +37,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #>
 function Backup-Exists {
     param (
-        [Parameter(Mandatory=$true)]$Path
+        [Parameter(Mandatory=$True)]$Path
     )
 
     if (!(Test-Path $Path)) { Return }
@@ -66,9 +66,11 @@ function Backup-Exists {
 #>
 function Test-SameRealPath {
     param (
-        [Parameter(Mandatory=$true)]$Path,
+        [Parameter(Mandatory=$True)]$Path,
         [Parameter(Mandatory=$true)]$Target
     )
+
+    if (!(Test-Path $Path)) { Return $False }
     
     # Resolve symbolic link or junction
     $RealPath = Get-Item $Path | Select-Object -ExpandProperty Target
@@ -106,7 +108,12 @@ function Test-SameRealPath {
     be deleted.
 #># 
 function New-Link {
-    param ($Directory, $Target, [String]$NewName, [Switch]$NoBackup)
+    param (
+        [Parameter(Mandatory=$True)]$Directory,
+        [Parameter(Mandatory=$True)]$Target,
+        [String]$NewName,
+        [Switch]$NoBackup
+    )
 
     # Check input target is a file or a directory
     $IsFile = Test-Path -Path $Target -PathType Leaf
@@ -117,6 +124,7 @@ function New-Link {
         $BaseName = $NewName
         $Path = [System.IO.Path]::Combine($Directory, $NewName)
     } else {
+        
         $BaseName = [System.IO.Path]::GetFileName($Target)
         $Path = [System.IO.Path]::Combine($Directory, $BaseName)
     }
@@ -164,21 +172,101 @@ function New-Link {
     }
 }
 
+<#
+.SYNOPSIS
+    Get all installed programs
+.DESCRIPTION
+    Get all installed programs by querying the Registry and return:
+    - DisplayName
+    - Publisher
+    - InstallDate
+    - DisplayVersion
+    - UninstallString
+#>
+function Get-AllInstalledApps {
+    $LMReg32 = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*"
+    $CUReg32 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*"
+    $LMReg64 = "HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
+    $CUReg64 = "HKCU:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
+    $Reg = @($LMReg32, $LMReg64, $CUReg32, $CUReg64) | Where-Object { Test-Path $_ }
+
+    Get-ItemProperty $Reg |
+        Where-Object { $_.DisplayName -and $_.UninstallString } |
+        Select-Object DisplayName, Publisher, InstallDate, DisplayVersion, UninstallString |
+        Sort-Object DisplayName
+}
+
+<#
+.SYNOPSIS
+    Extract information of installed programs using regular expression
+.DESCRIPTION
+    Extract information of installed programs using regular expression
+#>
+function Get-InstalledApp {
+    param (
+        [Parameter(Mandatory=$True)]$Program
+    )
+
+    # Get all installed programs
+    Get-AllInstalledApps | Where-Object { $_.DisplayName -Match $Program }
+}
+
+<#
+.SYNOPSIS
+    Download latest release files of a GitHub Repository
+
+.DESCRIPTION
+    Download latest release files of a GitHub Repository
+
+.PARAMETER Repo
+    A name of GitHub Repository. For example, "NREL/EnergyPlus"
+
+.PARAMETER FilePattern
+    A regular expression used to extract latest release files
+
+.PARAMETER Directory
+    A path of directory to save the downloaded files. Default is $TEMP
+#>
+function Get-GitHubRelease {
+    param (
+        [Parameter(Mandatory=$True)]$Repo,
+        [Parameter(Mandatory=$True)]$FilePattern,
+        [Parameter(Mandatory=$False)]$Directory = [System.IO.Path]::GetTempPath()
+    )
+
+    $ReleaseUri = "https://api.github.com/repos/$Repo/releases/latest"
+    $DownloadUri = ((Invoke-RestMethod -Method GET -Uri $ReleaseUri).assets |
+        Where-Object name -Match $FilePattern ).browser_download_url
+
+    if ($DownloadUri.length -eq 0) {
+        Write-Error "No matched release file has been found"
+    }
+
+    $Output = [System.IO.Path]::Combine($Directory, [System.IO.Path]::GetFileName($DownloadUri))
+
+    Invoke-WebRequest -Uri $DownloadUri -Outfile $Output
+
+    Return $Output
+}
+
 # Path of 'Documents' folder for current user
 $Documents = [IO.Path]::Combine($Env:USERPROFILE, "Documents")
 
+Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                  Preprocess                                  #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "Set the 'HOME' environment variable to $Env:USERPROFILE for current user "
 [System.Environment]::SetEnvironmentVariable('HOME', $Env:USERPROFILE, [System.EnvironmentVariableTarget]::User)
 
+Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                   Setup Git                                  #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 $gitconfig = [System.IO.Path]::Combine($PSScriptRoot, '.gitconfig')
 New-Link -Directory $Env:USERPROFILE -Target $gitconfig
 
+Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                    Setup R                                   #"
 Write-Host "# ---------------------------------------------------------------------------- #"
@@ -200,7 +288,7 @@ New-Link -Directory $RStudio_Dir -Target $RStudio
 $RMake = [System.IO.Path]::Combine($PSScriptRoot, '.R')
 New-Link -Directory $Documents -Target $RMake
 
-
+Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                   Setup Vim                                  #"
 Write-Host "# ---------------------------------------------------------------------------- #"
@@ -224,5 +312,113 @@ if (!(Test-Path $VimDir_Autoload)) {
 # Create a symbolic link of vimrc
 New-Link -Directory $Env:USERPROFILE -Target $Vimrc -NewName ".vimrc"
 
+# ------------- NOTE: Steps below depends on files on my Dropbox ------------- #
+# Path of Dropbox folder
+$Dropbox = [System.IO.Path]::Combine($Env:USERPROFILE, "Dropbox")
+$Backup = [System.IO.Path]::Combine($Dropbox, "software", "backup")
+$AppData = [System.IO.Path]::Combine($Backup, "Roaming")
+$LocalAppData = [System.IO.Path]::Combine($Backup, "Local")
+
+Write-Host ""
+Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "#                                 Setup Zotero                                 #"
+Write-Host "# ---------------------------------------------------------------------------- #"
+<#
+Zotero Data: ~/Dropbox/literatures/Zetero
+Attachments: ~/Dropbox/literatures/Attachments
+Profiles: ~/Dropbox/software/backup/Roaming/Zotero
+#>
+# Create a junction for Zotero Data folder
+$ZoteroData = [System.IO.Path]::Combine($Dropbox, "literatures", "Zotero")
+New-Link -Directory $Env:USERPROFILE -Target $ZoteroData
+# Restore Zotero profile
+$ZoteroProfile = [System.IO.Path]::Combine($AppData, "Zotero")
+New-Link -Directory $Env:APPDATA -Target $ZoteroProfile -NoBackup
+
+Write-Host ""
+Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "#                             Setup Total Commander                            #"
+Write-Host "# ---------------------------------------------------------------------------- #"
+<#
+Total Commander portable: ~/Dropbox/software/backup/TotalCMD64
+Total Commander System Variable: COMMANDER_PATH
+#>
+$TotalCMD = [System.IO.Path]::Combine($LocalAppData, "TotalCMD64")
+New-Link -Directory $Env:LOCALAPPDATA -Target $TotalCMD -NoBackup
+Write-Host "Set environment variable 'COMMANDER_PATH' to '$Env:LOCALAPPDATA\TotalCMD64' for current user..."
+[System.Environment]::SetEnvironmentVariable('COMMANDER_PATH', $Env:LOCALAPPDATA + "\TotalCMD64", [System.EnvironmentVariableTarget]::User)
+
+Write-Host ""
+Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "#                                 Flow Launcher                                #"
+Write-Host "# ---------------------------------------------------------------------------- #"
+<#
+Currently, Flow Launcher did not provide a way to recover settings.
+See: https://github.com/Flow-Launcher/Flow.Launcher/issues/365
+Flow Launcher: ~/Dropbox/software/backup/Roaming/FlowLauncher
+#>
+# Check if Flow Launcher has been installed and install it if not
+if ((Get-InstalledApp "Flow Launcher").length -eq 0) {
+    Write-Host "Download Flow Launcher from GitHub..."
+
+    $FLInstaller = Get-GitHubRelease "Flow-Launcher/Flow.Launcher" "Flow-Launcher-v\d\.\d\.\d\.exe"
+
+    Write-Host "Install Flow Launcher..."
+    Start-Process -Wait -FilePath $FLInstaller -ArgumentList "/S" -PassThru | Out-Null
+}
+# Recover Flow Launcher settings
+$FL = [System.IO.Path]::Combine($AppData, "FlowLauncher")
+New-Link -Directory $Env:APPDATA -Target $FL -NoBackup -NewName "FlowLauncher"
+
+Write-Host ""
+Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "#                                   GitKraken                                  #"
+Write-Host "# ---------------------------------------------------------------------------- #"
+$GitKraken = [System.IO.Path]::Combine($AppData, ".gitkraken")
+New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup
+
+Write-Host ""
+Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "#                                  Everything                                  #"
+Write-Host "# ---------------------------------------------------------------------------- #"
+$GitKraken = [System.IO.Path]::Combine($AppData, "Everything")
+New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup
+
+Write-Host ""
+Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "#                                   IrfanView                                  #"
+Write-Host "# ---------------------------------------------------------------------------- #"
+$GitKraken = [System.IO.Path]::Combine($AppData, "IrfanView")
+New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup
+
+Write-Host ""
+Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "#                                 Input Method                                 #"
+Write-Host "# ---------------------------------------------------------------------------- #"
+<#
+im-select
+Needed for switching input methods between normal mode and input mode in Vim
+Repo: https://github.com/daipeihust/im-select
+Path: ~/Dropbox/software/backup/im-select
+
+wubiLex
+Utilities of Wubi IM on Windows 10
+Repo: https://github.com/aardio/wubi-lex
+Path: ~/Dropbox/software/backup/wubiLex
+#>
+$wubiLex = [System.IO.Path]::Combine($LocalAppData, "wubiLex")
+$imselect = [System.IO.Path]::Combine($LocalAppData, "im-select")
+New-Link -Directory $Env:LOCALAPPDATA -Target $wubiLex -NoBackup
+New-Link -Directory $Env:LOCALAPPDATA -Target $imselect -NoBackup
+
+Write-Host ""
+Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "#                                  Misc Tools                                  #"
+Write-Host "# ---------------------------------------------------------------------------- #"
+$ssh = [System.IO.Path]::Combine($Backup, ".ssh")
+New-Link -Directory $Env:USERPROFILE -Target $ssh -NoBackup
+
+Write-Host ""
 Write-Host "Completed!"
+
 Read-Host -Prompt "Press Enter to exit"
