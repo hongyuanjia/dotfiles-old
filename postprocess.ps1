@@ -393,6 +393,14 @@ New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "#                                   PowerToys                                  #"
+Write-Host "# ---------------------------------------------------------------------------- #"
+$PowerToys = [System.IO.Path]::Combine($LocalAppData, "Microsoft", "PowerToys")
+$Microsoft = [System.IO.Path]::Combine($Env:LOCALAPPDATA, "Microsoft")
+New-Link -Directory $Microsoft -Target $PowerToys -NoBackup
+
+Write-Host ""
+Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                 Input Method                                 #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 <#
