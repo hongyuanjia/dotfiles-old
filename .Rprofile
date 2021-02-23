@@ -37,9 +37,9 @@ local({r <- getOption("repos")
         )
     )
 
-    if (.Platform$OS.type == "windows") {
-        Sys.setlocale("LC_CTYPE", "Chinese (Simplified)_China.936")
-    }
+    # if (.Platform$OS.type == "windows") {
+    #     Sys.setlocale("LC_CTYPE", "Chinese (Simplified)_China.936")
+    # }
 }
 
 # vim: noai:ts=4:sw=4
