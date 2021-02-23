@@ -12,59 +12,50 @@ Set-ItemProperty -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\A
 Set-ItemProperty -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name JointResize -Value 0
 Set-ItemProperty -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name SnapFill -Value 0
 
-# windows components & config
-cinst Microsoft-Hyper-V-All -source windowsFeatures
-cinst Microsoft-Windows-Subsystem-Linux -source windowsFeatures
-
 # programs
 
+## fonts
+choco install -y font-nerd-dejavusansmono
+
 ## utilities
-cinst 7zip.install
-cinst everything.portable
-cinst dropbox
-cinst irfanview
-cinst irfanviewplugins
-cinst powertoys
-cinst clash-for-windows
-cinst wechat
-cinst tim
-cinst internet-download-manager --ignore-checksums
-cinst netease-cloudmusic
-cinst totalcommander --params "/ShellExtension"
-cinst zoom
+choco install -y 7zip.install
+choco install -y everything.portable
+choco install -y dropbox
+choco install -y irfanview
+choco install -y irfanviewplugins
+choco install -y powertoys
+choco install -y clash-for-windows
+choco install -y wechat --ignore-checksums
+choco install -y tim
+choco install -y internet-download-manager --ignore-checksums
+choco install -y totalcommander --params "/ShellExtension"
+choco install -y zoom
 
 ## development
-cinst git.install --params "/NoShellIntegration /GitOnlyOnPath"
-cinst gitkraken
-cinst nodejs
-cinst yarn
-cinst docker-desktop
-cinst vcxsrv
-cinst fzf
-cinst ripgrep
+choco install -y git.install --params "/NoShellIntegration /GitOnlyOnPath"
+choco install -y gitkraken
+choco install -y nodejs
+choco install -y yarn
+choco install -y fzf
+choco install -y ripgrep
 
 ## programming
-cinst python
-cinst r.project --params "/AddToPath"
-cinst r.studio
-### TODO: Add rtools to $PATH
-cinst rtools
+choco install -y python
+choco install -y r.project --params "/AddToPath"
+choco install -y r.studio
+choco install -y rtools
 
 ## editors
-cinst neovim
-cinst fvim
-cinst vscode --params "/NoDesktopIcon /NoQuicklaunchIcon /NoContextMenuFiles /NoContextMenuFolders"
-cinst font-nerd-dejavusansmono
+choco install -y vim-tux
+choco install -y vscode --params "/NoDesktopIcon /NoQuicklaunchIcon /NoContextMenuFiles /NoContextMenuFolders"
 
 ## writing
-cinst pandoc --ia=ALLUSERS=1
-cinst pandoc-crossref
-cinst zotero
-cinst lyx
-cinst tinytex
-cinst sumatrapdf.install`
-cinst foxitreader --ia '/MERGETASKS="!desktopicon,!setdefaultreader,!displayinbrowser /COMPONENTS=*pdfviewer,*ffse,*installprint,*ffaddin,*ffspellcheck,!connectedpdf"'
-cinst drawio
+choco install -y pandoc --ia=ALLUSERS=1
+choco install -y pandoc-crossref
+choco install -y zotero
+choco install -y tinytex
+choco install -y sumatrapdf.install
+choco install -y drawio
 
 # # post-processing
 # cinst visualstudio2017buildtools
@@ -85,7 +76,6 @@ Get-AppxPackage *Facebook* | Remove-AppxPackage
 Get-AppxPackage Microsoft.WindowsFeedbackHub | Remove-AppxPackage
 Get-AppxPackage Microsoft.Getstarted | Remove-AppxPackage
 Get-AppxPackage *Keeper* | Remove-AppxPackage
-Get-AppxPackage microsoft.windowscommunicationsapps | Remove-AppxPackage
 Get-AppxPackage Microsoft.WindowsMaps | Remove-AppxPackage
 Get-AppxPackage *MarchofEmpires* | Remove-AppxPackage
 Get-AppxPackage *McAfee* | Remove-AppxPackage
