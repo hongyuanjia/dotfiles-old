@@ -9,6 +9,7 @@
 	eol = lf
 	editor = vim
 	fileMode = false
+	longpaths = true
 [http]
 	sslVerify = false
 [merge]
