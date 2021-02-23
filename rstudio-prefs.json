@@ -1,0 +1,52 @@
+{
+    "save_workspace": "never",
+    "load_workspace": false,
+    "always_save_history": false,
+    "num_spaces_for_tab": 4,
+    "windows_terminal_shell": "win-git-bash",
+    "default_project_location": "~/Desktop",
+    "rmd_preferred_template_path": "C:/Users/hongy/R/4.0/vitae/rmarkdown/templates/awesomecv",
+    "vertically_align_arguments_indent": false,
+    "highlight_selected_line": true,
+    "show_invisibles": true,
+    "show_indent_guides": true,
+    "syntax_color_console": true,
+    "highlight_r_function_calls": true,
+    "line_ending_conversion": "posix",
+    "default_encoding": "UTF-8",
+    "editor_keybindings": "vim",
+    "rmd_chunk_output_inline": false,
+    "default_sweave_engine": "knitr",
+    "use_tinytex": true,
+    "panes": {
+        "quadrants": [
+            "Source",
+            "TabSet1",
+            "Console",
+            "TabSet2"
+        ],
+        "tabSet1": [
+            "Environment",
+            "History",
+            "Connections",
+            "Build",
+            "VCS",
+            "Tutorial",
+            "Presentation"
+        ],
+        "tabSet2": [
+            "Files",
+            "Plots",
+            "Packages",
+            "Help",
+            "Viewer"
+        ],
+        "console_left_on_top": false,
+        "console_right_on_top": true
+    },
+    "editor_theme": "Dracula",
+    "jobs_tab_visibility": "shown",
+    "initial_working_directory": "~/Dropbox/github_repo/psychrolib/src/r",
+    "code_completion_delay": 50,
+    "code_completion_characters": 2
+}
