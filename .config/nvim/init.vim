@@ -209,6 +209,9 @@ set nofoldenable
 
 if has('persistent_undo')
     set undofile
+    if !isdirectory('$TEMP/undo')
+        silent call mkdir($TEMP . '/undo', 'p')
+    endif
     set undodir=$TEMP/undo,.
 endif
 
