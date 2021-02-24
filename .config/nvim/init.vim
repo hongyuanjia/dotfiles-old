@@ -206,12 +206,19 @@ set hidden
 " Disable fold when opening
 set nofoldenable
 
+" Set swap directory
+if !isdirectory($HOME.'/.vim/swap')
+    silent call mkdir($HOME.'/.vim/swap', 'p')
+endif
+set directory^=$HOME/.vim/swap//,.
+
+" Set undo directory
 if has('persistent_undo')
     set undofile
-    if !isdirectory('$TEMP/undo')
-        silent call mkdir($TEMP . '/undo', 'p')
+    if !isdirectory($HOME.'/.vim/undo')
+        silent call mkdir($HOME.'/.vim/undo', 'p')
     endif
-    set undodir=$TEMP/undo,.
+    set undodir=$HOME/.vim/undo//,.
 endif
 
 " Set English word dictionary
