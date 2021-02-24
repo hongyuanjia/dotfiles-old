@@ -1,5 +1,0 @@
-{
-    "snippets.priority": 100,
-    "snippets.ultisnips.directories": ["Ultisnips", "UltiSnips"],
-    "r.lsp.diagnostics": false
-}

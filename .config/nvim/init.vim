@@ -6,7 +6,7 @@
 "
 
 " Author: @hongyuanjia
-" Date: 2020-01-03
+" Date: 2021-02-24
 
 set runtimepath^=~/.vim
 
@@ -152,7 +152,6 @@ Plug 'justinmk/vim-gtfo'
 Plug 'moll/vim-bbye', { 'on': ['Bdelete', 'Bwipeout'] }
 
 " Markdown
-" Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'mzlogin/vim-markdown-toc', { 'on': ['GenTocGFM', 'GenTocRedcarpet', 'GenTocGitLab', 'UpdateToc', 'RemoveToc'] , 'for' :['markdown', 'rmd'] }
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
@@ -460,6 +459,7 @@ let g:lightline = {
 " Coc.nvim {{{
 " fix the most annoying bug that coc has
 " silent! au BufEnter,BufRead,BufNewFile * silent! unmap if
+let g:coc_config_home = $HOME.'/.vim'
 let g:coc_global_extensions = [
     \ 'coc-dictionary',
     \ 'coc-git',
