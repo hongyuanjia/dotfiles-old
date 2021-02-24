@@ -2,7 +2,8 @@
 @author         :  Hongyuan Jia
 @email          :  hongyuanjia@outlook.com
 @repo           :  https://github.com/hongyuanjia/dotfiles
-@createdOn      :  2021-02-23 14:59:36
+@createdOn      :  2021-02-23 14:59
+@modifiedOn     :  2021-02-24 11:24
 
 Copyright (c) 2021 Hongyuan Jia
 
@@ -145,7 +146,7 @@ function New-Link {
     # Backup file if required
     if (!$NoBackup) {
         Backup-Exists $Path
-    } elseif ((!isFile) -and (!isDir)) {
+    } elseif ((!$isFile) -and (!$isDir)) {
         Write-Error "Input '$Target' does not exist."
     # Delete file/directory if exists
     } elseif ($IsFile -and (Test-Path $Path -PathType Leaf)) {
@@ -257,7 +258,7 @@ Write-Host "# ------------------------------------------------------------------
 Write-Host "#                                      Git                                     #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 $gitconfig = [System.IO.Path]::Combine($PSScriptRoot, '.gitconfig')
-New-Link -Directory $Env:USERPROFILE -Target $gitconfig
+New-Link -Directory $Env:USERPROFILE -Target $gitconfig | Out-NULL
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
@@ -272,30 +273,45 @@ Write-Host "Set environment variable 'R_ENVIRON_USER' to '$Renviron' for current
 [System.Environment]::SetEnvironmentVariable('R_ENVIRON_USER', $Renviron, [System.EnvironmentVariableTarget]::User)
 # Rconsole preferences for RGui
 $Rconsole = [System.IO.Path]::Combine($PSScriptRoot, 'Rconsole')
-New-Link -Directory $Documents -Target $Rconsole
+New-Link -Directory $Documents -Target $Rconsole | Out-NULL
 # RStudio preferences
 $RStudio = [System.IO.Path]::Combine($PSScriptRoot, 'rstudio-prefs.json')
 $RStudio_Dir = [System.IO.Path]::Combine($Env:APPDATA, 'Rstudio')
-New-Link -Directory $RStudio_Dir -Target $RStudio
+New-Link -Directory $RStudio_Dir -Target $RStudio | Out-NULL
 # Makevars
 $RMake = [System.IO.Path]::Combine($PSScriptRoot, '.R')
-New-Link -Directory $Documents -Target $RMake
+New-Link -Directory $Documents -Target $RMake | Out-NULL
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                      Vim                                     #"
 Write-Host "# ---------------------------------------------------------------------------- #"
-# On Windows, 
-$VimDir = [System.IO.Path]::Combine($PSScriptRoot, ".vim")
-$VimDir_Autoload = [System.IO.Path]::Combine($Env:USERPROFILE, ".vim", "autoload")
-$VimPlug = [System.IO.Path]::Combine($VimDir_Autoload, "plug.vim")
+# Create a symbolic link of vimrc
 $Vimrc = [System.IO.Path]::Combine($PSScriptRoot, ".config", "nvim", "init.vim")
-New-Link -Directory $Env:USERPROFILE -Target $VimDir
+New-Link -Directory $Env:USERPROFILE -Target $Vimrc -NewName ".vimrc" | Out-NULL
+# NOTE: On Windows, 'runtimepath' will resolve the symbolic link and use both
+# the symbolic link and original folder. This causes problem for Nvim-R.
+# See: https://github.com/jalvesaq/Nvim-R/issues/576
+# To solve this, instead of symbolic linking '.vim' directory, make links for
+# every file and folder inside '.vim'.
+$VimDir = [System.IO.Path]::Combine($PSScriptRoot, ".vim")
+$VimDirHome = [System.IO.Path]::Combine($Env:USERPROFILE, ".vim")
+# Backup '.vim' folder if already exists
+Backup-Exists $VimDirHome
+# Create '.vim' folder if necessary
+New-Item -Path $VimDirHome -ItemType Directory
+Get-ChildItem $VimDir | ForEach-Object {
+    if ($_.Name -ne ".gitignore") {
+        New-Link -Directory $VimDirHome -Target $_.FullName
+    }
+} | Out-Null
+$VimDirAutoload = [System.IO.Path]::Combine($VimDirHome, "autoload")
+$VimPlug = [System.IO.Path]::Combine($VimDirAutoload, "plug.vim")
 # Download vim-plug
-if (!(Test-Path $VimDir_Autoload)) {
-    if (!(Test-Path $VimDir_Autoload -PathType Container)) {
+if (!(Test-Path $VimDirAutoload)) {
+    if (!(Test-Path $VimDirAutoload -PathType Container)) {
         Write-Output "Create 'autoload' folder under '.vim'..."
-        New-Item -Path $VimDir_Autoload -ItemType Directory
+        New-Item -Path $VimDirAutoload -ItemType Directory
     }
     if (!(Test-Path $VimPlug -PathType Leaf)) {
         Write-Output "Download vim-plug under '.vim\autoload'..."
@@ -303,8 +319,6 @@ if (!(Test-Path $VimDir_Autoload)) {
         Invoke-WebRequest -Uri $VimPlug_URI -Outfile $VimPlug
     }
 }
-# Create a symbolic link of vimrc
-New-Link -Directory $Env:USERPROFILE -Target $Vimrc -NewName ".vimrc"
 
 # ------------- NOTE: Steps below depends on files on my Dropbox ------------- #
 # Path of Dropbox folder
@@ -324,10 +338,10 @@ Profiles: ~/Dropbox/software/backup/Roaming/Zotero
 #>
 # Create a junction for Zotero Data folder
 $ZoteroData = [System.IO.Path]::Combine($Dropbox, "literatures", "Zotero")
-New-Link -Directory $Env:USERPROFILE -Target $ZoteroData
+New-Link -Directory $Env:USERPROFILE -Target $ZoteroData | Out-NULL
 # Restore Zotero profile
 $ZoteroProfile = [System.IO.Path]::Combine($AppData, "Zotero")
-New-Link -Directory $Env:APPDATA -Target $ZoteroProfile -NoBackup
+New-Link -Directory $Env:APPDATA -Target $ZoteroProfile -NoBackup | Out-NULL
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
@@ -338,7 +352,7 @@ Total Commander portable: ~/Dropbox/software/backup/TotalCMD64
 Total Commander System Variable: COMMANDER_PATH
 #>
 $TotalCMD = [System.IO.Path]::Combine($LocalAppData, "TotalCMD64")
-New-Link -Directory $Env:LOCALAPPDATA -Target $TotalCMD -NoBackup
+New-Link -Directory $Env:LOCALAPPDATA -Target $TotalCMD -NoBackup | Out-NULL
 Write-Host "Set environment variable 'COMMANDER_PATH' to '$Env:LOCALAPPDATA\TotalCMD64' for current user..."
 [System.Environment]::SetEnvironmentVariable('COMMANDER_PATH', $Env:LOCALAPPDATA + "\TotalCMD64", [System.EnvironmentVariableTarget]::User)
 
@@ -362,28 +376,28 @@ if ((Get-InstalledApp "Flow Launcher").length -eq 0) {
 }
 # Recover Flow Launcher settings
 $FL = [System.IO.Path]::Combine($AppData, "FlowLauncher")
-New-Link -Directory $Env:APPDATA -Target $FL -NoBackup -NewName "FlowLauncher"
+New-Link -Directory $Env:APPDATA -Target $FL -NoBackup -NewName "FlowLauncher" | Out-NULL
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                   GitKraken                                  #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 $GitKraken = [System.IO.Path]::Combine($AppData, ".gitkraken")
-New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup
+New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup | Out-NULL
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                  Everything                                  #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 $GitKraken = [System.IO.Path]::Combine($AppData, "Everything")
-New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup
+New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup | Out-NULL
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                   IrfanView                                  #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 $GitKraken = [System.IO.Path]::Combine($AppData, "IrfanView")
-New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup
+New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup | Out-NULL
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
@@ -391,7 +405,7 @@ Write-Host "#                                   PowerToys                       
 Write-Host "# ---------------------------------------------------------------------------- #"
 $PowerToys = [System.IO.Path]::Combine($LocalAppData, "Microsoft", "PowerToys")
 $Microsoft = [System.IO.Path]::Combine($Env:LOCALAPPDATA, "Microsoft")
-New-Link -Directory $Microsoft -Target $PowerToys -NoBackup
+New-Link -Directory $Microsoft -Target $PowerToys -NoBackup | Out-NULL
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
@@ -410,15 +424,15 @@ Path: ~/Dropbox/software/backup/wubiLex
 #>
 $wubiLex = [System.IO.Path]::Combine($LocalAppData, "wubiLex")
 $imselect = [System.IO.Path]::Combine($LocalAppData, "im-select")
-New-Link -Directory $Env:LOCALAPPDATA -Target $wubiLex -NoBackup
-New-Link -Directory $Env:LOCALAPPDATA -Target $imselect -NoBackup
+New-Link -Directory $Env:LOCALAPPDATA -Target $wubiLex -NoBackup | Out-NULL
+New-Link -Directory $Env:LOCALAPPDATA -Target $imselect -NoBackup | Out-NULL
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                  Misc Tools                                  #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 $ssh = [System.IO.Path]::Combine($Backup, ".ssh")
-New-Link -Directory $Env:USERPROFILE -Target $ssh -NoBackup
+New-Link -Directory $Env:USERPROFILE -Target $ssh -NoBackup | Out-NULL
 
 Write-Host ""
 Write-Host "Completed!"
