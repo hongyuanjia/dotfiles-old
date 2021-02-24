@@ -1,0 +1,2 @@
+PATH="${RTOOLS40_HOME}\usr\bin;${RTOOLS40_HOME}\mingw64\bin;${PATH}"
+

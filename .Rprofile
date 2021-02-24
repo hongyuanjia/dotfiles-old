@@ -42,4 +42,7 @@ local({r <- getOption("repos")
     # }
 }
 
+# custom start up
+tryCatch(startup::startup(), error = function(ex) message(".Rprofile error: ", conditionMessage(ex)))
+
 # vim: noai:ts=4:sw=4

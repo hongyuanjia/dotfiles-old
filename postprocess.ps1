@@ -356,6 +356,17 @@ if (!(Test-Path -Path $NvimCom -PathType Container)) {
     & R.exe CMD INSTALL --no-multiarch $($Matches.Values) -l=$($R_LIBS_USER)
 }
 
+# Install {startup} package to enable system-specific Rprofile and Renviron
+Write-Host "Install {startup} R package if necessary..."
+$RParams =
+"if (!suppressWarnings(require(`"startup`", character.only = TRUE, quietly = TRUE))) {
+    install.packages(`"startup`", `"$R_LIBS_USER_ESC`")
+}
+"
+$TMP = New-TemporaryFile
+[System.IO.File]::WriteAllLines($TMP.FullName, $RParams)
+& Rscript.exe $TMP.FullName | Out-Null
+
 # Create a folder that contains the path of those 2 packages to work better
 # with {renv}. Otherwise, {nvimcom} and {languageserver} will have to be
 # added in every {renv} project
