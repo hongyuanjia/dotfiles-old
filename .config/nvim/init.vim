@@ -470,6 +470,7 @@ let g:coc_global_extensions = [
     \ 'coc-vimlsp',
     \ 'coc-word',
     \ 'coc-yank',
+    \ 'coc-snippets'
     \ ]
 
 " Make <tab> used for trigger completion, completion confirm, snippet expand and jump like VSCode.
