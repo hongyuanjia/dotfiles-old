@@ -25,22 +25,26 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #>
 
 # --------------------------------- Utilities -------------------------------- #
-# 
 <#
 .SYNOPSIS
     Rename file if exists
+
 .DESCRIPTION
     Rename existing file with timestamp in format 'yyyyMMddThhmmss' and an
     extra '.bak' suffix
+
 .PARAMETER Path
     A path of file or directory
+
+.OUTPUTS
+    The path of the renamed file
 #>
 function Backup-Exists {
     param (
         [Parameter(Mandatory=$True)]$Path
     )
 
-    if (!(Test-Path $Path)) { Return }
+    if (!(Test-Path $Path)) { Return $Path }
 
     # Get file name
     $File = [System.IO.Path]::GetFileName($Path)
@@ -50,9 +54,10 @@ function Backup-Exists {
 
     Write-Host "'$File' already exists. Renaming it to '$File_Bak'..."
     Rename-Item -Path $Path -NewName $File_Bak -Force | Out-Null
+
+    Return [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($Path), $File_Bak)
 }
 
-# Resolve symbolic link and test if input path is the same as target
 <#
 .SYNOPSIS
     Test the real path with target with symbolic link resolved
@@ -80,33 +85,36 @@ function Test-SameRealPath {
 
 <#
 .SYNOPSIS
-    Create a symbolic link for input file or a junction for input directory
+    Create a symbolic link for input file or directory
 
 .DESCRIPTION
-    Create a symbolic link for input file or a junction for input directory.
+    Create a symbolic link for input file or directory.
 
-    If there is already a symbolic link or a junction to the input target,
-    nothing will be done.
+    If there is already a symbolic link to the input target, nothing will be
+    done.
 
     Otherwise, by default, existing file/directory with the same name as
     input target will be renamed with pattern DateTime + '.bak'.
 
     If '-NoBackup', existing file/directory will be deleted.
+
 .PARAMETER Directory
-    A directory where you want to create a symbolic link or a junction
+    A directory where you want to create a symbolic link
 
 .PARAMETER Target
-    A path of file or directory that you want to create a symbolic link or a
-    junction
+    A path of file or directory that you want to create a symbolic link
 
 .PARAMETER NewName
-    Optional. New name of the symbolic link or the junction to create. If not
-    specified, the original file/directory name is used.
+    Optional. New name of the symbolic link to create. If not specified, the
+    original file/directory name is used.
 
 .PARAMETER NoBackup
     If set, existing file/directory in '-Directory' with the same name will
     be deleted.
-#># 
+
+.OUTPUTS
+    The path of symbolic link
+#>
 function New-Link {
     param (
         [Parameter(Mandatory=$True)]$Directory,
@@ -124,57 +132,38 @@ function New-Link {
         $BaseName = $NewName
         $Path = [System.IO.Path]::Combine($Directory, $NewName)
     } else {
-        
         $BaseName = [System.IO.Path]::GetFileName($Target)
         $Path = [System.IO.Path]::Combine($Directory, $BaseName)
     }
 
-    if ($IsFile) {
-        # Test if symbolic link already exists
-        if (Test-SameRealPath -Path $Path -Target $Target) {
-            Write-Host "A symbolic link for '$BaseName' already exists in '$Directory'. Skip..."
-            Return
-        }
-        
-        # Backup file if required
-        if (!$NoBackup) {
-            Backup-Exists $Path
-        # Delete file if exists
-        } elseif (Test-Path $Path -PathType Leaf) {
-            Remove-Item $Path -Force
-        }
-
-        # Create symbolic link
-        Write-Host "Create a symbolic link for '$BaseName' in '$Directory'..."
-        New-Item -ItemType SymbolicLink -Path $Path -Target $Target -Force | Out-Null
-    } elseif ($IsDir) {
-        # Test if symbolic link already exists
-        if (Test-SameRealPath -Path $Path -Target $Target) {
-            Write-Host "A junction for '$BaseName' already exists in '$Directory'. Skip..."
-            Return
-        }
-        
-        # Backup file if required
-        if (!$NoBackup) {
-            Backup-Exists -Path $Path
-        } else {
-            # Delete file if exists
-            if (Test-Path $Path -PathType Container) {
-                Remove-Item $Path -Force -Recurse
-            }
-        }
-
-        # Create junction
-        Write-Host "Create a junction for '$BaseName' in '$Directory'..."
-        New-Item -ItemType Junction -Path $Path -Target $Target -Force | Out-Null
-    } else {
-        Write-Error "Input '$Target' does not exist."
+    # Test if symbolic link already exists
+    if (Test-SameRealPath -Path $Path -Target $Target) {
+        Write-Host "A symbolic link for '$BaseName' already exists in '$Directory'. Skip..."
+        Return $Path
     }
+    
+    # Backup file if required
+    if (!$NoBackup) {
+        Backup-Exists $Path
+    } elseif ((!isFile) -and (!isDir)) {
+        Write-Error "Input '$Target' does not exist."
+    # Delete file/directory if exists
+    } elseif ($IsFile -and (Test-Path $Path -PathType Leaf)) {
+        Remove-Item $Path -Force
+    } elseif ($IsDir -and (Test-Path $Path -PathType Container)) {
+        Remove-Item $Path -Force -Recurse
+    }
+
+    # Create symbolic link
+    Write-Host "Create a symbolic link for '$BaseName' in '$Directory'..."
+    New-Item -ItemType SymbolicLink -Path $Path -Target $Target -Force | Out-Null
+    Return $Path
 }
 
 <#
 .SYNOPSIS
     Get all installed programs
+
 .DESCRIPTION
     Get all installed programs by querying the Registry and return:
     - DisplayName
@@ -199,6 +188,7 @@ function Get-AllInstalledApps {
 <#
 .SYNOPSIS
     Extract information of installed programs using regular expression
+
 .DESCRIPTION
     Extract information of installed programs using regular expression
 #>
@@ -226,6 +216,9 @@ function Get-InstalledApp {
 
 .PARAMETER Directory
     A path of directory to save the downloaded files. Default is $TEMP
+
+.OUTPUTS
+    The path of downloaded file
 #>
 function Get-GitHubRelease {
     param (
@@ -261,14 +254,14 @@ Write-Host "Set the 'HOME' environment variable to $Env:USERPROFILE for current 
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
-Write-Host "#                                   Setup Git                                  #"
+Write-Host "#                                      Git                                     #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 $gitconfig = [System.IO.Path]::Combine($PSScriptRoot, '.gitconfig')
 New-Link -Directory $Env:USERPROFILE -Target $gitconfig
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
-Write-Host "#                                    Setup R                                   #"
+Write-Host "#                                       R                                      #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 # Use environment variable instead of symbolic links
 $Rprofile = [System.IO.Path]::Combine($PSScriptRoot, '.Rprofile')
@@ -290,8 +283,9 @@ New-Link -Directory $Documents -Target $RMake
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
-Write-Host "#                                   Setup Vim                                  #"
+Write-Host "#                                      Vim                                     #"
 Write-Host "# ---------------------------------------------------------------------------- #"
+# On Windows, 
 $VimDir = [System.IO.Path]::Combine($PSScriptRoot, ".vim")
 $VimDir_Autoload = [System.IO.Path]::Combine($Env:USERPROFILE, ".vim", "autoload")
 $VimPlug = [System.IO.Path]::Combine($VimDir_Autoload, "plug.vim")
@@ -321,7 +315,7 @@ $LocalAppData = [System.IO.Path]::Combine($Backup, "Local")
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
-Write-Host "#                                 Setup Zotero                                 #"
+Write-Host "#                                    Zotero                                    #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 <#
 Zotero Data: ~/Dropbox/literatures/Zetero
@@ -337,7 +331,7 @@ New-Link -Directory $Env:APPDATA -Target $ZoteroProfile -NoBackup
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
-Write-Host "#                             Setup Total Commander                            #"
+Write-Host "#                                Total Commander                               #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 <#
 Total Commander portable: ~/Dropbox/software/backup/TotalCMD64
