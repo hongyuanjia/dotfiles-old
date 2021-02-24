@@ -314,7 +314,7 @@ Write-Host "Set environment variable 'R_ENVIRON_USER' to '$Renviron' for current
 [System.Environment]::SetEnvironmentVariable('R_ENVIRON_USER', $Renviron, [System.EnvironmentVariableTarget]::User)
 # Rconsole preferences for RGui
 $Rconsole = [System.IO.Path]::Combine($PSScriptRoot, 'Rconsole')
-New-Link -Directory $Documents -Target $Rconsole | Out-NULL
+New-Link -Directory $Env:USERPROFILE -Target $Rconsole | Out-NULL
 # RStudio preferences
 $RStudio = [System.IO.Path]::Combine($PSScriptRoot, 'rstudio-prefs.json')
 $RStudio_Dir = [System.IO.Path]::Combine($Env:APPDATA, 'Rstudio')
