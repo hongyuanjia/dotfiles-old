@@ -262,6 +262,47 @@ New-Link -Directory $Env:USERPROFILE -Target $gitconfig | Out-NULL
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "#                                      Vim                                     #"
+Write-Host "# ---------------------------------------------------------------------------- #"
+# Create a symbolic link of vimrc
+$Vimrc = [System.IO.Path]::Combine($PSScriptRoot, ".config", "nvim", "init.vim")
+New-Link -Directory $Env:USERPROFILE -Target $Vimrc -NewName ".vimrc" | Out-NULL
+# NOTE: On Windows, 'runtimepath' will resolve the symbolic link and use both
+# the symbolic link and original folder. This causes problem for Nvim-R.
+# See: https://github.com/jalvesaq/Nvim-R/issues/576
+# To solve this, instead of symbolic linking '.vim' directory, make links for
+# every file and folder inside '.vim'.
+$VimDir = [System.IO.Path]::Combine($PSScriptRoot, ".vim")
+$VimDirHome = [System.IO.Path]::Combine($Env:USERPROFILE, ".vim")
+# Create '.vim' folder if necessary
+if (!(Test-Path -Path $VimDirHome -PathType Container)) {
+    Write-Host "Create '.vim' folder in '$Env:USERPROFILE'..."
+    New-Item -Path $VimDirHome -ItemType Directory | Out-Null
+}
+Get-ChildItem $VimDir | ForEach-Object {
+    if ($_.Name -ne ".gitignore") {
+        New-Link -Directory $VimDirHome -Target $_.FullName -NoBackup
+    }
+} | Out-Null
+$VimDirAutoload = [System.IO.Path]::Combine($VimDirHome, "autoload")
+$VimPlug = [System.IO.Path]::Combine($VimDirAutoload, "plug.vim")
+# Download vim-plug
+if (!(Test-Path $VimDirAutoload)) {
+    if (!(Test-Path $VimDirAutoload -PathType Container)) {
+        Write-Output "Create 'autoload' folder under '.vim'..."
+        New-Item -Path $VimDirAutoload -ItemType Directory
+    }
+    if (!(Test-Path $VimPlug -PathType Leaf)) {
+        Write-Output "Download vim-plug under '.vim\autoload'..."
+        $VimPlug_URI='https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+        Invoke-WebRequest -Uri $VimPlug_URI -Outfile $VimPlug
+    }
+}
+# Install all plugins
+& vim +PlugInstall +qall
+
+Write-Host ""
+Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                       R                                      #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 # Use environment variable instead of symbolic links
@@ -281,44 +322,51 @@ New-Link -Directory $RStudio_Dir -Target $RStudio | Out-NULL
 # Makevars
 $RMake = [System.IO.Path]::Combine($PSScriptRoot, '.R')
 New-Link -Directory $Documents -Target $RMake | Out-NULL
-
-Write-Host ""
-Write-Host "# ---------------------------------------------------------------------------- #"
-Write-Host "#                                      Vim                                     #"
-Write-Host "# ---------------------------------------------------------------------------- #"
-# Create a symbolic link of vimrc
-$Vimrc = [System.IO.Path]::Combine($PSScriptRoot, ".config", "nvim", "init.vim")
-New-Link -Directory $Env:USERPROFILE -Target $Vimrc -NewName ".vimrc" | Out-NULL
-# NOTE: On Windows, 'runtimepath' will resolve the symbolic link and use both
-# the symbolic link and original folder. This causes problem for Nvim-R.
-# See: https://github.com/jalvesaq/Nvim-R/issues/576
-# To solve this, instead of symbolic linking '.vim' directory, make links for
-# every file and folder inside '.vim'.
-$VimDir = [System.IO.Path]::Combine($PSScriptRoot, ".vim")
-$VimDirHome = [System.IO.Path]::Combine($Env:USERPROFILE, ".vim")
-# Backup '.vim' folder if already exists
-Backup-Exists $VimDirHome
-# Create '.vim' folder if necessary
-New-Item -Path $VimDirHome -ItemType Directory
-Get-ChildItem $VimDir | ForEach-Object {
-    if ($_.Name -ne ".gitignore") {
-        New-Link -Directory $VimDirHome -Target $_.FullName
-    }
-} | Out-Null
-$VimDirAutoload = [System.IO.Path]::Combine($VimDirHome, "autoload")
-$VimPlug = [System.IO.Path]::Combine($VimDirAutoload, "plug.vim")
-# Download vim-plug
-if (!(Test-Path $VimDirAutoload)) {
-    if (!(Test-Path $VimDirAutoload -PathType Container)) {
-        Write-Output "Create 'autoload' folder under '.vim'..."
-        New-Item -Path $VimDirAutoload -ItemType Directory
-    }
-    if (!(Test-Path $VimPlug -PathType Leaf)) {
-        Write-Output "Download vim-plug under '.vim\autoload'..."
-        $VimPlug_URI='https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-        Invoke-WebRequest -Uri $VimPlug_URI -Outfile $VimPlug
-    }
+# Install {languageserver} and {nvimcom} packages
+# Create 'R_LIBS_USER' if not exists
+$RParams = @("-e", "cat(normalizePath(Sys.getenv('R_LIBS_USER'), mustWork = FALSE))")
+$R_LIBS_USER = & Rscript.exe @RParams
+# Escape backslash
+$R_LIBS_USER_ESC = $R_LIBS_USER.Replace("\", "\\")
+if (!(Test-Path -Path $R_LIBS_USER -PathType Container)) {
+    New-Item -ItemType Directory -Path $R_LIBS_USER
 }
+
+# Install {languageserver} package and return the install location
+Write-Host "Install {languageserver} R package if necessary..."
+$RParams =
+"if (!suppressWarnings(require(`"languageserver`", character.only = TRUE, quietly = TRUE))) {
+    install.packages(`"languageserver`", `"$R_LIBS_USER_ESC`")
+}
+cat(find.package(`"languageserver`"), sep = `"\n`")
+"
+$TMP = New-TemporaryFile
+[System.IO.File]::WriteAllLines($TMP.FullName, $RParams)
+$LanguageServer = [System.IO.Path]::GetFullPath((& Rscript.exe $TMP.FullName | Select-Object -Last 1))
+
+# Install {nvimcom} package that is distributed with 'Nvim-R' plugin
+Write-Host "Install {nvimcom} R package if necessary..."
+$NvimCom = [System.IO.Path]::Combine($R_LIBS_USER, "nvimcom")
+if (!(Test-Path -Path $NvimCom -PathType Container)) {
+    $NvimComSrc = [System.IO.Path]::Combine($VimDirHome, "plugged", "Nvim-R", "R", "nvimcom")
+    $NvimComBuild = & R.exe CMD build $NvimcomSrc | Select-Object -Last 1
+    if (!($NvimComBuild -match "nvimcom_[0-9\.\-]+.tar.gz")) {
+        Write-Error "Failed to build 'nvimcom' package for 'Nvim-R' Vim plugin"
+    }
+    & R.exe CMD INSTALL --no-multiarch $($Matches.Values) -l=$($R_LIBS_USER)
+}
+
+# Create a folder that contains the path of those 2 packages to work better
+# with {renv}. Otherwise, {nvimcom} and {languageserver} will have to be
+# added in every {renv} project
+# See: https://github.com/jalvesaq/Nvim-R/issues/445#issuecomment-635419033
+$R_LIBS_EXT = [System.IO.Path]::Combine($Env:USERPROFILE, "R", "External")
+if (!(Test-Path -Path $R_LIBS_EXT -PathType Container)) {
+    New-Item -Path $R_LIBS_EXT -ItemType Directory | Out-Null
+}
+# Create symbolic links to {nvimcom} and {languageserver} package folder
+New-Link $R_LIBS_EXT -Target $LanguageServer -NoBackup | Out-Null
+New-Link $R_LIBS_EXT -Target $NvimCom -NoBackup | Out-Null
 
 # ------------- NOTE: Steps below depends on files on my Dropbox ------------- #
 # Path of Dropbox folder
@@ -334,14 +382,11 @@ Write-Host "# ------------------------------------------------------------------
 <#
 Zotero Data: ~/Dropbox/literatures/Zetero
 Attachments: ~/Dropbox/literatures/Attachments
-Profiles: ~/Dropbox/software/backup/Roaming/Zotero
 #>
-# Create a junction for Zotero Data folder
+Write-Host "Recover Zetero data..."
+# Create a symbolic link for Zotero Data folder
 $ZoteroData = [System.IO.Path]::Combine($Dropbox, "literatures", "Zotero")
 New-Link -Directory $Env:USERPROFILE -Target $ZoteroData | Out-NULL
-# Restore Zotero profile
-$ZoteroProfile = [System.IO.Path]::Combine($AppData, "Zotero")
-New-Link -Directory $Env:APPDATA -Target $ZoteroProfile -NoBackup | Out-NULL
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
@@ -351,6 +396,7 @@ Write-Host "# ------------------------------------------------------------------
 Total Commander portable: ~/Dropbox/software/backup/TotalCMD64
 Total Commander System Variable: COMMANDER_PATH
 #>
+Write-Host "Install Total Commander (portable)..."
 $TotalCMD = [System.IO.Path]::Combine($LocalAppData, "TotalCMD64")
 New-Link -Directory $Env:LOCALAPPDATA -Target $TotalCMD -NoBackup | Out-NULL
 Write-Host "Set environment variable 'COMMANDER_PATH' to '$Env:LOCALAPPDATA\TotalCMD64' for current user..."
@@ -366,6 +412,7 @@ See: https://github.com/Flow-Launcher/Flow.Launcher/issues/365
 Flow Launcher: ~/Dropbox/software/backup/Roaming/FlowLauncher
 #>
 # Check if Flow Launcher has been installed and install it if not
+Write-Host "Install Flow Launcher if necessary..."
 if ((Get-InstalledApp "Flow Launcher").length -eq 0) {
     Write-Host "Download Flow Launcher from GitHub..."
 
@@ -374,43 +421,12 @@ if ((Get-InstalledApp "Flow Launcher").length -eq 0) {
     Write-Host "Install Flow Launcher..."
     Start-Process -Wait -FilePath $FLInstaller -ArgumentList "/S" -PassThru | Out-Null
 }
-# Recover Flow Launcher settings
-$FL = [System.IO.Path]::Combine($AppData, "FlowLauncher")
-New-Link -Directory $Env:APPDATA -Target $FL -NoBackup -NewName "FlowLauncher" | Out-NULL
-
-Write-Host ""
-Write-Host "# ---------------------------------------------------------------------------- #"
-Write-Host "#                                   GitKraken                                  #"
-Write-Host "# ---------------------------------------------------------------------------- #"
-$GitKraken = [System.IO.Path]::Combine($AppData, ".gitkraken")
-New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup | Out-NULL
-
-Write-Host ""
-Write-Host "# ---------------------------------------------------------------------------- #"
-Write-Host "#                                  Everything                                  #"
-Write-Host "# ---------------------------------------------------------------------------- #"
-$GitKraken = [System.IO.Path]::Combine($AppData, "Everything")
-New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup | Out-NULL
-
-Write-Host ""
-Write-Host "# ---------------------------------------------------------------------------- #"
-Write-Host "#                                   IrfanView                                  #"
-Write-Host "# ---------------------------------------------------------------------------- #"
-$GitKraken = [System.IO.Path]::Combine($AppData, "IrfanView")
-New-Link -Directory $Env:APPDATA -Target $GitKraken -NoBackup | Out-NULL
-
-Write-Host ""
-Write-Host "# ---------------------------------------------------------------------------- #"
-Write-Host "#                                   PowerToys                                  #"
-Write-Host "# ---------------------------------------------------------------------------- #"
-$PowerToys = [System.IO.Path]::Combine($LocalAppData, "Microsoft", "PowerToys")
-$Microsoft = [System.IO.Path]::Combine($Env:LOCALAPPDATA, "Microsoft")
-New-Link -Directory $Microsoft -Target $PowerToys -NoBackup | Out-NULL
 
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                 Input Method                                 #"
 Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "Install im-select and wubiLex..."
 <#
 im-select
 Needed for switching input methods between normal mode and input mode in Vim
@@ -431,8 +447,26 @@ Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                  Misc Tools                                  #"
 Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "Recover SSH data..."
 $ssh = [System.IO.Path]::Combine($Backup, ".ssh")
 New-Link -Directory $Env:USERPROFILE -Target $ssh -NoBackup | Out-NULL
+
+Write-Host ""
+Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "#                               Application Data                               #"
+Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "Recover application data..."
+Get-ChildItem $AppData | ForEach-Object {
+    if ($_.Name -ne "Microsoft") {
+        New-Link -Directory $Env:APPDATA -Target $_.FullName
+    } else {
+        # For Microsoft applications
+        $Microsoft = [System.IO.Path]::Combine($Env:LOCALAPPDATA, "Microsoft")
+        Get-ChildItem $_ | ForEach-Object {
+            New-Link -Directory $Microsoft -Target $_.FullName
+        }
+    }
+} | Out-Null
 
 Write-Host ""
 Write-Host "Completed!"
