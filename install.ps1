@@ -1,4 +1,7 @@
 # http://boxstarter.org/package/url?
+
+# install chocolatey if not using boxstarter
+# Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 Disable-UAC
 Disable-GameBarTips
 Disable-BingSearch
