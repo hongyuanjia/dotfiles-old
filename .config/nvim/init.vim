@@ -557,6 +557,10 @@ let g:vim_markdown_math = 0
 " }}}
 
 " Nvim-R {{{
+" do not update $HOME
+if has('win32')
+    let R_set_home_env = 0
+endif
 let r_indent_align_args = 0
 let rmd_syn_hl_chunk = 1
 " not losing focus every time that you generate the pdf
