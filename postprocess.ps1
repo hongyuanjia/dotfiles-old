@@ -2,8 +2,8 @@
 @author         :  Hongyuan Jia
 @email          :  hongyuanjia@outlook.com
 @repo           :  https://github.com/hongyuanjia/dotfiles
-@createdOn      :  2021-02-23 14:59
-@modifiedOn     :  2021-02-24 11:24
+@createdOn      :  2021-02-23
+@modifiedOn     :  2021-02-26
 
 Copyright (c) 2021 Hongyuan Jia
 
@@ -427,7 +427,7 @@ Write-Host "Install Flow Launcher if necessary..."
 if ((Get-InstalledApp "Flow Launcher").length -eq 0) {
     Write-Host "Download Flow Launcher from GitHub..."
 
-    $FLInstaller = Get-GitHubRelease "Flow-Launcher/Flow.Launcher" "Flow-Launcher-v\d\.\d\.\d\.exe"
+    $FLInstaller = Get-GitHubRelease "Flow-Launcher/Flow.Launcher" "Flow-Launcher-v\d+\.\d+\.\d+\.exe"
 
     Write-Host "Install Flow Launcher..."
     Start-Process -Wait -FilePath $FLInstaller -ArgumentList "/S" -PassThru | Out-Null
@@ -454,6 +454,24 @@ $imselect = [System.IO.Path]::Combine($LocalAppData, "im-select")
 New-Link -Directory $Env:LOCALAPPDATA -Target $wubiLex -NoBackup | Out-NULL
 New-Link -Directory $Env:LOCALAPPDATA -Target $imselect -NoBackup | Out-NULL
 
+Write-Host ""
+Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "#                                  Workspacer                                  #"
+Write-Host "# ---------------------------------------------------------------------------- #"
+Write-Host "Install workspacer if necessary..."
+if ((Get-InstalledApp "workspacer").length -eq 0) {
+    Write-Host "Download workspacer from GitHub..."
+
+    $workspacer = Get-GitHubRelease "rickbutton/workspacer" "workspacer-stable-\d+\.\d+\.\d+\.msi"
+
+    Write-Host "Install workspacer..."
+    Start-Process -Wait -FilePath $workspacer -ArgumentList "/S" -PassThru | Out-Null
+}
+Write-Host "Recover .workspacer..."
+$workspacer = [System.IO.Path]::Combine($PSScriptRoot, ".workspacer")
+New-Link -Directory $Env:USERPROFILE -Target $workspacer -NoBackup | Out-NULL
+
+Write-Host "Install im-select and wubiLex..."
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
 Write-Host "#                                  Misc Tools                                  #"
