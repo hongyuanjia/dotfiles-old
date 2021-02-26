@@ -6,3 +6,4 @@ __pycache__/
 /.config/ranger/bookmarks
 
 .Renviron.d/private
+*.log
