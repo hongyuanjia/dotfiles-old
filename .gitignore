@@ -4,3 +4,5 @@ __pycache__/
 /.config/aria2/aria2\.session
 /.config/ranger/history
 /.config/ranger/bookmarks
+
+.Renviron.d/private
