@@ -335,6 +335,14 @@ set clipboard=unnamed,unnamedplus
 " Always show signcolumns
 set signcolumn=yes
 
+" Use PowerShell as the default shell
+if has('win32')
+    set shell=powershell.exe
+    set shellcmdflag=-NoProfile\ -NoLogo\ -NonInteractive\ -Command
+    set shellpipe=|
+    set shellredir=>
+endif
+
 " Allow color schemes to do bright colors without forcing bold.
 if &t_Co == 8 && $TERM !~# '^Eterm'
     set t_Co=16
