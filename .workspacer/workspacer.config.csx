@@ -14,7 +14,15 @@ Action<IConfigContext> doConfig = (context) =>
     // Uncomment to switch update branch (or to disable updates)
     //context.Branch = Branch.None
 
-    context.AddBar();
+    context.AddBar(new BarPluginConfig(){
+        BarTitle = "workspacer.Bar",
+        BarHeight = 20,
+        FontSize = 12,
+        FontName = "Consolas",
+        DefaultWidgetForeground = Color.Blue,
+        DefaultWidgetBackground = Color.White,
+        Background = Color.White,
+});
     // when selecting a window show a red border
     context.AddFocusIndicator(new FocusIndicatorPluginConfig() {
         BorderColor = Color.Teal,
