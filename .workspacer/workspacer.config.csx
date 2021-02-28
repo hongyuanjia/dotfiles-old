@@ -38,10 +38,10 @@ Action<IConfigContext> doConfig = (context) =>
     var monitors = context.MonitorContainer.GetAllMonitors();
 
     if (context.MonitorContainer.NumMonitors > 1) {
-        sticky.CreateWorkspaces(monitors[0], "1|Focus", "2|File", "3|Web", "4|Literature");
-        sticky.CreateWorkspaces(monitors[1], "5|IM", "6|Misc", "7|Idle");
+        sticky.CreateWorkspaces(monitors[0], "1|Focus", "2|File", "3|Code", "4|Web", "5|Literature");
+        sticky.CreateWorkspaces(monitors[1], "6|IM", "7|Misc", "8|Idle");
     } else {
-        sticky.CreateWorkspaces(monitors[0], "1|Work", "2|File", "3|Web", "4|Literature", "5|IM", "6|Misc", "7|Idle");
+        sticky.CreateWorkspaces(monitors[0], "1|Focus", "2|File", "3|Code", "4|Web", "5|Literature", "6|IM", "7|Misc", "8|Idle");
     }
 
     // Ignore program filters
@@ -52,14 +52,17 @@ Action<IConfigContext> doConfig = (context) =>
 
     // Put program to various workspace by default
     context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("TotalCMD64.exe") ? context.WorkspaceContainer["2|File"] : null);
-    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("msedge.exe") ? context.WorkspaceContainer["3|Web"] : null);
-    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("zotero.exe") ? context.WorkspaceContainer["4|Literature"] : null);
-    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("Acrobat.exe") ? context.WorkspaceContainer["4|Literature"] : null);
-    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("SumatraPDF.exe") ? context.WorkspaceContainer["4|Literature"] : null);
-    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("slack.exe") ? context.WorkspaceContainer["5|IM"] : null);
-    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("WeChat.exe") ? context.WorkspaceContainer["5|IM"] : null);
-    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("WeChatApp.exe") ? context.WorkspaceContainer["5|IM"] : null);
-    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("wechatweb.exe") ? context.WorkspaceContainer["5|IM"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("gitkraken.exe") ? context.WorkspaceContainer["3|Code"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("code.exe") ? context.WorkspaceContainer["3|Code"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("rstudio.exe") ? context.WorkspaceContainer["3|Code"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("msedge.exe") ? context.WorkspaceContainer["4|Web"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("zotero.exe") ? context.WorkspaceContainer["5|Literature"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("Acrobat.exe") ? context.WorkspaceContainer["5|Literature"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("SumatraPDF.exe") ? context.WorkspaceContainer["5|Literature"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("slack.exe") ? context.WorkspaceContainer["6|IM"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("WeChat.exe") ? context.WorkspaceContainer["6|IM"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("WeChatApp.exe") ? context.WorkspaceContainer["6|IM"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("wechatweb.exe") ? context.WorkspaceContainer["6|IM"] : null);
 
     // Custom keybindings
     KeyModifiers mod = KeyModifiers.Alt;
