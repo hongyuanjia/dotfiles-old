@@ -49,10 +49,10 @@ Action<IConfigContext> doConfig = (context) =>
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("Everything.exe"));
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("Zoom.exe"));
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("IDMan.exe"));
+    context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("gitkraken.exe"));
 
     // Put program to various workspace by default
     context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("TotalCMD64.exe") ? context.WorkspaceContainer["2|File"] : null);
-    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("gitkraken.exe") ? context.WorkspaceContainer["3|Code"] : null);
     context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("code.exe") ? context.WorkspaceContainer["3|Code"] : null);
     context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("rstudio.exe") ? context.WorkspaceContainer["3|Code"] : null);
     context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("msedge.exe") ? context.WorkspaceContainer["4|Web"] : null);
