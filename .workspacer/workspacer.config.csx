@@ -28,8 +28,13 @@ Action<IConfigContext> doConfig = (context) =>
     context.WorkspaceContainer = sticky;
 
     var monitors = context.MonitorContainer.GetAllMonitors();
-    sticky.CreateWorkspaces(monitors[0], "1|Work", "2|File");
-    sticky.CreateWorkspaces(monitors[1], "3|Misc", "4|Idle");
+
+    if (context.MonitorContainer.NumMonitors > 1) {
+        sticky.CreateWorkspaces(monitors[0], "1|Focus", "2|File", "3|Web", "4|Literature");
+        sticky.CreateWorkspaces(monitors[1], "5|IM", "6|Misc", "7|Idle");
+    } else {
+        sticky.CreateWorkspaces(monitors[0], "1|Work", "2|File", "3|Web", "4|Literature", "5|IM", "6|Misc", "7|Idle");
+    }
 
     // Ignore program filters
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("Flow.Launcher.exe"));
