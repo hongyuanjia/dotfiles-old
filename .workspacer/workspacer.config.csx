@@ -42,8 +42,16 @@ Action<IConfigContext> doConfig = (context) =>
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("Zoom.exe"));
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("IDMan.exe"));
 
-    // Put Total Commander to "2|File" workspace by default
+    // Put program to various workspace by default
     context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("TotalCMD64.exe") ? context.WorkspaceContainer["2|File"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("msedge.exe") ? context.WorkspaceContainer["3|Web"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("zotero.exe") ? context.WorkspaceContainer["4|Literature"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("Acrobat.exe") ? context.WorkspaceContainer["4|Literature"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("SumatraPDF.exe") ? context.WorkspaceContainer["4|Literature"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("slack.exe") ? context.WorkspaceContainer["5|IM"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("WeChat.exe") ? context.WorkspaceContainer["5|IM"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("WeChatApp.exe") ? context.WorkspaceContainer["5|IM"] : null);
+    context.WindowRouter.AddRoute((window) => window.ProcessFileName.Equals("wechatweb.exe") ? context.WorkspaceContainer["5|IM"] : null);
 
     // Custom keybindings
     KeyModifiers mod = KeyModifiers.Alt;
