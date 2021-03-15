@@ -206,11 +206,9 @@ set hidden
 " Disable fold when opening
 set nofoldenable
 
-" Set swap directory
-if !isdirectory($HOME.'/.vim/swap')
-    silent call mkdir($HOME.'/.vim/swap', 'p')
-endif
-set directory^=$HOME/.vim/swap//,.
+" Disable backup
+set nobackup
+set noswapfile
 
 " Set undo directory
 if has('persistent_undo')
@@ -336,12 +334,12 @@ set clipboard=unnamed,unnamedplus
 set signcolumn=yes
 
 " Use PowerShell as the default shell
-if has('win32')
-    set shell=powershell.exe
-    set shellcmdflag=-NoProfile\ -NoLogo\ -NonInteractive\ -Command
-    set shellpipe=|
-    set shellredir=>
-endif
+" if has('win32')
+"     set shell=powershell.exe
+"     set shellcmdflag=-NoProfile\ -NoLogo\ -NonInteractive\ -Command
+"     set shellpipe=|
+"     set shellredir=>
+" endif
 
 " Allow color schemes to do bright colors without forcing bold.
 if &t_Co == 8 && $TERM !~# '^Eterm'
