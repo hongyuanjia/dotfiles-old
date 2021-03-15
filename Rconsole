@@ -14,7 +14,7 @@ statusbar = no
 # If font=FixedFont the system fixed font is used; in this case
 # points and style are ignored. If font begins with "TT ", only
 # True Type fonts are searched for.
-font = WenQuanYi Micro Hei Mono
+font = DejaVuSansMono NF
 points = 12
 style = normal # Style can be normal, bold, italic
 
