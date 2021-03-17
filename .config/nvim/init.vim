@@ -73,7 +73,6 @@ Plug 'justinmk/vim-sneak'
 Plug 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 Plug 'mllg/vim-devtools-plugin', { 'for': ['r', 'rmd', 'rnoweb']}
 Plug 'jalvesaq/R-Vim-runtime', {'for': ['r', 'rmd']}
-Plug 'hongyuanjia/vim-pandoc',  {'for': ['rmd', 'markdown']}
 Plug 'vim-pandoc/vim-pandoc-syntax',  {'for': ['rmd', 'markdown']}
 
 " Insert documentation template
