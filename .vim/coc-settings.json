@@ -2,5 +2,12 @@
     "session.directory": "~/.vim/sessions",
     "snippets.priority": 100,
     "snippets.ultisnips.directories": ["Ultisnips"],
-    "r.lsp.diagnostics": false
+    "r.lsp.diagnostics": false,
+    "languageserver": {
+        "R": {
+            "command": "R",
+            "args" : [ "--slave", "-e", "languageserver::run()"],
+            "filetypes" : ["r", "rmd"]
+        }
+    }
 }
