@@ -77,7 +77,7 @@ function Test-SameRealPath {
     )
 
     if (!(Test-Path $Path)) { Return $False }
-    
+
     # Resolve symbolic link or junction
     $RealPath = Get-Item $Path | Select-Object -ExpandProperty Target
 
@@ -142,7 +142,7 @@ function New-Link {
         Write-Host "A symbolic link for '$BaseName' already exists in '$Directory'. Skip..."
         Return $Path
     }
-    
+
     # Backup file if required
     if (!$NoBackup) {
         Backup-Exists $Path
@@ -306,12 +306,12 @@ Write-Host "# ------------------------------------------------------------------
 Write-Host "#                                       R                                      #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 # Use environment variable instead of symbolic links
-$Rprofile = [System.IO.Path]::Combine($PSScriptRoot, '.Rprofile')
 $Renviron = [System.IO.Path]::Combine($PSScriptRoot, '.Renviron')
-Write-Host "Set environment variable 'R_PROFILE_USER' to '$Rprofile' for current user..."
-[System.Environment]::SetEnvironmentVariable('R_PROFILE_USER', $Rprofile, [System.EnvironmentVariableTarget]::User)
 Write-Host "Set environment variable 'R_ENVIRON_USER' to '$Renviron' for current user..."
 [System.Environment]::SetEnvironmentVariable('R_ENVIRON_USER', $Renviron, [System.EnvironmentVariableTarget]::User)
+# Rprofile
+$Rprofile = [System.IO.Path]::Combine($PSScriptRoot, '.Rprofile')
+New-Link -Directory $Env:USERPROFILE -Target $Rprofile | Out-NULL
 # Rconsole preferences for RGui
 $Rconsole = [System.IO.Path]::Combine($PSScriptRoot, 'Rconsole')
 New-Link -Directory $Env:USERPROFILE -Target $Rconsole | Out-NULL
