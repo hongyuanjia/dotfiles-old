@@ -30,8 +30,12 @@ local({r <- getOption("repos")
         # usethis
         usethis.full_name = "Hongyuan Jia",
         usethis.description = list(
-            `Authors@R` = 'person("Hongyuan", "Jia", email = "hongyuan.jia@bears-berkeley.sg", role = c("aut", "cre"),
-                                 comment = c(ORCID = "0000-0002-0075-8183"))',
+            `Authors@R` = utils::person(
+                "Hongyuan", "Jia",
+                email = "hongyuanjia@outlook.com",
+                role = c("aut", "cre"),
+                comment = c(ORCID = "0000-0002-0075-8183")
+            ),
             License = "MIT + file LICENSE",
             Version = "0.0.0.9000"
         )
