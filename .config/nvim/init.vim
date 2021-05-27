@@ -964,9 +964,7 @@ augroup au_R
     " force showing color column
     au FileType r,rmd setlocal colorcolumn=80
 
-    " au FileType r setlocal foldmethod=syntax
-    au FileType r setlocal foldmethod=marker
-    au FileType r setlocal foldmarker={{{,}}}
+    au FileType r setlocal foldmethod=syntax
 
     " set comment string
     au FileType r setlocal formatoptions+=r "insert the current comment leader
