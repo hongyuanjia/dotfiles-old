@@ -6,44 +6,26 @@ local({r <- getOption("repos")
 
 .First <- function () {
     options(
-        # radian
-        radian.editing_mode = "vi",
-        radian.auto_match = TRUE,
-        radian.escape_key_map = list(
-            list(key = "-", value = " <- "),
-            list(key = "=", value = " %>% "),
-            list(key = ":", value = " := ")
-        ),
-
-        # Suggestions from devtools
-        # https://github.com/hadley/devtools
-        browserNLdisabled = TRUE,
-        deparse.max.lines = 2,
-        warnPartialMatchDollar = TRUE,
-        warnPartialMatchArgs = TRUE,
-        datatable.print.class = TRUE,
-
-        # blogdown
-        blogdown.ext = ".Rmd",
-        blogdown.author = "Hongyuan Jia",
-
-        # usethis
+        # default author name. change accordingly
         usethis.full_name = "Hongyuan Jia",
+        # default values in the DESCRIPTION file. change accordingly
         usethis.description = list(
-            `Authors@R` = utils::person(
+            "Authors@R" = utils::person(
+                # default author name
                 "Hongyuan", "Jia",
+                # default author email
                 email = "hongyuanjia@outlook.com",
+                # default role, i.e. aut = author, cre = creator
                 role = c("aut", "cre"),
+                # default ORCID
                 comment = c(ORCID = "0000-0002-0075-8183")
-            ),
+                ),
+            # default license of the R code
             License = "MIT + file LICENSE",
+            # default package initial version
             Version = "0.0.0.9000"
         )
     )
-
-    # if (.Platform$OS.type == "windows") {
-    #     Sys.setlocale("LC_CTYPE", "Chinese (Simplified)_China.936")
-    # }
 }
 
 # custom start up
