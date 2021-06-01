@@ -29,16 +29,19 @@ choco install -y irfanviewplugins
 choco install -y powertoys
 choco install -y clash-for-windows
 choco install -y wechat --ignore-checksums
-choco install -y tim
+# choco install -y tim
 choco install -y internet-download-manager --ignore-checksums
 choco install -y zoom
 choco install -y everything --params "/client-service /run-on-system-startup /start-menu-shortcuts"
+choco install -y InkScape
 
 ## development
 choco install -y git.install --params "/NoShellIntegration /GitOnlyOnPath"
 choco install -y gitkraken
 choco install -y nodejs
 choco install -y yarn
+choco install -y cmake
+choco install -y docker-desktop
 choco install -y fzf
 choco install -y ripgrep
 
