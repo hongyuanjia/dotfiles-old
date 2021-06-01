@@ -6,6 +6,7 @@ local({r <- getOption("repos")
 
 .First <- function () {
     options(
+        datatable.print.class = TRUE,
         # default author name. change accordingly
         usethis.full_name = "Hongyuan Jia",
         # default values in the DESCRIPTION file. change accordingly
