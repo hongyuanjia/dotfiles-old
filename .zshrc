@@ -2,7 +2,8 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH="/home/hongyuanjia/.oh-my-zsh"
+export ZSH="/home/hongyuanjia/.oh-my-zsh"
+export TERM="xterm-256color"
 
 # use tmux in wsl-terminal
 [[ -z "$TMUX" && -n "$USE_TMUX" ]] && {
@@ -100,7 +101,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nvim'
+#   export EDITOR='nvim'
 # else
 #   export EDITOR='mvim'
 # fi
