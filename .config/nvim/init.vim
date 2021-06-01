@@ -427,12 +427,28 @@ tnoremap <c-w>k <c-\><c-n><c-w>k
 tnoremap <c-w>l <c-\><c-n><c-w>l
 
 " Enable clipboard in WSL
-" https://vi.stackexchange.com/questions/12376/vim-on-wsl-synchronize-system-clipboard-set-clipboard-unnamed
-if has('wsl')
-    augroup Yank
-        autocmd!
-        autocmd TextYankPost * :call system('clip.exe ',@")
-    augroup END
+" https://superuser.com/a/1557751
+function! Is_WSL() abort
+  let proc_version = '/proc/version'
+  return filereadable(proc_version)
+        \  ? !empty(filter(
+        \    readfile(proc_version, '', 1), { _, val -> val =~? 'microsoft' }))
+        \  : v:false
+endfunction
+
+if Is_WSL()
+    let g:clipboard = {
+          \   'name': 'win32yank-wsl',
+          \   'copy': {
+          \      '+': 'win32yank.exe -i --crlf',
+          \      '*': 'win32yank.exe -i --crlf',
+          \    },
+          \   'paste': {
+          \      '+': 'win32yank.exe -o --lf',
+          \      '*': 'win32yank.exe -o --lf',
+          \   },
+          \   'cache_enabled': 0,
+          \ }
 endif
 " }}}
 
