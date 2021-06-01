@@ -479,6 +479,7 @@ let g:coc_global_extensions = [
     \ 'coc-gitignore',
     \ 'coc-json',
     \ 'coc-lists',
+    \ 'coc-r-lsp',
     \ 'coc-vimlsp',
     \ 'coc-word',
     \ 'coc-yank',
