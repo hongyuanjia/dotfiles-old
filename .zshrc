@@ -148,3 +148,19 @@ if grep -qE "(Microsoft|WSL)" /proc/version &>/dev/null; then
     # Requires: https://sourceforge.net/projects/vcxsrv
     export DISPLAY=:0
 fi
+
+export hostip=$(cat /etc/resolv.conf |grep -oP '(?<=nameserver\ ).*')
+alias proxy='
+    export https_proxy="http://${hostip}:7890";
+    export http_proxy="http://${hostip}:7890";
+    export all_proxy="http://${hostip}:7890";
+    echo -e "Acquire::http::Proxy \"http://${hostip}:7890\";" | sudo tee -a /etc/apt/apt.conf.d/proxy.conf > /dev/null;
+    echo -e "Acquire::https::Proxy \"http://${hostip}:7890\";" | sudo tee -a /etc/apt/apt.conf.d/proxy.conf > /dev/null;
+'
+alias unproxy='
+    unset https_proxy;
+    unset http_proxy;
+    unset all_proxy;
+    sudo sed -i -e '/Acquire::http::Proxy/d' /etc/apt/apt.conf.d/proxy.conf;
+    sudo sed -i -e '/Acquire::https::Proxy/d' /etc/apt/apt.conf.d/proxy.conf;
+'
