@@ -106,7 +106,7 @@ Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
 Plug 'liuchengxu/space-vim-theme'
 
 " Status line
-Plug 'itchyny/lightline.vim'
+Plug 'liuchengxu/eleline.vim'
 
 " Highlight current word
 Plug 'RRethy/vim-illuminate'
@@ -441,19 +441,6 @@ nmap  -  <Plug>(choosewin)
 " vim-maximizer {{{
 " Do not use the default mapping (F3)
 let g:maximizer_set_default_mapping = 1
-" }}}
-
-" lightline {{{
-let g:lightline = {
-    \ 'active': {
-    \   'left': [ [ 'mode', 'paste' ],
-    \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-    \ },
-    \ 'component_function': {
-    \   'gitbranch': 'fugitive#head'
-    \ },
-    \ 'colorscheme': 'darcula',
-    \ }
 " }}}
 
 " Coc.nvim {{{
