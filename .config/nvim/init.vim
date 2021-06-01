@@ -128,7 +128,6 @@ Plug 'vifm/vifm.vim'
 
 " Snippets
 Plug 'honza/vim-snippets'
-Plug 'SirVer/ultisnips'
 
 " Rainbow Parentheses Improved
 Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle'}
