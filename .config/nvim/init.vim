@@ -62,7 +62,6 @@ Plug 'easymotion/vim-easymotion'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'cohama/lexima.vim'
-Plug 'rhysd/vim-grammarous'
 Plug 'unblevable/quick-scope'
 Plug 'justinmk/vim-sneak'
 
@@ -89,9 +88,6 @@ Plug 'tyru/open-browser.vim'
 
 " For better looking
 Plug 'ryanoasis/vim-devicons'
-
-" For IM switching
-Plug 'rlue/vim-barbaric'
 
 " Key menu
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
@@ -124,7 +120,6 @@ Plug 'danro/rename.vim', { 'on' : 'Rename' }
 " Refer to https://github.com/junegunn/dotfiles  vimrc
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
-Plug 'vifm/vifm.vim'
 
 " Snippets
 Plug 'honza/vim-snippets'
@@ -138,12 +133,6 @@ Plug 'airblade/vim-rooter'
 " Show indent line
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle' }
 
-" Open dir of current file
-Plug 'justinmk/vim-gtfo'
-
-" Delete buffers and close files without closing windows
-Plug 'moll/vim-bbye', { 'on': ['Bdelete', 'Bwipeout'] }
-
 " Markdown
 Plug 'mzlogin/vim-markdown-toc', { 'on': ['GenTocGFM', 'GenTocRedcarpet', 'GenTocGitLab', 'UpdateToc', 'RemoveToc'] , 'for' :['markdown', 'rmd'] }
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
@@ -154,9 +143,6 @@ Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 
 " EnergyPlus IDF syntax highlighting
 Plug 'mitchpaulus/energyplus-vim', {'for' : 'idf' }
-
-" Note taking
-Plug 'lervag/wiki.vim'
 
 " Window Management
 Plug 't9md/vim-choosewin'
@@ -325,14 +311,6 @@ set clipboard=unnamed,unnamedplus
 
 " Always show signcolumns
 set signcolumn=yes
-
-" Use PowerShell as the default shell
-" if has('win32')
-"     set shell=powershell.exe
-"     set shellcmdflag=-NoProfile\ -NoLogo\ -NonInteractive\ -Command
-"     set shellpipe=|
-"     set shellredir=>
-" endif
 
 " Allow color schemes to do bright colors without forcing bold.
 if &t_Co == 8 && $TERM !~# '^Eterm'
@@ -646,14 +624,6 @@ nmap # <Plug>(anzu-sharp-with-echo)
 
 " clear status
 nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
-" }}}
-
-" wiki.vim {{{
-let g:wiki_root = $HOME.'/Dropbox/github_repo/wiki'
-let g:wiki_filetypes = ['md']
-let g:wiki_link_extenstion = '.md'
-let g:wiki_link_target_type = 'md'
-let g:wiki_mappings_use_defaults = 0
 " }}}
 
 " vim-quickscope {{{
