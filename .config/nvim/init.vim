@@ -22,6 +22,9 @@ endif
 " Load Plugins {{{
 call plug#begin('~/.vim/plugged')
 
+" Start time profiling
+Plug 'dstein64/vim-startuptime', { 'on' : 'StartupTime' }
+
 " fzf finder
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -444,8 +447,8 @@ let g:maximizer_set_default_mapping = 1
 " }}}
 
 " Coc.nvim {{{
-" fix the most annoying bug that coc has
-" silent! au BufEnter,BufRead,BufNewFile * silent! unmap if
+" https://github.com/neoclide/coc.nvim/issues/2993
+autocmd User CocStatusChange redraws
 let g:coc_config_home = $HOME.'/.vim'
 let g:coc_global_extensions = [
     \ 'coc-dictionary',
