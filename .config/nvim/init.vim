@@ -725,6 +725,28 @@ let g:which_key_map.b = {
     \ }
 " }}}
 
+" c {{{
+let g:which_key_map.c = {
+    \ 'name' : '+code'                           ,
+    \ 'c' : ['<Plug>(coc-classobj-i)'            , 'select-inside-class']    ,
+    \ 'C' : ['<Plug>(coc-classobj-a)'            , 'select-around-class']    ,
+    \ 'l' : ['<Plug>(coc-format-selected)'       , 'format-selected']        ,
+    \ 'b' : ['<Plug>(coc-format)'                , 'format-buffer']          ,
+    \ 'd' : ['<Plug>(coc-definition)'            , 'jump-to-definition']     ,
+    \ 'f' : ['<Plug>(coc-funcobj-i)'             , 'select-inside-function'] ,
+    \ 'F' : ['<Plug>(coc-funcobj-a)'             , 'select-around-function'] ,
+    \ 'i' : ['<Plug>(coc-implementation)'        , 'goto-implementation']    ,
+    \ 'r' : ['<Plug>(coc-references)'            , 'jump-to-references']     ,
+    \ 'R' : ['<Plug>(coc-rename)'                , 'rename-symbol']          ,
+    \ 's' : ['<Plug>(coc-range-select)'          , 'range-select']           ,
+    \ 'S' : ['<Plug>(coc-range-select-backward)' , 'range-select-backward']  ,
+    \ 'T' : ['<Plug>(coc-type-definition)'       , 'goto-type-definition']   ,
+    \ 'e' : ['<Plug>(coc-diagnostic-info)'       , 'diagnostic-current']     ,
+    \ 'n' : ['<Plug>(coc-diagnostic-info)'       , 'diagnostic-next']        ,
+    \ 'p' : ['<Plug>(coc-diagnostic-info)'       , 'diagnostic-prev']        ,
+    \ }
+" }}}
+
 " f {{{
 let g:which_key_map.f = { 'name' : '+find/files/fold'}
 nnoremap <silent> <leader>f0 :set foldlevel=0<CR>
@@ -765,26 +787,26 @@ let g:which_key_map.f.v = 'open-vimrc'
 
 " g {{{
 let g:which_key_map.g = {
-    \ 'name' : '+git/goto'                  ,
-    \ 'D' :  ['<Plug>(coc-definition)'      , 'goto-definition']             ,
-    \ 'N' :  ['<Plug>(coc-rename)'          , 'rename-variables']            ,
-    \ 'P' :  [':Git pull'                   , 'git-pull']                    ,
-    \ 'R' :  ['<Plug>(coc-references)'      , 'goto-reference']              ,
-    \ 'T' :  ['<Plug>(coc-type-definition)' , 'goto-type-definition']        ,
-    \ 'V' :  [':GV!'                        , 'git-commit-log-current-file'] ,
-    \ 'a' :  [':Git add -p %'               , 'git-add']                     ,
-    \ 'b' :  ['Gblame'                      , 'git-blame']                   ,
-    \ 'c' :  ['Gcommit'                     , 'git-commit']                  ,
-    \ 'd' :  ['Gdiff'                       , 'git-diff']                    ,
-    \ 'e' :  ['Gedit'                       , 'git-edit']                    ,
-    \ 'h' :  [':GV?'                        , 'git-revision-current-file']   ,
-    \ 'i' :  ['<Plug>(coc-implementation)'  , 'goto-implementation']         ,
-    \ 'l' :  ['Glog'                        , 'git-log']                     ,
-    \ 'p' :  [':Git push'                   , 'git-push']                    ,
-    \ 'r' :  ['Gread'                       , 'git-read']                    ,
-    \ 's' :  ['Gstatus'                     , 'git-status']                  ,
-    \ 'v' :  ['GV'                          , 'git-commit-log']              ,
-    \ 'w' :  ['Gwrite'                      , 'git-write']                   ,
+    \ 'name' : '+git'                         ,
+    \ 'O' :  [':CocCommand git.browserOpen'   , 'git-open-current']            ,
+    \ 'P' :  [':Git pull'                     , 'git-pull']                    ,
+    \ 'S' :  [':CocCommand git.chunkStage'    , 'git-chunk-stage']             ,
+    \ 'U' :  [':CocCommand git.chunkUndo'     , 'git-chunk-undo']              ,
+    \ 'V' :  [':GV!'                          , 'git-commit-log-current-file'] ,
+    \ 'a' :  [':Git add -p %'                 , 'git-add']                     ,
+    \ 'b' :  ['Git_blame'                     , 'git-blame']                   ,
+    \ 'c' :  [':CocCommand git.chunkInfo'     , 'git-chunk-info']              ,
+    \ 'd' :  ['Gdiffsplit'                    , 'git-diff']                    ,
+    \ 'D' :  [':CocCommand git.diffCached'    , 'git-cached']                  ,
+    \ 'e' :  ['Gedit'                         , 'git-edit']                    ,
+    \ 'h' :  [':GV?'                          , 'git-revision-current-file']   ,
+    \ 'l' :  ['Gclog'                         , 'git-log']                     ,
+    \ 'p' :  [':CocCommand git.push'          , 'git-push']                    ,
+    \ 'r' :  ['Gread'                         , 'git-read']                    ,
+    \ 's' :  ['Git'                           , 'git-status']                  ,
+    \ 'v' :  ['GV'                            , 'git-commit-log']              ,
+    \ 'w' :  ['Gwrite'                        , 'git-write']                   ,
+    \ 'z' :  [':CocCommand git.foldUnchanged' , 'git-fold-unchanged']          ,
     \ }
 " }}}
 
@@ -965,6 +987,10 @@ let g:which_key_map.z = {
 noremap <silent><leader>z+ :Bigger<CR>
 noremap <silent><leader>z- :Smaller<CR>
 " }}}
+
+" navigate chunks of current buffer
+nmap [g <Plug>(coc-git-prevchunk)
+nmap ]g <Plug>(coc-git-nextchunk)
 
 " }}}
 
