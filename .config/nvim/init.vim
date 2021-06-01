@@ -565,6 +565,7 @@ let g:vim_markdown_math = 0
 " }}}
 
 " Nvim-R {{{
+let r_syntax_folding = 1
 " do not update $HOME
 if has('win32')
     let R_set_home_env = 0
