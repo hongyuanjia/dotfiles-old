@@ -46,8 +46,6 @@ Plug 'osyo-manga/vim-anzu'
 Plug 'tpope/vim-fugitive'
 " Git commit browser
 Plug 'rbong/vim-flog', { 'on': ['Flog'] }
-" Gbrowser
-Plug 'tpope/vim-rhubarb'
 
 " Maximize and restore the current window
 Plug 'szw/vim-maximizer'
@@ -57,11 +55,8 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'kana/vim-textobj-user'
-Plug 'Julian/vim-textobj-variable-segment'
-Plug 'Julian/vim-textobj-brace'
-Plug 'AndrewRadev/sideways.vim'
-Plug 'easymotion/vim-easymotion'
+Plug 'wellle/targets.vim'
+Plug 'AndrewRadev/sideways.vim', { 'on': ['SidewaysLeft', 'SidewaysRight'] }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'cohama/lexima.vim'
@@ -79,9 +74,6 @@ Plug 'kkoomen/vim-doge'
 
 " LaTex
 Plug 'lervag/vimtex', {'for': ['tex', 'rmd']}
-
-" Stan syntax highlighting
-Plug 'maverickg/stan.vim'
 
 " LSP finder Finder
 Plug 'liuchengxu/vista.vim'
@@ -485,6 +477,10 @@ let g:rooter_silent_chdir = 1
 
 " Change to file's directory when vim-rooter failed
 let g:rooter_change_directory_for_non_project_files = 'current'
+" }}}
+
+" eleline {{{
+let g:eleline_powerline_fonts = 1
 " }}}
 
 " indentLine {{{
