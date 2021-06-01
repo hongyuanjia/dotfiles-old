@@ -19,9 +19,6 @@ if ! filereadable(expand('~/.vim/autoload/plug.vim'))
 endif
 " }}}
 
-" polyglot
-let g:polyglot_disabled = ['csv']
-
 " Load Plugins {{{
 call plug#begin('~/.vim/plugged')
 
@@ -135,9 +132,6 @@ Plug 'SirVer/ultisnips'
 
 " Rainbow Parentheses Improved
 Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle'}
-
-" Language pack
-Plug 'sheerun/vim-polyglot'
 
 " Auto change working directory
 Plug 'airblade/vim-rooter'
