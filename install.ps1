@@ -22,14 +22,12 @@ choco install -y font-nerd-dejavusansmono
 
 ## utilities
 choco install -y 7zip.install
-choco install -y everything.portable
 choco install -y dropbox
 choco install -y irfanview
 choco install -y irfanviewplugins
 choco install -y powertoys
 choco install -y clash-for-windows
 choco install -y wechat --ignore-checksums
-# choco install -y tim
 choco install -y internet-download-manager --ignore-checksums
 choco install -y zoom
 choco install -y everything --params "/client-service /run-on-system-startup /start-menu-shortcuts"
@@ -41,9 +39,9 @@ choco install -y gitkraken
 choco install -y nodejs
 choco install -y yarn
 choco install -y cmake
-choco install -y docker-desktop
-choco install -y fzf
 choco install -y ripgrep
+choco install -y docker-desktop
+choco install -y universal-ctags
 
 ## programming
 choco install -y python
@@ -62,11 +60,6 @@ choco install -y zotero
 choco install -y tinytex
 choco install -y sumatrapdf.install
 choco install -y drawio
-
-# # post-processing
-# cinst visualstudio2017buildtools
-# pip install neovim-remote
-# pip install pynvim
 
 #--- Remove Pre-Installed Appx ---
 Get-AppxPackage Microsoft.3DBuilder | Remove-AppxPackage
@@ -158,5 +151,5 @@ Set-ItemProperty -Path "HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\
 # Requires restart, or add the -Restart flag
 $computername = "X1E"
 if ($env:computername -ne $computername) {
-	Rename-Computer -NewName $computername
+    Rename-Computer -NewName $computername
 }
