@@ -454,23 +454,6 @@ $imselect = [System.IO.Path]::Combine($LocalAppData, "im-select")
 New-Link -Directory $Env:LOCALAPPDATA -Target $wubiLex -NoBackup | Out-NULL
 New-Link -Directory $Env:LOCALAPPDATA -Target $imselect -NoBackup | Out-NULL
 
-Write-Host ""
-Write-Host "# ---------------------------------------------------------------------------- #"
-Write-Host "#                                  Workspacer                                  #"
-Write-Host "# ---------------------------------------------------------------------------- #"
-Write-Host "Install workspacer if necessary..."
-if ((Get-InstalledApp "workspacer").length -eq 0) {
-    Write-Host "Download workspacer from GitHub..."
-
-    $workspacer = Get-GitHubRelease "rickbutton/workspacer" "workspacer-stable-\d+\.\d+\.\d+\.msi"
-
-    Write-Host "Install workspacer..."
-    Start-Process -Wait -FilePath $workspacer -ArgumentList "/S" -PassThru | Out-Null
-}
-Write-Host "Recover .workspacer..."
-$workspacer = [System.IO.Path]::Combine($PSScriptRoot, ".workspacer")
-New-Link -Directory $Env:USERPROFILE -Target $workspacer -NoBackup | Out-NULL
-
 Write-Host "Install im-select and wubiLex..."
 Write-Host ""
 Write-Host "# ---------------------------------------------------------------------------- #"
