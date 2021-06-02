@@ -83,6 +83,3 @@ command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1'
 command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 noremap + :Bigger<CR>
 noremap _ :Smaller<CR>
-
-" <Leader>q close quickfix/location list window
-nnoremap <leader>q :cclose<bar>lclose<cr>

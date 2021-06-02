@@ -1,5 +1,3 @@
-" Polyglot ---------------------------------------------------------------------
-
 " EnergyPlus IDF syntax highlighting
 Plug 'mitchpaulus/energyplus-vim'
 

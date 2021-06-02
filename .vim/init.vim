@@ -25,10 +25,14 @@ endif
 
 call plug#begin($HOME.'/.vim/plugged')
 
-for f in split(glob($HOME.'/.vim/layers/*.vim'), '\n')
+for f in split(glob($HOME.'/.vim/layers/**/packages.vim'), '\n')
     execute 'source' f
 endfor
 
 call plug#end()
+
+for f in split(glob($HOME.'/.vim/layers/**/config.vim'), '\n')
+    execute 'source' f
+endfor
 
 " vim:set ft=vim et sw=4:
