@@ -1,11 +1,17 @@
 " add/remove comments
 Plug 'tpope/vim-commentary'
 
+" auto set buffer options
+Plug 'tpope/vim-sleuth'
+
 " add surround brackets
-Plug 'machakann/vim-sandwich'
+DeferPlug 'machakann/vim-sandwich', { 'on': 200 }
+
+" change naming style
+Plug 'tpope/vim-abolish', { 'on': '<Plug>(abolish-coerce-word)' }
 
 " more text objects
-Plug 'wellle/targets.vim'
+DeferPlug 'wellle/targets.vim', { 'on': 200 }
 
 " multi-cursor
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
@@ -17,7 +23,7 @@ Plug 'cohama/lexima.vim'
 Plug 'unblevable/quick-scope'
 
 " move using s and S with two characters
-Plug 'justinmk/vim-sneak'
+Plug 'justinmk/vim-sneak', { 'on': [ '<Plug>Sneak_s', '<Plug>Sneak_S' ] }
 
 " align
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
@@ -29,7 +35,7 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'AndrewRadev/sideways.vim', { 'on': ['SidewaysLeft', 'SidewaysRight'] }
 
 " show mark label
-Plug 'kshenoy/vim-signature'
+DeferPlug 'kshenoy/vim-signature', { 'defer': 200 }
 
 " highlight and remove whitespace
 Plug 'ntpeters/vim-better-whitespace', { 'on': 'StripWhitespace' }

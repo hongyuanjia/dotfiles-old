@@ -1,6 +1,61 @@
 {
-    "session.directory": "~/.vim/sessions",
-    "snippets.priority": 100,
-    "snippets.ultisnips.directories": ["Ultisnips"],
-    "r.lsp.diagnostics": false
+    "snippets.userSnippetsDirectory": "~/.vim/ultisnips",
+
+    "r.lsp.diagnostics": false,
+
+    "git.enableGutters": true,
+    "git.addGBlameToBufferVar": true,
+    "git.addGBlameToVirtualText": true,
+    "git.virtualTextPrefix": "  ➤  ",
+
+    "codeLens.enable": true,
+
+    "explorer.width": 25,
+    "explorer.icon.enableNerdfont": true,
+    "explorer.file.autoReveal": true,
+    "explorer.file.showHiddenFiles": true,
+    "explorer.git.icon.status.modified": "•",
+    "explorer.git.icon.status.deleted": "✗",
+    "explorer.git.icon.status.untracked": "★",
+    "explorer.git.icon.status.renamed": "➜",
+    "explorer.git.icon.status.unmerged": "",
+    "explorer.git.icon.status.ignored": "ⁱ",
+    "list.source.grep.command": "rg",
+    "list.source.grep.defaultArgs": [
+        "--column",
+        "--hidden",
+        "--line-number",
+        "--no-heading",
+        "--color=always",
+        "--smart-case"
+    ],
+    "list.source.files.command": "rg",
+    "list.source.files.args": ["--hidden", "--files"],
+    "suggest.completionItemKindLabels": {
+        "class": "",
+        "color": "",
+        "constant": "",
+        "default": "",
+        "enum": "",
+        "enumMember": "",
+        "event": "鬒",
+        "field": "m",
+        "file": "",
+        "folder": "",
+        "function": "F",
+        "interface": "",
+        "keyword": "",
+        "method": "f",
+        "module": "",
+        "operator": "Ψ",
+        "property": "",
+        "reference": "r",
+        "snippet": "",
+        "struct": "פּ",
+        "text": "",
+        "typeParameter": "",
+        "unit": "",
+        "value": "",
+        "variable": ""
+    }
 }

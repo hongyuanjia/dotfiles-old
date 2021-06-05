@@ -7,9 +7,15 @@
 
 " Author: @hongyuanjia
 " Created Date: 2021-06-01
-" Last Modified: 2021-06-02 16:44
+" Last Modified: 2021-06-05 16:10
 
-set runtimepath+=$HOME/.vim
+scriptencoding utf-8
+
+" On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
+" across (heterogeneous) systems easier.
+if has('win32')
+    set runtimepath^=~/.vim
+endif
 
 if get(s:, 'loaded', 0) != 0
     finish
@@ -17,22 +23,25 @@ else
     let s:loaded = 1
 endif
 
-if empty(glob($HOME.'/.vim/autoload/plug.vim'))
-    echo "Downloading junegunn/vim-plug to manage plugins..."
-    silent !curl -fLo $HOME/.vim/autoload/plug.vim --create-dirs "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
+" use space as leader key
+let g:mapleader = "\<Space>"
+" use comma as local leader key
+let g:maplocalleader = ','
 
-call plug#begin($HOME.'/.vim/plugged')
+" load layers
+call layer#begin()
 
-for f in split(glob($HOME.'/.vim/layers/**/packages.vim'), '\n')
-    execute 'source' f
-endfor
+Layer 'theme'
+Layer 'interface'
+Layer 'startup'
+Layer 'project'
+Layer 'lsp'
+Layer 'git'
+Layer 'lang-r'
+Layer 'file-manager'
+Layer 'editing'
+Layer 'autocomplete'
 
-call plug#end()
-
-for f in split(glob($HOME.'/.vim/layers/**/config.vim'), '\n')
-    execute 'source' f
-endfor
+call layer#end()
 
 " vim:set ft=vim et sw=4:

@@ -1,14 +1,18 @@
+" startup landing page
+Plug 'mhinz/vim-startify'
+
 " key mapping menu when pressing <Space>
-Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+Plug 'liuchengxu/vim-which-key', { 'on': [
+    \ 'WhichKey', 'WhichKey!',
+    \ 'WhichKeyVisual', 'WhichKeyVisual!'
+    \ ] }
+autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
 
 " statusline
 Plug 'liuchengxu/eleline.vim'
 
 " highlight current word
-Plug 'itchyny/vim-cursorword'
-
-" icons support
-Plug 'ryanoasis/vim-devicons'
+DeferPlug 'itchyny/vim-cursorword', { 'defer': 500 }
 
 " rainbow parentheses improved
 Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle'}
@@ -17,6 +21,7 @@ Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle'}
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle' }
 
 " show search status
+Plug 'haya14busa/is.vim'
 Plug 'osyo-manga/vim-anzu', {
     \ 'on': [
     \ '<Plug>(anzu-n-with-echo)',
@@ -27,10 +32,10 @@ Plug 'osyo-manga/vim-anzu', {
     \ }
 
 " highlights patterns and ranges for substitute
-Plug 'markonm/traces.vim'
+DeferPlug 'markonm/traces.vim', { 'defer': 500 }
 
 " maximize and restore the current window
-Plug 'szw/vim-maximizer'
+Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle!'}
 
 " label each window and directly jump to it
-Plug 't9md/vim-choosewin'
+Plug 't9md/vim-choosewin', { 'on': '<Plug>(choosewin)'}

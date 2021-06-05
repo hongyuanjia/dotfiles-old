@@ -1,8 +1,6 @@
-Plug 'neoclide/coc.nvim', { 'do': { -> coc#util#install()} }
-
 " LSP symbol and tags Finder
-Plug 'liuchengxu/vista.vim'
+Plug 'liuchengxu/vista.vim', { 'on': [ 'Vista', 'Vista!!' ] }
 
 " vimscript lsp
-Plug 'Shougo/neco-vim'
-Plug 'neoclide/coc-neco'
+DeferPlug 'Shougo/neco-vim', { 'defer': 300 }
+DeferPlug 'neoclide/coc-neco', { 'defer': 300 }

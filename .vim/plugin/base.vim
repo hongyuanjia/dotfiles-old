@@ -7,6 +7,14 @@
 "===============================================================================
 " vim: set ts=4 sw=4 tw=80 :
 
+scriptencoding utf-8
+
+if get(s:, 'loaded', 0) != 0
+    finish
+endif
+
+let s:loaded = 1
+
 " Basic ------------------------------------------------------------------------
 " {{{
 
@@ -35,6 +43,12 @@ set ruler
 
 " enable changing buffer without saving
 set hidden
+
+" auto reload file if changed
+set autoread
+
+" use system clipboard as the default
+set clipboard=unnamed,unnamedplus
 
 " show completions of Ex command
 set wildmenu
@@ -112,7 +126,7 @@ set matchtime=2
 set display+=lastline
 
 " show tabline
-set showtabline=2
+set showtabline=1 tabline=%!tab#TabLine()
 
 " show statusline
 set laststatus=2
@@ -159,6 +173,13 @@ augroup END
 " use gui colors in terminal if available
 if has('termguicolors')
     set termguicolors
+
+    if !empty($TMUX)
+        " If use vim inside tmux, see https://github.com/vim/vim/issues/993
+        " set Vim-specific sequences for RGB colors
+        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    endif
 endif
 
 " fix cursor shape
@@ -175,9 +196,11 @@ endif
 
 " GVim options
 if !has("nvim") && has('gui_running')
-    " set Chinese fonts
-    set guifont=DejaVuSansMono\ NF:h10
-    set guifontwide=SimHei:h10
+    if has('win32')
+        set guifont=DejaVuSansMono\ NF:h10,Consolas:h10
+        " set Chinese fonts
+        set guifontwide=SimHei:h10
+    endif
 
     " disable GUI menu
     set guioptions-=m
@@ -190,14 +213,6 @@ if !has("nvim") && has('gui_running')
     " disable tab pages
     set guioptions-=e
 endif
-" }}}
-
-" Colorscheme ------------------------------------------------------------------
-" {{{
-set background=dark
-set t_Co=256
-
-colorscheme space_vim_theme
 " }}}
 
 " Fomat options ----------------------------------------------------------------
@@ -223,11 +238,14 @@ set formatoptions+=q
 " when formatting text, recognize numbered lists
 set formatoptions+=n
 
-" oo not insert the current comment leader
-set formatoptions-=r
+" insert the current comment leader when hitting <Enter>
+set formatoptions+=r
 
 " oo not auto format text
 set formatoptions-=t
+
+" oo not insert the current command leader when hitting o/O
+set formatoptions-=o
 " }}}
 
 " Folding ----------------------------------------------------------------------
@@ -358,12 +376,8 @@ augroup InitFileTypesGroup
     " clear autocommand in same group
     autocmd!
 
-    " use {{{,}}} marker for VimScript folding
-    autocmd FileType vim setlocal foldmethod=marker
-    autocmd FileType vim setlocal foldmarker={{{,}}}
-
-    " enable wrap for Markdown and R Markdown
-    autocmd FileType markdown,rmd setlocal wrap
+    " see http://vim.wikia.com/wiki/Speed_up_Syntax_Highlighting
+    autocmd BufWinEnter,Syntax * syn sync minlines=500 maxlines=500
 augroup END
 " }}}
 
