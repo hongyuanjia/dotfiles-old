@@ -325,62 +325,83 @@ New-Link -Directory $RStudio_Dir -Target $RStudio | Out-NULL
 # Makevars
 $RMake = [System.IO.Path]::Combine($PSScriptRoot, '.R')
 New-Link -Directory $Documents -Target $RMake | Out-NULL
-# Install {languageserver} and {nvimcom} packages
-# Create 'R_LIBS_USER' if not exists
-$RParams = @("-e", "cat(normalizePath(Sys.getenv('R_LIBS_USER'), mustWork = FALSE))")
-$R_LIBS_USER = & Rscript.exe @RParams
-# Escape backslash
-$R_LIBS_USER_ESC = $R_LIBS_USER.Replace("\", "\\")
-if (!(Test-Path -Path $R_LIBS_USER -PathType Container)) {
-    New-Item -ItemType Directory -Path $R_LIBS_USER
-}
 
-# Install {languageserver} package and return the install location
-Write-Host "Install {languageserver} R package if necessary..."
-$RParams =
-"if (!suppressWarnings(require(`"languageserver`", character.only = TRUE, quietly = TRUE))) {
-    install.packages(`"languageserver`", `"$R_LIBS_USER_ESC`")
-}
-cat(find.package(`"languageserver`"), sep = `"\n`")
-"
-$TMP = New-TemporaryFile
-[System.IO.File]::WriteAllLines($TMP.FullName, $RParams)
-$LanguageServer = [System.IO.Path]::GetFullPath((& Rscript.exe $TMP.FullName | Select-Object -Last 1))
+# Add R to $PATH
+Write-Host "Add R to system PATH..."
+$RApp = Get-InstalledApp "R for Windows"
+if (($RApp).length -eq 0) {
+    Write-Host "Failed to find R installation... [Skip]"
+} else {
+    # Only use the latest version
+    $RApp = $RApp | Sort-Object DisplayVersion | Select-Object -Last 1
+    Write-Host "R $($RApp.DisplayVersion) found at `"$($RApp.InstallLocation)`""
 
-# Install {nvimcom} package that is distributed with 'Nvim-R' plugin
-Write-Host "Install {nvimcom} R package if necessary..."
-$NvimCom = [System.IO.Path]::Combine($R_LIBS_USER, "nvimcom")
-if (!(Test-Path -Path $NvimCom -PathType Container)) {
-    $NvimComSrc = [System.IO.Path]::Combine($VimDirHome, "plugged", "Nvim-R", "R", "nvimcom")
-    $NvimComBuild = & R.exe CMD build $NvimcomSrc | Select-Object -Last 1
-    if (!($NvimComBuild -match "nvimcom_[0-9\.\-]+.tar.gz")) {
-        Write-Error "Failed to build 'nvimcom' package for 'Nvim-R' Vim plugin"
+    $RAppDir = $RApp | Select-Object -ExpandProperty InstallLocation
+    $RAppDirBin = [System.IO.Path]::Combine($RAppDir, "bin")
+    $Rscript = [System.IO.Path]::Combine($RAppDirBin, "Rscript.exe")
+    $Rexe = [System.IO.Path]::Combine($RAppDirBin, "R.exe")
+
+    # Add to PATH
+    [System.Environment]::SetEnvironmentVariable("Path", "$RAppDirBin;$Env:Path", [System.EnvironmentVariableTarget]::Machine)
+
+    # Install {languageserver} and {nvimcom} packages
+    # Create 'R_LIBS_USER' if not exists
+    $RParams = @("-e", "cat(normalizePath(Sys.getenv('R_LIBS_USER'), mustWork = FALSE))")
+    $R_LIBS_USER = & $Rscript @RParams
+    # Escape backslash
+    $R_LIBS_USER_ESC = $R_LIBS_USER.Replace("\", "\\")
+    if (!(Test-Path -Path $R_LIBS_USER -PathType Container)) {
+        New-Item -ItemType Directory -Path $R_LIBS_USER
     }
-    & R.exe CMD INSTALL --no-multiarch $($Matches.Values) -l=$($R_LIBS_USER)
+
+    # Install {languageserver} package and return the install location
+    Write-Host "Install {languageserver} R package if necessary..."
+    $RParams =
+    "if (!suppressWarnings(require(`"languageserver`", character.only = TRUE, quietly = TRUE))) {
+        install.packages(`"languageserver`", `"$R_LIBS_USER_ESC`")
+    }
+    cat(find.package(`"languageserver`"), sep = `"\n`")
+    "
+    $TMP = New-TemporaryFile
+    [System.IO.File]::WriteAllLines($TMP.FullName, $RParams)
+    $LanguageServer = [System.IO.Path]::GetFullPath((& $Rscript $TMP.FullName | Select-Object -Last 1))
+
+    # Install {nvimcom} package that is distributed with 'Nvim-R' plugin
+    Write-Host "Install {nvimcom} R package if necessary..."
+    $NvimCom = [System.IO.Path]::Combine($R_LIBS_USER, "nvimcom")
+    if (!(Test-Path -Path $NvimCom -PathType Container)) {
+        $NvimComSrc = [System.IO.Path]::Combine($VimDirHome, "plugged", "Nvim-R", "R", "nvimcom")
+        $NvimComBuild = & $Rexe CMD build $NvimcomSrc | Select-Object -Last 1
+        if (!($NvimComBuild -match "nvimcom_[0-9\.\-]+.tar.gz")) {
+            Write-Error "Failed to build 'nvimcom' package for 'Nvim-R' Vim plugin"
+        }
+        & $Rexe CMD INSTALL --no-multiarch $($Matches.Values) -l=$($R_LIBS_USER)
+    }
+
+    # Install {startup} package to enable system-specific Rprofile and Renviron
+    Write-Host "Install {startup} R package if necessary..."
+    $RParams =
+    "if (!suppressWarnings(require(`"startup`", character.only = TRUE, quietly = TRUE))) {
+        install.packages(`"startup`", `"$R_LIBS_USER_ESC`")
+    }
+    "
+    $TMP = New-TemporaryFile
+    [System.IO.File]::WriteAllLines($TMP.FullName, $RParams)
+    & $Rscript $TMP.FullName | Out-Null
+
+    # Create a folder that contains the path of those 2 packages to work better
+    # with {renv}. Otherwise, {nvimcom} and {languageserver} will have to be
+    # added in every {renv} project
+    # See: https://github.com/jalvesaq/Nvim-R/issues/445#issuecomment-635419033
+    $R_LIBS_EXT = [System.IO.Path]::Combine($Env:USERPROFILE, "R", "External")
+    if (!(Test-Path -Path $R_LIBS_EXT -PathType Container)) {
+        New-Item -Path $R_LIBS_EXT -ItemType Directory | Out-Null
+    }
+    # Create symbolic links to {nvimcom} and {languageserver} package folder
+    New-Link $R_LIBS_EXT -Target $LanguageServer -NoBackup | Out-Null
+    New-Link $R_LIBS_EXT -Target $NvimCom -NoBackup | Out-Null
 }
 
-# Install {startup} package to enable system-specific Rprofile and Renviron
-Write-Host "Install {startup} R package if necessary..."
-$RParams =
-"if (!suppressWarnings(require(`"startup`", character.only = TRUE, quietly = TRUE))) {
-    install.packages(`"startup`", `"$R_LIBS_USER_ESC`")
-}
-"
-$TMP = New-TemporaryFile
-[System.IO.File]::WriteAllLines($TMP.FullName, $RParams)
-& Rscript.exe $TMP.FullName | Out-Null
-
-# Create a folder that contains the path of those 2 packages to work better
-# with {renv}. Otherwise, {nvimcom} and {languageserver} will have to be
-# added in every {renv} project
-# See: https://github.com/jalvesaq/Nvim-R/issues/445#issuecomment-635419033
-$R_LIBS_EXT = [System.IO.Path]::Combine($Env:USERPROFILE, "R", "External")
-if (!(Test-Path -Path $R_LIBS_EXT -PathType Container)) {
-    New-Item -Path $R_LIBS_EXT -ItemType Directory | Out-Null
-}
-# Create symbolic links to {nvimcom} and {languageserver} package folder
-New-Link $R_LIBS_EXT -Target $LanguageServer -NoBackup | Out-Null
-New-Link $R_LIBS_EXT -Target $NvimCom -NoBackup | Out-Null
 
 # ------------- NOTE: Steps below depends on files on my Dropbox ------------- #
 # Path of Dropbox folder
