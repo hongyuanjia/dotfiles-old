@@ -3,7 +3,7 @@
 @email          :  hongyuanjia@outlook.com
 @repo           :  https://github.com/hongyuanjia/dotfiles
 @createdOn      :  2021-02-23
-@modifiedOn     :  2021-02-26
+@modifiedOn     :  2021-06-02 17:01
 
 Copyright (c) 2021 Hongyuan Jia
 
@@ -182,7 +182,7 @@ function Get-AllInstalledApps {
 
     Get-ItemProperty $Reg |
         Where-Object { $_.DisplayName -and $_.UninstallString } |
-        Select-Object DisplayName, Publisher, InstallDate, DisplayVersion, UninstallString |
+        Select-Object DisplayName, Publisher, InstallLocation, InstallDate, DisplayVersion, UninstallString |
         Sort-Object DisplayName
 }
 
@@ -265,7 +265,7 @@ Write-Host "# ------------------------------------------------------------------
 Write-Host "#                                      Vim                                     #"
 Write-Host "# ---------------------------------------------------------------------------- #"
 # Create a symbolic link of vimrc
-$Vimrc = [System.IO.Path]::Combine($PSScriptRoot, ".config", "nvim", "init.vim")
+$Vimrc = [System.IO.Path]::Combine($PSScriptRoot, ".vim", "init.vim")
 New-Link -Directory $Env:USERPROFILE -Target $Vimrc -NewName ".vimrc" | Out-NULL
 # NOTE: On Windows, 'runtimepath' will resolve the symbolic link and use both
 # the symbolic link and original folder. This causes problem for Nvim-R.
@@ -280,8 +280,11 @@ if (!(Test-Path -Path $VimDirHome -PathType Container)) {
     New-Item -Path $VimDirHome -ItemType Directory | Out-Null
 }
 Get-ChildItem $VimDir | ForEach-Object {
-    if ($_.Name -ne ".gitignore") {
+    if (($_.Name -ne ".gitignore") -and ($_.Name -ne "plugged") ) {
         New-Link -Directory $VimDirHome -Target $_.FullName -NoBackup
+    } elseif ($_.Name -ne "plugged") {
+        Backup-Exists "$VimDirHome\plugged"
+        Copy-Item -Path "$VimDir\plugged" -Destination "$VimDirHome\plugged" -Recurse
     }
 } | Out-Null
 $VimDirAutoload = [System.IO.Path]::Combine($VimDirHome, "autoload")
