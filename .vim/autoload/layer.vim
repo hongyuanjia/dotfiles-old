@@ -34,12 +34,6 @@ function! s:load_layer(name, ...)
     endif
 endfunction
 
-function! s:load_init() abort
-    if filereadable(expand($HOME . '.vimrc'))
-        execute 'source '. fnameescape(l:layer_packages)
-    endif
-endfunction
-
 function! s:register_plugins()
     call plug#begin($HOME.'/.vim/plugged/')
     for l:layer in g:layer.loaded
@@ -98,7 +92,7 @@ function! layer#plug_defer(github_ref, options) abort
     " extract defer time
     if has_key(a:options, 'defer')
         let defer = a:options['defer']
-        let options = remove(a:options, 'defer')
+        call remove(a:options, 'defer')
     else
         let defer = 100
     endif

@@ -58,8 +58,8 @@ set lazyredraw
 
 " disable sound on errors
 set noerrorbells
-set novisualbell
 set visualbell t_vb=
+au GUIEnter * set visualbell t_vb=
 
 " open new windows in the right bottom
 set splitright
