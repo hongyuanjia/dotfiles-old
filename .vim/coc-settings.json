@@ -1,4 +1,5 @@
 {
+    "session.directory": "~/.vim/sessions",
     "snippets.userSnippetsDirectory": "~/.vim/ultisnips",
 
     "r.lsp.diagnostics": false,
