@@ -33,9 +33,6 @@ let R_routnotab = 1
 " show commented lines when sourced
 let R_commented_lines = 1
 
-" clear R Console before sending commands
-let R_clear_line = 1
-
 " not losing focus every time that you generate the pdf
 let R_openpdf = 1
 
