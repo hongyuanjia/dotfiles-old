@@ -33,14 +33,14 @@ call layer#begin()
 
 Layer 'theme'
 Layer 'interface'
-Layer 'startup'
+Layer 'file-manager'
+Layer 'editing'
 Layer 'project'
+Layer 'autocomplete'
 Layer 'lsp'
 Layer 'git'
 Layer 'lang-r'
-Layer 'file-manager'
-Layer 'editing'
-Layer 'autocomplete'
+Layer 'lang-polyglot'
 
 call layer#end()
 
