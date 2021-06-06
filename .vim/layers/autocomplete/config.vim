@@ -1,3 +1,4 @@
+" coc {{{
 " save config in .vim folder
 let g:coc_config_home = $HOME.'/.vim'
 
@@ -221,6 +222,8 @@ nnoremap <Leader>sr :<C-u>CocList registers<CR>
 nnoremap <Leader>st :<C-u>CocList btags<CR>
 " search tags in current project
 nnoremap <Leader>sT :<C-u>CocList tags<CR>
+" search Vim command
+nnoremap <Leader>sv :<C-u>CocList vimcommands<CR>
 " search windows
 nnoremap <Leader>sw :<C-u>CocList windows<CR>
 " search registers
@@ -264,3 +267,24 @@ nnoremap <Leader>ll :<C-u>CocCommand<CR>
 
 " <Leader>w
 nnoremap <Leader>w? :<C-u>CocList windows<CR>
+" }}}
+
+" gutentags {{{
+let g:gutentags_project_root = ['.git', '.here']
+let g:gutentags_ctags_tagfile = '.tags'
+
+let g:gutentags_cache_dir = expand($HOME.'/.vim/tmp')
+
+if !isdirectory(g:gutentags_cache_dir)
+    call mkdir(g:gutentags_cache_dir, 'p')
+endif
+
+let g:gutentags_ctags_extra_args = []
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+
+if has('win32') || has('win16') || has('win64') || has('win95')
+    let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
+endif
+
+let g:gutentags_plus_switch = 0
+" }}}
