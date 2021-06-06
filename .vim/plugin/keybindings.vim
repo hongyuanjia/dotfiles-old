@@ -195,5 +195,5 @@ nnoremap <Leader><Leader>f :1tabnext<CR>
 command! ProfileStart call utils#ProfileStart()
 command! ProfileStop  call utils#ProfileStop()
 
-command! -bang -range ToggleSlash <line1>,<line2>call utils#toggle_slash(<bang>1)
-nnoremap <Leader>t<Bslash> ToggleSlash
+command! -bang -range ToggleSlash <line1>,<line2>call utils#ToggleSlash(<bang>1)
+nnoremap <Leader>t<Bslash> :ToggleSlash<CR>
