@@ -20,10 +20,10 @@ omap Z <Plug>Sneak_S
 map gS <Plug>Sneak_,
 map gs <Plug>Sneak_;
 
-omap aa <Plug>SidewaysArgumentTextobjA
-xmap aa <Plug>SidewaysArgumentTextobjA
-omap ia <Plug>SidewaysArgumentTextobjI
-xmap ia <Plug>SidewaysArgumentTextobjI
+" omap aa <Plug>SidewaysArgumentTextobjA
+" xmap aa <Plug>SidewaysArgumentTextobjA
+" omap ia <Plug>SidewaysArgumentTextobjI
+" xmap ia <Plug>SidewaysArgumentTextobjI
 nnoremap <Leader>ah :<C-u>SidewaysLeft<cr>
 nnoremap <Leader>al :<C-u>SidewaysRight<cr>
 
