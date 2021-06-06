@@ -58,11 +58,11 @@ autocmd! FileType which_key
 autocmd  FileType which_key set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
-nnoremap  <Leader>      :<C-u>WhichKey '<Space>'<CR>
-vnoremap  <Leader>      :<C-u>WhichKeyVisual '<Space>'<CR>
+nnoremap  <silent><Leader>      :<C-u>WhichKey '<Space>'<CR>
+vnoremap  <silent><Leader>      :<C-u>WhichKeyVisual '<Space>'<CR>
 
-nnoremap  <LocalLeader> :<C-u>WhichKey  ','<CR>
-vnoremap  <LocalLeader> :<C-u>WhichKeyVisual ','<CR>
+nnoremap  <silent><LocalLeader> :<C-u>WhichKey  ','<CR>
+vnoremap  <silent><LocalLeader> :<C-u>WhichKeyVisual ','<CR>
 
 let g:which_key_map =  {}
 let g:which_key_map['name'] = 'Mappings'
