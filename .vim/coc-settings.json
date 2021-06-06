@@ -21,6 +21,7 @@
     "explorer.git.icon.status.renamed": "➜",
     "explorer.git.icon.status.unmerged": "",
     "explorer.git.icon.status.ignored": "ⁱ",
+
     "list.source.grep.command": "rg",
     "list.source.grep.defaultArgs": [
         "--column",
@@ -32,6 +33,7 @@
     ],
     "list.source.files.command": "rg",
     "list.source.files.args": ["--hidden", "--files"],
+
     "suggest.completionItemKindLabels": {
         "class": "",
         "color": "",

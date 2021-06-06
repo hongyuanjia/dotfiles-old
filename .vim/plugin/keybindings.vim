@@ -79,10 +79,10 @@ nnoremap N Nzz
 tnoremap <Esc> <C-\><C-n>
 tnoremap <M-[> <Esc>
 tnoremap <C-v><Esc> <Esc>
-tnoremap <C-w>h <c-\><C-n><C-w>h
-tnoremap <C-w>j <c-\><C-n><C-w>j
-tnoremap <C-w>k <c-\><C-n><C-w>k
-tnoremap <C-w>l <c-\><C-n><C-w>l
+tnoremap <C-w>h <C-w><C-h>
+tnoremap <C-w>j <C-w><C-j>
+tnoremap <C-w>k <C-w><C-k>
+tnoremap <C-w>l <C-w><C-l>
 
 " use Ctrl-Tab and Alt-Tab to switch tab
 map    <C-Tab>  :tabnext<CR>
@@ -171,6 +171,10 @@ nnoremap <Leader>wh <C-w>h
 nnoremap <Leader>wj <C-w>j
 nnoremap <Leader>wl <C-w>l
 nnoremap <Leader>wk <C-w>k
+tnoremap <Leader>wh <C-w><C-h>
+tnoremap <Leader>wj <C-w><C-j>
+tnoremap <Leader>wk <C-w><C-k>
+tnoremap <Leader>wl <C-w><C-l>
 nnoremap <Leader>wH <C-w>5<
 nnoremap <Leader>wJ :resize +5<CR>
 nnoremap <Leader>wL <C-w>5>
