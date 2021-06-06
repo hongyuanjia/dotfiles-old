@@ -5,4 +5,8 @@ setlocal dictionary+=$HOME/.vim/dict/idd.dic
 setlocal wrap
 
 " render all formats listed in R Markdown header
-call RCreateMaps('nvi', 'RMakeAll', 'kA', ':call RMakeRmd("all")')
+function! RMakeAll() abort
+    let path = substitute(expand('%:p'), '\', '/', 'g')
+    call g:SendCmdToR('rmarkdown::render("'. path .'", "all")')
+endfunction
+nnoremap <LocalLeader>ka :<C-u>RMakeAll()<CR>
