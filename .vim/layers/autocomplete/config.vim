@@ -1,3 +1,39 @@
+" vista {{{
+" show these pretty symbols
+let g:vista#renderer#enable_icon = 1
+let g:vista_fzf_preview = ['right:50%']
+nnoremap <Leader>tt :<C-u>Vista!!<CR>
+nnoremap <Leader>ts :<C-u>Vista show<CR>
+nnoremap <Leader>to :<C-u>Vista toc<CR>
+
+let g:vista_default_executive = 'ctags'
+
+let g:vista_ctags_cmd = {
+    \ 'idf': 'Rscript -e "idftags::build_idf_tags(cmd = TRUE)"'
+    \ }
+
+let s:types = {}
+let s:types.lang = 'idf'
+let s:types.kinds = {
+    \ 'c': {'long' : 'classes', 'fold' : 0, 'stl' : 1},
+    \ 'o': {'long' : 'objects', 'fold' : 0, 'stl' : 1}
+    \ }
+let s:types.kind2scope = {
+    \ 'c' : 'class',
+    \ 'o' : 'method'
+    \ }
+let s:types.scope2kind = {
+    \ 'class'  : 'c',
+    \ 'method' : 'o'
+    \ }
+let g:vista#types#uctags#idf# = s:types
+
+let g:vista_executive_for = {
+    \ 'rmd': 'markdown',
+    \ 'markdown': 'toc'
+    \ }
+" }}}
+
 " coc {{{
 " save config in .vim folder
 let g:coc_config_home = $HOME.'/.vim'
@@ -219,9 +255,7 @@ nnoremap <Leader>sq :<C-u>CocList quickfix<CR>
 " search registers
 nnoremap <Leader>sr :<C-u>CocList registers<CR>
 " search tags
-nnoremap <Leader>st :<C-u>CocList btags<CR>
-" search tags in current project
-nnoremap <Leader>sT :<C-u>CocList tags<CR>
+nnoremap <Leader>st :<C-u>Vista finder<CR>
 " search Vim command
 nnoremap <Leader>sv :<C-u>CocList vimcommands<CR>
 " search windows
@@ -270,20 +304,15 @@ nnoremap <Leader>w? :<C-u>CocList windows<CR>
 " }}}
 
 " gutentags {{{
-let g:gutentags_project_root = ['.git', '.here']
+let g:gutentags_exclude_filetypes = ['tags']
+let g:gutentags_resolve_symlinks = 1
 let g:gutentags_ctags_tagfile = '.tags'
+let g:gutentags_ctags_executable_idf = 'Rscript -e "idftags::build_idf_tag(cmd = TRUE)"'
 
 let g:gutentags_cache_dir = expand($HOME.'/.vim/tmp')
 
 if !isdirectory(g:gutentags_cache_dir)
     call mkdir(g:gutentags_cache_dir, 'p')
-endif
-
-let g:gutentags_ctags_extra_args = []
-let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
-
-if has('win32') || has('win16') || has('win64') || has('win95')
-    let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
 endif
 
 let g:gutentags_plus_switch = 0
