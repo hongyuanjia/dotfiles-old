@@ -1,3 +1,6 @@
+" do not align function arguments
+let r_indent_align_args = 0
+
 " enable to go to NORMAL mode in TERMINAL mode
 let R_esc_term = 0
 
@@ -45,6 +48,9 @@ let R_auto_omni = []
 
 " highlight chunk header as R code
 let rmd_syn_hl_chunk = 1
+
+" disable R debug support
+let R_debug = 0
 
 " auto quit R when close Vim
 autocmd VimLeave * if exists("g:SendCmdToR") && string(g:SendCmdToR) != "function('SendCmdToR_fake')" | call RQuit("nosave") | endif
