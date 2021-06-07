@@ -13,7 +13,7 @@ scriptencoding utf-8
 
 " On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
 " across (heterogeneous) systems easier.
-if has('win32')
+if has('win32') || has('nvim')
     set runtimepath^=~/.vim
 endif
 
