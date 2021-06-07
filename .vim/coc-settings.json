@@ -5,9 +5,8 @@
     "r.lsp.diagnostics": false,
 
     "git.enableGutters": true,
-    "git.addGBlameToBufferVar": true,
-    "git.addGBlameToVirtualText": true,
-    "git.virtualTextPrefix": "  ➤  ",
+    "git.addGBlameToBufferVar": false,
+    "git.addGBlameToVirtualText": false,
 
     "codeLens.enable": true,
 
