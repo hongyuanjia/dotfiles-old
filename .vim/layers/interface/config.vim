@@ -54,10 +54,6 @@ set timeoutlen=500
 " use which-key
 autocmd! FileType which_key
 
-" do not show statusline in which-key
-autocmd  FileType which_key set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-
 nnoremap  <silent><Leader>      :<C-u>WhichKey '<Space>'<CR>
 vnoremap  <silent><Leader>      :<C-u>WhichKeyVisual '<Space>'<CR>
 
