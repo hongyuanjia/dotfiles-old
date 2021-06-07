@@ -1,9 +1,6 @@
 " add/remove comments
 Plug 'tpope/vim-commentary'
 
-" auto set buffer options
-Plug 'tpope/vim-sleuth'
-
 " add surround brackets
 DeferPlug 'machakann/vim-sandwich', { 'on': 200 }
 
