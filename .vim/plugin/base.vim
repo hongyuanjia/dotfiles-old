@@ -61,6 +61,9 @@ set noerrorbells
 set visualbell t_vb=
 au GUIEnter * set visualbell t_vb=
 
+" maximum GVim
+au GUIEnter * simalt ~x
+
 " open new windows in the right bottom
 set splitright
 set splitbelow
