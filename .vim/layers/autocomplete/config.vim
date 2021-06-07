@@ -154,7 +154,7 @@ function! s:show_documentation()
     if (index(['vim', 'help'], &filetype) >= 0)
         execute 'h '.expand('<cword>')
     else
-        let l:found = CocAction('doHover')
+        let l:found = CocActionAsync('doHover')
     endif
 endfunction
 
@@ -211,7 +211,7 @@ endfunction
 
 " <Leader>G search under cursor
 " locate files under cursor
-nnoremap <Leader>Gf :<C-u>call CocAction('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['relative', 0, 'file']])<CR>
+nnoremap <Leader>Gf :<C-u>call CocActionAsync('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['relative', 0, 'file']])<CR>
 " grep on the fly using current word
 nnoremap <Leader>Gg :<C-u>execute 'CocList -A -I --input='.expand('<cword>').' grep'<CR>
 " grep on the fly using current selection
