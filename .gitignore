@@ -7,3 +7,5 @@ __pycache__/
 
 .Renviron.d/private
 *.log
+
+.vim/tmp
