@@ -2,7 +2,7 @@
 DeferPlug 'neoclide/coc.nvim', { 'do': { -> coc#util#install()}, 'defer': 200 }
 
 " tags
-DeferPlug 'ludovicchabant/vim-gutentags', {'defer': 200}
+Plug 'ludovicchabant/vim-gutentags', { 'on': [] }
 
 " LSP symbol and tags Finder
 Plug 'liuchengxu/vista.vim', { 'on': [ 'Vista', 'Vista!!' ] }
