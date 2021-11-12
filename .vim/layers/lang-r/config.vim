@@ -52,6 +52,8 @@ let rmd_syn_hl_chunk = 1
 " disable R debug support
 let R_debug = 0
 
+let r_syntax_fun_pattern = 1
+
 " auto quit R when close Vim
 autocmd VimLeave * if exists("g:SendCmdToR") && string(g:SendCmdToR) != "function('SendCmdToR_fake')" | call RQuit("nosave") | endif
 
