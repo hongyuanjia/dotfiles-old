@@ -1,17 +1,13 @@
 " startify {{{
-let g:startify_list_order = [
-    \ ['   Recent Files:'],
-    \ 'files',
-    \ ['   Project:'],
-    \ 'dir',
-    \ ['   Sessions:'],
-    \ 'sessions',
-    \ ['   Bookmarks:'],
-    \ 'bookmarks',
-    \ ['   Commands:'],
-    \ 'commands',
+let g:startify_lists = [
+    \ { 'type': 'files',     'header': ['   MRU']            },
+    \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+    \ { 'type': 'sessions',  'header': ['   Sessions']       },
+    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+    \ { 'type': 'commands',  'header': ['   Commands']       },
     \ ]
 let g:startify_change_to_vcs_root = 1
+let g:startify_session_dir = $HOME.'/.vim/sessions'
 nnoremap <Leader>bh :Startify<CR>
 " }}}
 
