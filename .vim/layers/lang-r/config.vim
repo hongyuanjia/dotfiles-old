@@ -7,9 +7,6 @@ let R_esc_term = 0
 " number of columns to be offset when calculating R terminal width
 let R_setwidth = -7
 
-" remove 'winfixwidth' buffer option to enable change R console width
-let R_buffer_opts = "nobuflisted"
-
 " do not update $HOME on Windows since I set it manually
 if has('win32')
     let R_set_home_env = 0
