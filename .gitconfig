@@ -12,5 +12,6 @@
 	longpaths = true
 [http]
 	sslVerify = false
+	proxy = 127.0.0.1:7890
 [merge]
 	tool = vimdiff
