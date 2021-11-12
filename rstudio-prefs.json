@@ -20,8 +20,8 @@
     "panes": {
         "quadrants": [
             "Source",
-            "TabSet1",
             "Console",
+            "TabSet1",
             "TabSet2"
         ],
         "tabSet1": [
@@ -40,21 +40,24 @@
             "Help",
             "Viewer"
         ],
+        "hiddenTabSet": [],
         "console_left_on_top": false,
-        "console_right_on_top": true
+        "console_right_on_top": true,
+        "additional_source_columns": 0
     },
     "editor_theme": "Tomorrow Night 80s",
     "jobs_tab_visibility": "shown",
     "initial_working_directory": "~/Dropbox/github_repo/psychrolib/src/r",
     "code_completion_delay": 10,
     "code_completion_characters": 2,
-    "source_with_echo": true,
     "full_project_path_in_window_title": true,
     "rainbow_parentheses": true,
     "tab_multiline_completion": true,
     "console_double_click_select": true,
     "strip_trailing_whitespace": true,
     "show_hidden_files": true,
-    "new_proj_git_init": true,
-    "shiny_viewer_type": "browser"
+    "shiny_viewer_type": "browser",
+    "insert_numbered_latex_sections": true,
+    "show_terminal_tab": false,
+    "source_with_echo": true
 }
