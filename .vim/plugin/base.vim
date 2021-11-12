@@ -207,7 +207,7 @@ if !has("nvim") && has('gui_running')
     if has('win32')
         set guifont=DejaVuSansMono\ NF:h10
         " set Chinese fonts
-        set guifontwide=SimHei:h10
+        set guifontwide=SimHei:h12
     endif
 
     " disable GUI menu
