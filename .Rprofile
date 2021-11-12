@@ -1,6 +1,6 @@
 # set a CRAN mirror
 local({r <- getOption("repos")
-      r["CRAN"] <- "https://cloud.r-project.org/"
+      r["CRAN"] <- "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"
       options(repos=r)
 })
 
