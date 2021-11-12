@@ -49,6 +49,9 @@ let rmd_syn_hl_chunk = 1
 " disable R debug support
 let R_debug = 0
 
+" by default use UTF-8 encoding
+let R_source_args = 'print.eval = FALSE, echo = TRUE, spaced = TRUE, encoding = "UTF-8"'
+
 let r_syntax_fun_pattern = 1
 
 " auto quit R when close Vim
