@@ -57,4 +57,7 @@ let r_syntax_fun_pattern = 1
 " auto quit R when close Vim
 autocmd VimLeave * if exists("g:SendCmdToR") && string(g:SendCmdToR) != "function('SendCmdToR_fake')" | call RQuit("nosave") | endif
 
+" redefine test current file
+command! -nargs=0 RTestFile :call devtools#test_file()
+
 let g:pandoc#syntax#conceal#use=0
