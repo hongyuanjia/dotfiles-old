@@ -25,8 +25,14 @@ local({r <- getOption("repos")
             License = "MIT + file LICENSE",
             # default package initial version
             Version = "0.0.0.9000"
-        )
+        ),
+        # make nvimcom package from Nvim-R as an external library to ensure the
+        # compatibility for renv 
+        renv.settings.external.libraries = "nvimcom"
     )
+
+    # always use English
+    Sys.setenv(LANG = "en")
 }
 
 # custom start up
