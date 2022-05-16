@@ -59,5 +59,7 @@
     "shiny_viewer_type": "browser",
     "insert_numbered_latex_sections": true,
     "show_terminal_tab": false,
-    "source_with_echo": true
+    "source_with_echo": true,
+    "visual_markdown_editing_wrap_at_column": 80,
+    "visual_markdown_editing_wrap": "column"
 }
